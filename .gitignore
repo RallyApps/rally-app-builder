@@ -7,7 +7,7 @@ lib-cov
 *.pid
 *.gz
 .c9revisions
-
+.idea
 pids
 logs
 results
