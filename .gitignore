@@ -6,6 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
+.c9revisions
 
 pids
 logs
