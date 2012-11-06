@@ -26,8 +26,8 @@
     },
     "scripts":{
         "test":"mocha --compilers iced:iced-coffee-script",
-        "bin" : "node bin/rally-app-builder.js"
+        "bin" : "iced bin/rally-app-builder.iced"
     },
 
-    "bin": "node ./bin/rally-app-builder.js"
+    "bin": "iced ./bin/rally-app-builder.iced"
 }

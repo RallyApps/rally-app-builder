@@ -10,15 +10,6 @@ rally-app-builder
 
 ## API
 
-JavaScript
-```
-
-```
-
-
-Coffee
-```
-```
 
 
 ## Run Tests
