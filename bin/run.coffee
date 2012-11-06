@@ -13,21 +13,19 @@ cmdr
   .description("Creates a new Rally App project")
   .action(()->)
 cmdr
-  .command('clone [organization,repo]')
+  .command('clone [organization] [repo]')
   .description("Creates a new Rally App project from an existing GitHub project. ")
-  .action((input)->
-    args = (input || "").split(",")
+  .action((organization,repo)->
 
-    if args.length != 2
-      console.error("Please specify an organization and a repo when using the clone command.")
+    if !organization
+      console.error("Please specify an organization when using the clone command.")
+      return
+    if !repo
+      console.error("Please specify a repo when using the clone command.")
       return
 
-    organization = args[0]
-    repo = args[1]
     Clone = require("../lib/Clone")
     Clone(
-      error:()-> console.error "error"
-      success:()-> console.log "success"
       organization: organization
       repo: repo
     )
