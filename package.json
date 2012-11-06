@@ -25,7 +25,7 @@
         "mocha":"1.6.x"
     },
     "scripts":{
-        "test":"mocha --compilers iced:iced-coffee-script",
+        "test":"mocha --compilers coffee:coffee-script",
         "bin" : "coffee bin/rally-app-builder.coffee"
     },
 

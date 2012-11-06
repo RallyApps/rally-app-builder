@@ -9,7 +9,7 @@ cmdr
 
 
 cmdr
-  .command('new [project]')
+  .command('init [name] [sdk_version] [server]')
   .description("Creates a new Rally App project")
   .action(()->)
 cmdr
