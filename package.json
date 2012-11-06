@@ -18,7 +18,8 @@
         "request":"2.11.x",
         "replay":"1.6.x",
         "mustache":"0.7.x",
-        "commander":"0.6.x"
+        "commander":"0.6.x",
+        "fetch-github-repo":"0.0.x"
     },
     "devDependencies": {
         "mocha":"1.6.x"
@@ -27,7 +28,6 @@
         "test":"mocha --compilers iced:iced-coffee-script",
         "bin" : "node bin/rally-app-builder.js"
     },
-
 
     "bin": "node ./bin/rally-app-builder.js"
 }
