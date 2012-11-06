@@ -2,9 +2,6 @@ fs = require('fs')
 
 cmdr = require('commander')
 
-
-require('iced-coffee-script')
-
 version = JSON.parse(fs.readFileSync("package.json")).version
 
 cmdr
@@ -12,12 +9,7 @@ cmdr
   .option('-s, --server <server>', 'server: Specifies the server to connect to [rally1]')
   .option('-a, --package <package>', 'new: Specifies the app package [app]')
   .option('-l, --language <language>', 'new: Specifies the default language for the app [javascript]')
-
-#	.option('-u', '--username <username>', 'server: Specifies the username')
-#	.option('-p', '--password <password>', 'server: Specifies the password')
-#	.option('-o', '--offline', 'server: Sets the server to offline mode.  All queries will return cached values')
-#	.option('-r', '--port <port>', 'server: Specifies the port [3000]', Number)
-
+  .parse(process.argv)
 
 cmdr
   .command('new [project]')
