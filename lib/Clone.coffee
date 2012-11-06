@@ -1,7 +1,6 @@
 fetchGitHubRepo = require("fetch-github-repo")
 _ = require('underscore')
-
-Clone = (args)->
+module.exports = (args)->
     @args = _.defaults args,
         error: ()->
         success:()->
@@ -12,5 +11,4 @@ Clone = (args)->
         repo : @args.repo
         success:@args.error
         error:@args.success
-
-module.exports = Clone
+console.log "yar"

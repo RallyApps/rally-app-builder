@@ -6,24 +6,38 @@ version = JSON.parse(fs.readFileSync("package.json")).version
 
 cmdr
   .version(version)
-  .option('-s, --server <server>', 'server: Specifies the server to connect to [rally1]')
-  .option('-a, --package <package>', 'new: Specifies the app package [app]')
-  .option('-l, --language <language>', 'new: Specifies the default language for the app [javascript]')
-  .parse(process.argv)
+
 
 cmdr
   .command('new [project]')
   .description("Creates a new Rally App project")
   .action(()->)
-
 cmdr
   .command('clone [organization,repo]')
   .description("Creates a new Rally App project from an existing GitHub project. ")
-  .action(()->)
+  .action((input)->
+    args = (input || "").split(",")
 
-cmdr
-  .command('server')
-  .description("Starts a web server to host your App.  Also caches requests for offline development")
-  .action(()->)
+    if args.length != 2
+      console.error("Please specify an organization and a repo when using the clone command.")
+      return
 
-cmdr.parse(process.argv)
+    organization = args[0]
+    repo = args[1]
+    Clone = require("../lib/Clone")
+    Clone(
+      error:()-> console.error "error"
+      success:()-> console.log "success"
+      organization: organization
+      repo: repo
+    )
+  )
+
+
+#
+#cmdr
+#  .command('test [live]')
+#  .description("Runs your tests and captures the responses from Rally locally to be served in later unit tests")
+#  .action(()->)
+
+cmdr.parse process.argv
