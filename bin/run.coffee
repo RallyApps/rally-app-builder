@@ -2,6 +2,8 @@ fs = require('fs')
 
 cmdr = require('commander')
 
+RallyAppBuilder = require("../lib/Main.coffee")
+
 version = JSON.parse(fs.readFileSync("package.json")).version
 
 cmdr
@@ -12,8 +14,8 @@ cmdr
   .command('init [name] [sdk_version] [server]')
   .description("Creates a new Rally App project")
   .action((name,sdk_version,server)->
-    NewApp = require('../lib/NewApp')
-    NewApp(
+
+    RallyAppBuilder.init(
       name:name
       sdk_version:sdk_version
       server:server
@@ -31,13 +33,11 @@ cmdr
       console.error("Please specify a repo when using the clone command.")
       return
 
-    Clone = require("../lib/Clone")
-    Clone(
+    RallyAppBuilder.clone(
       organization: organization
       repo: repo
     )
   )
-
 
 #
 #cmdr
