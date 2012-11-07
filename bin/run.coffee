@@ -11,7 +11,14 @@ cmdr
 cmdr
   .command('init [name] [sdk_version] [server]')
   .description("Creates a new Rally App project")
-  .action(()->)
+  .action((name,sdk_version,server)->
+    NewApp = require('../lib/NewApp')
+    NewApp(
+      name:name
+      sdk_version:sdk_version
+      server:server
+    )
+  )
 cmdr
   .command('clone [organization] [repo]')
   .description("Creates a new Rally App project from an existing GitHub project. ")
