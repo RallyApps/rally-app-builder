@@ -11,6 +11,6 @@ lib-cov
 pids
 logs
 results
-
+test/temp
 node_modules
 npm-debug.log
