@@ -1,5 +1,6 @@
 _ = require 'underscore'
 fs = require 'fs'
+path = require 'path'
 Mustache = require 'mustache'
 error = (error) ->
   console.error(error)
@@ -23,14 +24,14 @@ module.exports = (args)->
     server: 'rally1.rallydev.com'
     path: '.'
 
-  path = args.path
+  filePath = args.path
   delete args.path
   view = args
-
+  templatePath =path.resolve(__dirname, '../templates/')
   _.each(files,
   (value, key)->
-    templateFile = "templates/#{key}"
-    destinationFile = "test/#{value}"
+    templateFile = "#{templatePath}/#{key}"
+    destinationFile = "#{filePath}/#{value}"
     file = fs.readFileSync(templateFile, "utf-8")
     parsed = Mustache.render(file, view)
     fs.writeFile(destinationFile,parsed)
