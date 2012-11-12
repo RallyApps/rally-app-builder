@@ -2,7 +2,7 @@ fs = require('fs')
 
 cmdr = require('commander')
 
-RallyAppBuilder = require("../lib/Main.coffee")
+RallyAppBuilder = require("../lib/main")
 
 version = JSON.parse(fs.readFileSync("package.json")).version
 
