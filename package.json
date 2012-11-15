@@ -19,7 +19,7 @@
         "replay":"1.6.x",
         "mustache":"0.7.x",
         "commander":"0.6.x",
-        "fetch-github-repo":"0.0.x"
+        "fetch-github-repo":"0.1.x"
     },
     "devDependencies": {
         "mocha":"1.6.x"

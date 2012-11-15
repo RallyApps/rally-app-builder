@@ -1,22 +1,20 @@
 fetchGitHubRepo = require("fetch-github-repo")
 _ = require('underscore')
 
+module.exports = (args, callback)->
+  callback = callback || ()->
+  callbackWrapper = (error) ->
+    if error
+      console.error(error)
+    else
+      console.log("success")
+    callback(error)
 
-error = (error) ->
-  console.error(error)
-
-success = (success)->
-  console.log("success")
-
-module.exports = (args)->
-  @args = _.defaults args,
-    error: error
-    success: ()->
+  args = _.defaults args,
     organization: 'No Organization'
     repo: 'No Repo'
   fetchGitHubRepo.download
-    organization: @args.organization
-    repo: @args.repo
-    success: @args.success
-    error: @args.error
+    organization: args.organization
+    repo: args.repo
     path: process.cwd()
+    callbackWrapper
