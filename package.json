@@ -26,8 +26,8 @@
     },
     "scripts":{
         "test":"mocha --compilers coffee:coffee-script",
-        "bin" : "coffee bin/rally-app-builder.coffee"
+        "bin" : "coffee bin/rally-app-builder"
     },
 
-    "bin": "coffee ./bin/rally-app-builder.coffee"
+    "bin": "coffee ./bin/rally-app-builder"
 }
