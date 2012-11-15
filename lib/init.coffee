@@ -34,7 +34,7 @@ module.exports = (args)->
     destinationFile = "#{filePath}/#{value}"
     file = fs.readFileSync(templateFile, "utf-8")
     parsed = Mustache.render(file, view)
-    fs.writeFile(destinationFile,parsed)
+    fs.writeFile(destinationFile, parsed)
   )
 
 

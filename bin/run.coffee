@@ -1,10 +1,10 @@
 fs = require('fs')
-
+path = require ('path')
 cmdr = require('commander')
-
 RallyAppBuilder = require("../lib/main")
 
-version = JSON.parse(fs.readFileSync("package.json")).version
+packageLocation = path.normalize(__dirname+"/../package.json")
+version = JSON.parse(fs.readFileSync(packageLocation)).version
 
 cmdr
   .version(version)
