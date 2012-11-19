@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "underscore": "~1.3.1",
-        "coffee-script": "1.3.x",
+        "iced-coffee-script": "1.3.x",
         "request":"2.11.x",
         "replay":"1.6.x",
         "mustache":"0.7.x",
@@ -26,8 +26,7 @@
         "wrench":"1.3.x"
     },
     "scripts":{
-        "test":"mocha --compilers coffee:coffee-script",
-        "bin" : "coffee bin/rally-app-builder"
+        "test":"mocha -t 10000 --compilers iced:iced-coffee-script"
     },
 
     "bin": "./bin/rally-app-builder"
