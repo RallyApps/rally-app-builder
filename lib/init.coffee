@@ -31,7 +31,7 @@ module.exports = (args,callback)->
       destinationFile = "#{filePath}/#{value}"
       file = fs.readFileSync(templateFile, "utf-8")
       parsed = Mustache.render(file, view)
-      fs.writeFile(destinationFile, parsed)
+      fs.writeFileSync(destinationFile, parsed)
     )
   catch err
     error = err

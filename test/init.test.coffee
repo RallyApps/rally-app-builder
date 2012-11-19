@@ -2,8 +2,8 @@ assert = require 'assert'
 rallyAppBuilder = require '../index'
 fs = require 'fs'
 wrench = require 'wrench'
-describe('Fetch Github Repo', ()->
-  baseDir = 'test/temp'
+describe('Init new App', ()->
+  baseDir = 'test/initTemp'
 
   before ()->
     try
@@ -12,7 +12,7 @@ describe('Fetch Github Repo', ()->
 
   after ()->
     try
-      wrench.rmdirSyncRecursive(baseDir)
+#      wrench.rmdirSyncRecursive(baseDir)
     catch e
 
   it('tests files created', (done)->
@@ -22,7 +22,10 @@ describe('Fetch Github Repo', ()->
       for file in files
         if file.indexOf("README.md") > -1
           error = null
-      done(error)
+      if error
+        done(error)
+      else
+        done()
 
     rallyAppBuilder.init(
       name: 'App'
