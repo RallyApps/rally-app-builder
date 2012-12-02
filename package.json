@@ -27,7 +27,7 @@
         "wrench":"1.3.x"
     },
     "scripts":{
-        "test":"mocha -t 1000 --compilers iced:iced-coffee-script"
+        "test":"mocha -t 10000 --compilers iced:iced-coffee-script"
     },
 
     "bin": "./bin/rally-app-builder"
