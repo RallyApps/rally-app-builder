@@ -15,7 +15,7 @@ describe('Clone existing App', ()->
       wrench.rmdirSyncRecursive(baseDir)
     catch e
 
-  it('tests files created', (done)->
+  it('created files successfully', (done)->
     checkFilesFetched = (error)->
       if error
         done(error)
