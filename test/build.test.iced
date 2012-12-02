@@ -4,23 +4,28 @@ fs = require 'fs'
 wrench = require 'wrench'
 path = require 'path'
 
-describe('Build an App', ()->
-  baseDir = 'test/buildTemp'
 
-  before ()->
+tempTestDirectory = 'test/buildTemp'
+fixturesDirectory = path.join(__dirname, 'fixtures')
+sdk1Directory = path.join(fixturesDirectory, 'sdk1')
+sdk2Directory = path.join(fixturesDirectory, 'sdk2')
+
+
+describe('Build an App', ()->
+  beforeEach (done)->
     try
-      fs.mkdirSync(baseDir)
+      copy = ()-> wrench.copyDirRecursive( fixturesDirectory,tempTestDirectory,done)
+      fs.mkdir(tempTestDirectory,copy)
     catch e
 
-  after ()->
+  afterEach (done)->
     try
-      wrench.rmdirSyncRecursive(baseDir)
+      wrench.rmdirRecursive(tempTestDirectory,done)
     catch e
 
   it 'errors if no config', (done)->
     config = path : '.'
     testResponse = (error)->
-      console.log(error)
       if(error)
         done()
       else
@@ -30,7 +35,7 @@ describe('Build an App', ()->
 
   it 'passes with config', (done)->
 
-    config = path : path.join(__dirname, 'fixtures','sdk1')
+    config = path : sdk1Directory
     rallyAppBuilder.build config, done
 
   it('worked', (done)->
