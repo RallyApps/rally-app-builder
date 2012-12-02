@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- Copyright (c) 2012 Rally Software Development Corp. All rights reserved -->
+<html>
+<head>
+  <title>Story Deep Copy</title>
+  <meta name="Name" content="App: Story Deep Copy" />
+  <meta name="Version" content="2012.11.30" />
+  <meta name="Vendor" content="Rally Software" />
+
+  <script type ="text/javascript" src="/apps/1.32/sdk.js"></script>
+  <script type ="text/javascript">
+    rally.StoryDeepCopy = function (rallyDataSource, config) {
+        var storyBuffer = [];
+        var firstStory = null;
+        var finishedCallback;
+        var that = this;
+    
+        function getTypeFromRef(ref) {
+            if (rally.sdk.util.Ref.isRef(ref)) {
+                var list = ref.split("/");
+                list.pop();
+                return list.pop();
+            }
+            else {
+                throw "Function getTypeFromRef expected a Rally Reference.";
+            }
+        }
+    
+        //dojo.connect(obj, event, context, method, dontFix);
+        this._fireEvent = function(eventName, eventArgs) {
+    
+            if (config && config.eventListeners[eventName] && dojo.isFunction(config.eventListeners[eventName])) {
+                config.eventListeners[eventName](that, eventArgs);
+            }
+        };
+    
+        // removes private and read only fields to keep from pushing them up.
+        this.filterObject = function (object) {
+            delete object.Discussion;
+            delete object.Rank;
+            delete object.LastUpdateDate;
+            delete object.Attachments;
+            delete object.AcceptedDate;
+            delete object.Blocker;
+            delete object.Defects;
+            delete object.TaskActualTotal;
+            delete object.TaskEstimateTotal;
+            delete object.TaskRemainingTotal;
+            delete object.TaskEstimateTotal;
+            delete object.RevisionHistory;
+            delete object.Subscription;
+            delete object.FormattedID;
+            delete object.CreationDate;
+            delete object.Changesets;
+            delete object.ObjectID;
+            for (var j in object) {
+                if (j.substring(0, 1) == '_') {
+                    delete object[j];
+                }
+            }
+            return object;
+        };
+    
+        this._addObject = function(object, typeName, callback) {
+            var item = dojo.clone(object);
+            item = this.filterObject(item);
+            function errorFunctionWrapper(error) {
+                if (dojo.isArray(error.Errors)) {
+                    var errorMessage = error.Errors.pop();
+                    if (errorMessage.indexOf("Not authorized to create:") >= 0) {
+                        errorMessage = "Unable to create an object. This can happen due to a child or task being in a project you do not have write permissions to.";
+                    }
+                    rally.sdk.ui.AppHeader.showMessage("error", errorMessage, 10000);
+                }
+                else if(dojo.isObject(error)&&error.message){
+                    rally.sdk.ui.AppHeader.showMessage("error", error.message, 10000);
+                    error = [error.message];
+                }
+                if (dojo.isFunction(config.onError)) {
+                    config.onError(error);
+                }
+            }
+    
+            rallyDataSource.create(typeName, item, callback, errorFunctionWrapper);
+        };
+    
+        this._copyAllFromBuffer = function() {
+            if (storyBuffer.length > 0) {
+                var story = storyBuffer.pop();
+                that._copyStory(story.ref, story.parent, that._copyAllFromBuffer);
+            }
+            else {
+                if (finishedCallback) {
+                    finishedCallback(firstStory);
+                }
+            }
+        };
+    
+        this._addStoriesToBuffer = function(storyArray, parentRef) {
+            dojo.forEach(storyArray, function (story) {
+                storyBuffer.push({
+                    ref: story._ref,
+                    parent: parentRef
+                });
+            });
+        };
+    
+        this._copyStory = function(ref, parentRef, callback) {
+            rallyDataSource.getRallyObject(ref, function (foundObject) {
+                var type = getTypeFromRef(ref);
+                that._fireEvent("storyPreAdd", {story:foundObject});
+                if (parentRef) {
+                    foundObject.Parent = parentRef;
+                }
+                else {
+                    foundObject.Name = "(Copy of) " + foundObject.Name;
+                }
+                that._addObject(foundObject, type, function (storyRef) {
+                    if (!firstStory) {
+                        firstStory = storyRef;
+                    }
+                    that._fireEvent("storyPostAdd", {});
+                    that._addStoriesToBuffer(foundObject.Children, storyRef);
+                    that._copyTasksToStory(foundObject.Tasks, storyRef, callback);
+                }, null);
+            });
+        };
+    
+        this._copyTasksToStory = function(tasks, storyRef, callback) {
+            //Copy the array
+            var localTasks = tasks.slice(0);
+            if (localTasks.length > 0) {
+                var task = localTasks.pop();
+                that._copyTask(task._ref, storyRef, function () {
+                    that._copyTasksToStory(localTasks, storyRef, callback);
+                });
+            }
+            else {
+                callback();
+            }
+        };
+    
+        this._copyTask = function(ref, storyRef, callback) {
+            rallyDataSource.getRallyObject(ref, function (foundObject) {
+                var type = getTypeFromRef(ref);
+                foundObject.WorkProduct = storyRef;
+                that._fireEvent("taskPreAdd", {task:foundObject});
+                that._addObject(foundObject, type, function (ref, warnings) {
+                    if (callback) {
+                        that._fireEvent("taskPostAdd", [ref]);
+                        callback();
+                    }
+                }, null);
+            });
+        };
+    
+        this.copyStory = function (ref, callback) {
+            that._copyStory(ref, undefined, that._copyAllFromBuffer);
+            finishedCallback = callback;
+        };
+    };
+  </script>
+
+  <style type="text/css">
+        /* Add app styles here */
+
+  </style>
+
+  <script type="text/javascript">
+    rally.addOnLoad(function() {
+      var selectedValue = null;
+      var tasksAdded = 0;
+      var storiesAdded = 0;
+      var searchStories;
+      var goButton, chooseButton;
+      var chooser;
+      var waiter;
+      var dataSource = new rally.sdk.data.RallyDataSource('__WORKSPACE_OID__', 
+                                                          '__PROJECT_OID__',
+                                                          '__PROJECT_SCOPING_UP__', 
+                                                          '__PROJECT_SCOPING_DOWN__');
+
+      function taskPostAdd(object, args) {
+        tasksAdded = tasksAdded + 1;
+        displayTasksAdded(tasksAdded);
+      }
+
+      function taskPreAdd(object, args) {
+        dojo.byId("currentInfo").innerHTML = "Adding Task " + args.task.FormattedID + " - " + args.task.Name;
+      }
+
+      function storyPreAdd(object, args) {
+        dojo.byId("currentInfo").innerHTML = "Adding User Story " + args.story.FormattedID + " - " + args.story.Name;
+      }
+
+      function storyPostAdd(object, args) {
+        storiesAdded = storiesAdded + 1;
+        displayStoriesAdded(storiesAdded);
+      }
+
+      function displayStoriesAdded(count) {
+        dojo.byId("storyResult").innerHTML = "Stories added: " + count;
+      }
+
+      function displayTasksAdded(count) {
+        dojo.byId("taskResult").innerHTML = "Tasks added: " + tasksAdded;
+      }
+
+      function storyCopied(story) {
+        dojo.byId("currentInfo").innerHTML = "Copy complete: ";
+        var link = new rally.sdk.ui.basic.Link({
+          item: story,
+          text: story._refObjectName
+        });
+
+        link.display('currentInfo');
+        goButton.setEnabled(true);
+        chooseButton.setEnabled(true);
+        if(waiter) {
+          waiter.hide();
+          waiter = null;
+        }
+      }
+
+      function buttonPressed() {
+        if (selectedValue) {
+          var config = {
+            eventListeners:{
+              storyPreAdd:storyPreAdd,
+              storyPostAdd:storyPostAdd,
+              taskPreAdd:taskPreAdd,
+              taskPostAdd:taskPostAdd
+            }
+          };
+          tasksAdded = 0;
+          displayTasksAdded(tasksAdded);
+          storiesAdded = 0;
+          displayStoriesAdded(storiesAdded);
+          dojo.byId("currentInfo").innerHTML = "";
+          var copy = new rally.StoryDeepCopy(dataSource, config);
+          goButton.setEnabled(false);
+          chooseButton.setEnabled(false);
+          waiter = new rally.sdk.ui.basic.Wait({});
+          waiter.display('wait');
+          copy.copyStory(rally.sdk.util.Ref.getRelativeRef(selectedValue), storyCopied);
+        }
+      }
+
+      function onChooserClose(chooser, args) {
+        if (args.selectedItem) {
+          selectedValue = args.selectedItem;
+          goButton.setEnabled(true);
+          dojo.byId('storyBox').innerHTML = args.selectedItem.FormattedID + ' - ' + args.selectedItem.Name;
+        }
+      }
+
+      function showChooser() {
+        var chooserConfig = {
+          fetch:"FormattedID,Name,Description",
+          title: 'Story Chooser'
+        };
+        chooser = new rally.sdk.ui.Chooser(chooserConfig, dataSource);
+        chooser.addEventListener('onClose', onChooserClose);
+        chooser.display();
+      }
+
+      rally.addOnLoad(function () {
+        goButton = new rally.sdk.ui.basic.Button({
+          text: "Copy",
+          enabled: false
+        });
+        goButton.addEventListener('onClick', buttonPressed);
+        goButton.display('goButton');
+
+        chooseButton = new rally.sdk.ui.basic.Button({
+          text: "Choose"
+        });
+        chooseButton.addEventListener('onClick', showChooser);
+        chooseButton.display('chooseButton');
+
+        showChooser();
+
+        rally.sdk.ui.AppHeader.setHelpTopic("252");
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="container">
+    <div style="float:left">
+      <span id="chooseButton"></span>
+      <span id="storyBox" style="line-height:18px;vertical-align:middle">[No story selected]</span>
+      <span id="goButton"></span>
+    </div>
+    <div id="wait" style="float:left; height: 16px; width: 24px;"></div>
+    <div style="margin-left:5px;padding-top:10px;clear:both">
+      <div id="currentInfo" style="height:16px"></div>
+      <div id="storyResult" style="margin-top:10px"></div>
+      <div id="taskResult"></div>
+    </div>
+  </div>
+</body>
+</html>
+

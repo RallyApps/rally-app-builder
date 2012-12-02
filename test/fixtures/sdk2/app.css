@@ -1,0 +1,30 @@
+.button {
+    float: right;
+    margin-left: 10px;
+}
+
+.type-combo {
+    float: right;
+    margin-left: 10px;
+}
+
+.add-new {
+    float: left;
+    margin-left: 10px;
+}
+
+.headerControls {
+    float: left;
+}
+
+.headerControls .x-panel-body {
+    border-style: none;
+}
+
+.filterItemDisplay {
+    float: right;
+}
+
+.header {
+    margin-top: 10px
+}

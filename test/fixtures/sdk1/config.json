@@ -1,0 +1,12 @@
+{
+    "name": "StoryDeepCopy",
+    "className": "CustomApp",
+    "server": "https://rally1.rallydev.com",
+    "sdk": "1.32",
+    "javascript": [
+        "StoryDeepCopy.js"
+    ],
+    "css": [
+        "StoryDeepCopy.css"
+    ]
+}

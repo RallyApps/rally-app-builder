@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- Copyright (c) 2012 Rally Software Development Corp. All rights reserved -->
+<html>
+<head>
+  <title>Story Deep Copy</title>
+  <meta name="Name" content="App: Story Deep Copy" />
+  <meta name="Version" content="2012.11.30" />
+  <meta name="Vendor" content="Rally Software" />
+
+  <script type="text/javascript" src="/apps/1.32/sdk.js"></script>
+
+  <script type="text/javascript">
+    rally.addOnLoad(function() {
+      var selectedValue = null;
+      var tasksAdded = 0;
+      var storiesAdded = 0;
+      var searchStories;
+      var goButton, chooseButton;
+      var chooser;
+      var waiter;
+      var dataSource = new rally.sdk.data.RallyDataSource('__WORKSPACE_OID__', 
+                                                          '__PROJECT_OID__',
+                                                          '__PROJECT_SCOPING_UP__', 
+                                                          '__PROJECT_SCOPING_DOWN__');
+
+      function taskPostAdd(object, args) {
+        tasksAdded = tasksAdded + 1;
+        displayTasksAdded(tasksAdded);
+      }
+
+      function taskPreAdd(object, args) {
+        dojo.byId("currentInfo").innerHTML = "Adding Task " + args.task.FormattedID + " - " + args.task.Name;
+      }
+
+      function storyPreAdd(object, args) {
+        dojo.byId("currentInfo").innerHTML = "Adding User Story " + args.story.FormattedID + " - " + args.story.Name;
+      }
+
+      function storyPostAdd(object, args) {
+        storiesAdded = storiesAdded + 1;
+        displayStoriesAdded(storiesAdded);
+      }
+
+      function displayStoriesAdded(count) {
+        dojo.byId("storyResult").innerHTML = "Stories added: " + count;
+      }
+
+      function displayTasksAdded(count) {
+        dojo.byId("taskResult").innerHTML = "Tasks added: " + tasksAdded;
+      }
+
+      function storyCopied(story) {
+        dojo.byId("currentInfo").innerHTML = "Copy complete: ";
+        var link = new rally.sdk.ui.basic.Link({
+          item: story,
+          text: story._refObjectName
+        });
+
+        link.display('currentInfo');
+        goButton.setEnabled(true);
+        chooseButton.setEnabled(true);
+        if(waiter) {
+          waiter.hide();
+          waiter = null;
+        }
+      }
+
+      function buttonPressed() {
+        if (selectedValue) {
+          var config = {
+            eventListeners:{
+              storyPreAdd:storyPreAdd,
+              storyPostAdd:storyPostAdd,
+              taskPreAdd:taskPreAdd,
+              taskPostAdd:taskPostAdd
+            }
+          };
+          tasksAdded = 0;
+          displayTasksAdded(tasksAdded);
+          storiesAdded = 0;
+          displayStoriesAdded(storiesAdded);
+          dojo.byId("currentInfo").innerHTML = "";
+          var copy = new rally.StoryDeepCopy(dataSource, config);
+          goButton.setEnabled(false);
+          chooseButton.setEnabled(false);
+          waiter = new rally.sdk.ui.basic.Wait({});
+          waiter.display('wait');
+          copy.copyStory(rally.sdk.util.Ref.getRelativeRef(selectedValue), storyCopied);
+        }
+      }
+
+      function onChooserClose(chooser, args) {
+        if (args.selectedItem) {
+          selectedValue = args.selectedItem;
+          goButton.setEnabled(true);
+          dojo.byId('storyBox').innerHTML = args.selectedItem.FormattedID + ' - ' + args.selectedItem.Name;
+        }
+      }
+
+      function showChooser() {
+        var chooserConfig = {
+          fetch:"FormattedID,Name,Description",
+          title: 'Story Chooser'
+        };
+        chooser = new rally.sdk.ui.Chooser(chooserConfig, dataSource);
+        chooser.addEventListener('onClose', onChooserClose);
+        chooser.display();
+      }
+
+      rally.addOnLoad(function () {
+        goButton = new rally.sdk.ui.basic.Button({
+          text: "Copy",
+          enabled: false
+        });
+        goButton.addEventListener('onClick', buttonPressed);
+        goButton.display('goButton');
+
+        chooseButton = new rally.sdk.ui.basic.Button({
+          text: "Choose"
+        });
+        chooseButton.addEventListener('onClick', showChooser);
+        chooseButton.display('chooseButton');
+
+        showChooser();
+
+        rally.sdk.ui.AppHeader.setHelpTopic("252");
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="container">
+    <div style="float:left">
+      <span id="chooseButton"></span>
+      <span id="storyBox" style="line-height:18px;vertical-align:middle">[No story selected]</span>
+      <span id="goButton"></span>
+    </div>
+    <div id="wait" style="float:left; height: 16px; width: 24px;"></div>
+    <div style="margin-left:5px;padding-top:10px;clear:both">
+      <div id="currentInfo" style="height:16px"></div>
+      <div id="storyResult" style="margin-top:10px"></div>
+      <div id="taskResult"></div>
+    </div>
+  </div>
+</body>
+</html>
