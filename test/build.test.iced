@@ -2,8 +2,10 @@ assert = require 'assert'
 rallyAppBuilder = require '../index'
 fs = require 'fs'
 wrench = require 'wrench'
-describe('Init new App', ()->
-  baseDir = 'test/initTemp'
+path = require 'path'
+
+describe('Build an App', ()->
+  baseDir = 'test/buildTemp'
 
   before ()->
     try
@@ -15,22 +17,39 @@ describe('Init new App', ()->
       wrench.rmdirSyncRecursive(baseDir)
     catch e
 
-  it('tests files created', (done)->
-    checkFilesFetched = ()->
-      files = fs.readdirSync(baseDir)
-      error = new Error("README.md not found")
-      for file in files
-        if file.indexOf("README.md") > -1
-          error = null
-      if error
-        done(error)
-      else
+  it 'errors if no config', (done)->
+    config = path : '.'
+    testResponse = (error)->
+      console.log(error)
+      if(error)
         done()
+      else
+        done(new Error("Error not thrown without config specified"))
+    rallyAppBuilder.build config, testResponse
 
-    rallyAppBuilder.init(
-      name: 'App'
-      path: baseDir
-      checkFilesFetched
-    )
+
+  it 'passes with config', (done)->
+
+    config = path : path.join(__dirname, 'fixtures','sdk1')
+    rallyAppBuilder.build config, done
+
+  it('worked', (done)->
+    done()
+#    checkFilesFetched = ()->
+#      files = fs.readdirSync(baseDir)
+#      error = new Error("README.md not found")
+#      for file in files
+#        if file.indexOf("README.md") > -1
+#          error = null
+#      if error
+#        done(error)
+#      else
+#        done()
+#
+#    rallyAppBuilder.init(
+#      name: 'App'
+#      path: baseDir
+#      checkFilesFetched
+#    )
   )
 )
