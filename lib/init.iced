@@ -1,7 +1,7 @@
 _ = require 'underscore'
 fs = require 'fs'
 path = require 'path'
-Mustache = require 'mustache'
+mustache = require 'mustache'
 
 files =
   "app.css": "app.css"
@@ -12,7 +12,7 @@ files =
   "README.md": "README.md"
 
 
-module.exports = (args,callback)->
+module.exports = (args, callback)->
   callback = callback || ()->
   try
     args = _.defaults args,
@@ -24,13 +24,13 @@ module.exports = (args,callback)->
     filePath = args.path
     delete args.path
     view = args
-    templatePath =path.resolve(__dirname, '../templates/')
+    templatePath = path.resolve(__dirname, '../templates/')
     _.each(files,
     (value, key)->
       templateFile = "#{templatePath}/#{key}"
       destinationFile = "#{filePath}/#{value}"
       file = fs.readFileSync(templateFile, "utf-8")
-      parsed = Mustache.render(file, view)
+      parsed = mustache.render(file, view)
       fs.writeFileSync(destinationFile, parsed)
     )
   catch err

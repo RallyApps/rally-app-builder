@@ -1,6 +1,0 @@
-{
-    "server": "{{server}}",
-    "username": "you@domain.com",
-    "password": "S3cr3t",
-    "project": "YourProject"
-}

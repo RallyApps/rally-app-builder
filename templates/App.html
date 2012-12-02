@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{name}}</title>
+
+    <script type="text/javascript" src="{{{sdk}}}"></script>
+
+    <script type="text/javascript">
+        Rally.onReady(function () {
+            Rally.launchApp('{{className}}', {
+                name:"{{name}}"
+            });
+        });
+    </script>
+
+
+{{#javascript_files}}
+    <script type="javascript">
+        {{{.}}}
+    </script>
+{{/javascript_files}}
+{{#css_files}}
+    <style type="text/css">
+        {{{.}}}
+    </style>
+{{/css_files}}
+</head>
+<body></body>
+</html>

@@ -6,15 +6,15 @@ path = require 'path'
 
 tempTestDirectory = 'test/buildTemp'
 fixturesDirectory = path.join(__dirname, 'fixtures')
-sdk1Directory = path.join(fixturesDirectory, 'sdk1')
-sdk2Directory = path.join(fixturesDirectory, 'sdk2')
-existsSync = fs.existsSync || path.existsSync
+sdk1FixturesDirectory = path.join(fixturesDirectory, 'sdk1')
+sdk2FixturesDirectory = path.join(fixturesDirectory, 'sdk2')
 
-assertDeployDirectoryHasAppFile = (sdkDirectory)->
+sdk1TestDirectory = path.join(tempTestDirectory, 'sdk1')
+sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
+existsSync = fs.existsSync || path.existsSync
 
 
 describe('Build an App', ()->
-
   beforeEach (done)->
     try
       copy = ()-> wrench.copyDirRecursive(fixturesDirectory, tempTestDirectory, done)
@@ -23,7 +23,8 @@ describe('Build an App', ()->
 
   afterEach (done)->
     if(existsSync(tempTestDirectory))
-      wrench.rmdirRecursive(tempTestDirectory, done)
+#      wrench.rmdirRecursive(tempTestDirectory, done)
+      done()
     else
       done()
 
@@ -37,18 +38,21 @@ describe('Build an App', ()->
         done(new Error("Error not thrown without config specified"))
     rallyAppBuilder.build config, testResponse
 
-
   it 'passes with config', (done)->
-    config = path: sdk1Directory
+    config = path: sdk1TestDirectory
     rallyAppBuilder.build config, done
 
   it('builds sdk2 Apps', (done)->
-    config = path: sdk2Directory
-    rallyAppBuilder.build config, done
+    config = path: sdk2TestDirectory
+    assertSuccessfulBuild = (error)->
+      if (error) then done(error)
+      deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
+      assert(deployFileExists)
+      done()
+    rallyAppBuilder.build config, assertSuccessfulBuild
   )
 
-
-#  it('build operation is safely repeatable', (done)->
-#    done()
-#  )
+  #  it('build operation is safely repeatable', (done)->
+  #    done()
+  #  )
 )
