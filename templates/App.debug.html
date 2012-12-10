@@ -3,27 +3,26 @@
 <head>
     <title>{{name}}</title>
 
-    <script type="text/javascript" src="{{{sdk}}}"></script>
+    <script type="text/javascript" src="https://rally1.rallydev.com/apps/{{{sdk}}}/sdk-debug.js"></script>
 
     <script type="text/javascript">
-        Rally.onReady(function () {
+        // I am keeping the extra , in there to simplify my code. If someone is actually using an old version of IE to make an app let me know.
+        Rally.loadScripts(
+                [
+                    {{#javascript}}
+                      "{{{.}}}",
+                    {{/javascript}}
+                ],
+        function() {
             Rally.launchApp('{{className}}', {
                 name:"{{name}}"
             });
-        });
+        }, true);
     </script>
 
-
-{{#javascript_files}}
-    <script type="javascript">
-        {{{.}}}
-    </script>
-{{/javascript_files}}
-{{#css_files}}
-    <style type="text/css">
-        {{{.}}}
-    </style>
-{{/css_files}}
+{{#css}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+{{/css}}
 </head>
 <body></body>
 </html>

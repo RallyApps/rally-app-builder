@@ -41,17 +41,34 @@ describe('Build an App', ()->
     config = path: sdk1TestDirectory
     rallyAppBuilder.build config, done
 
+
   it('builds sdk2 Apps', (done)->
     config = path: sdk2TestDirectory
     assertSuccessfulBuild = (error)->
       if (error) then done(error)
-      deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
-      assert(deployFileExists)
-      done()
+      else
+        deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
+        assert(deployFileExists)
+        debugFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
+        assert(debugFileExists)
+        done()
     rallyAppBuilder.build config, assertSuccessfulBuild
   )
 
-  #  it('build operation is safely repeatable', (done)->
-  #    done()
-  #  )
+  it('build operation is safely repeatable', (done)->
+    config = path: sdk2TestDirectory
+    assertSuccessfulBuild = (error)->
+      if (error) then done(error)
+      else
+        deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
+        assert(deployFileExists)
+        debugFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
+        assert(debugFileExists)
+        done()
+    rallyAppBuilder.build config, (error)->
+      if error then done(error)
+      else
+        rallyAppBuilder.build config, assertSuccessfulBuild
+
+  )
 )

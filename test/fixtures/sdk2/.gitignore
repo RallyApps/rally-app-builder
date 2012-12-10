@@ -6,3 +6,4 @@ App-debug.html
 App-local.html
 #Ignore All hidden files.
 .*
+deploy
