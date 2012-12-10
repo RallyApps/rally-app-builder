@@ -5,11 +5,10 @@ async = require 'async'
 mustache = require 'mustache'
 configFileName = "config.json"
 appFileName = "App.html"
+appDebugFileName = "App.debug.html"
 deployFilePath = "deploy"
 templatePath = path.resolve(__dirname, '../templates/')
 sameExistsSync = fs.existsSync || path.existsSync
-javaScriptTemplate = """
-                 """
 
 getConfig = (appPath, callback) ->
   convertToJson = (error, file)->
@@ -23,7 +22,6 @@ getConfig = (appPath, callback) ->
     throw new Error("#{configFileName} not found at path #{configPath}")
   fs.readFile(configPath, "utf-8", convertToJson)
 
-
 getScripts = ({appPath, scripts}, callback)->
   fullPathScripts = []
   for script in scripts || []
@@ -32,45 +30,56 @@ getScripts = ({appPath, scripts}, callback)->
     fs.readFile(file, "utf-8", callback)
   async.map(fullPathScripts, readFile, (err, results) ->
     if err then callback(err)
-    else callback(null,results)
+    else callback(null, results)
   )
 
-
-createDeployFile = (appPath, data, callback)->
-  appTemplate = fs.readFileSync(path.resolve(__dirname, '../templates/App.html'),"utf-8")
-  fullDeployFilePath = path.join(appPath, deployFilePath)
-  filePath = path.join(fullDeployFilePath, appFileName)
+createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
+  appTemplate = fs.readFileSync(path.join(templatePath, templateFileName), "utf-8")
+  fullDeployFilePath = path.resolve(appPath, directory)
+  filePath = path.join(fullDeployFilePath, templateFileName)
   if(!sameExistsSync(fullDeployFilePath))
     fs.mkdirSync(fullDeployFilePath)
-  compiledApp = mustache.render(appTemplate, data)
+  compiledApp = mustache.render(appTemplate, templateData)
   fs.writeFile(filePath, compiledApp, callback)
+
+buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, callback)->
+  async.forEach(
+    [
+      {appPath, templateData, templateFileName: appDebugFileName, directory: '.'},
+      {appPath, templateData, templateFileName: appFileName, directory: deployFilePath}
+    ]
+    createDeployFile
+    callback
+  )
+
+getFiles = ({configJson,appPath},callback)->
+  async.parallel(
+    javascript_files: (jsCallback)->
+      getScripts {appPath, scripts: configJson.javascript }, jsCallback
+    css_files: (cssCallback)->
+      getScripts {appPath, scripts: configJson.css }, cssCallback
+    callback
+  )
 
 module.exports = ({path}, callback)->
   try
     callback = callback || ()->
-
     appPath = path || process.cwd()
     getConfig(appPath, (error, configJson)->
       if error then callback error
       else
-        async.parallel(
-
-          javascript_files: (jsCallback)->
-            scripts = configJson.javascript
-            getScripts {appPath, scripts }, jsCallback
-          css_files: (cssCallback)->
-            scripts = configJson.css
-            getScripts {appPath, scripts }, cssCallback
-        (err, files)->
-          data = _.defaults(configJson,files)
-          createDeployFile(appPath, data, callback)
-        )
-
+      getFiles(
+        {configJson,appPath}
+        (err, {javascript_files, css_files})->
+          configJson.javascript_files = javascript_files
+          configJson.css_files = css_files
+          buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
+      )
     )
 
   catch error
     callback error
 
 
-#exports costants
-_.defaults module.exports, {configFileName, appFileName, deployFilePath}
+#exports constants
+_.defaults module.exports, {configFileName, appFileName, deployFilePath, appDebugFileName}

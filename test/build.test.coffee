@@ -47,6 +47,8 @@ describe('Build an App', ()->
       if (error) then done(error)
       deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
       assert(deployFileExists)
+      debugFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
+      assert(debugFileExists)
       done()
     rallyAppBuilder.build config, assertSuccessfulBuild
   )
