@@ -24,7 +24,7 @@ cmdr
   .description("Builds a the current App")
   .action ()->
 
-    RallyAppBuilder.build
+    RallyAppBuilder.build {},console.log
 
 cmdr
   .command('clone [organization] [repo]')

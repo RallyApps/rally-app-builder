@@ -3,22 +3,25 @@
 <head>
     <title>{{name}}</title>
 
-    <script type="text/javascript" src="{{{sdk}}}"></script>
+    <script type="text/javascript" src="/apps/{{{sdk}}}/sdk.js"></script>
+
+
+
 
     <script type="text/javascript">
         Rally.onReady(function () {
+            {{#javascript_files}}
+                {{{.}}}
+            {{/javascript_files}}
+
             Rally.launchApp('{{className}}', {
                 name:"{{name}}"
             });
+
         });
     </script>
 
 
-{{#javascript_files}}
-    <script type="javascript">
-        {{{.}}}
-    </script>
-{{/javascript_files}}
 {{#css_files}}
     <style type="text/css">
         {{{.}}}
