@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 require("coffee-script");
-require("./run");
+path = require("path")
+require(path.join(__dirname, 'run'));

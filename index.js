@@ -1,3 +1,3 @@
 require("coffee-script");
 
-module.exports = require("./lib/main.iced");
+module.exports = require("./lib/main.coffee");

@@ -20,6 +20,13 @@ cmdr
       server:server
 
 cmdr
+  .command('build')
+  .description("Builds a the current App")
+  .action ()->
+
+    RallyAppBuilder.build
+
+cmdr
   .command('clone [organization] [repo]')
   .description("Creates a new Rally App project from an existing GitHub project. ")
   .action (organization,repo)->

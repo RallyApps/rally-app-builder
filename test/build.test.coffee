@@ -23,8 +23,7 @@ describe('Build an App', ()->
 
   afterEach (done)->
     if(existsSync(tempTestDirectory))
-#      wrench.rmdirRecursive(tempTestDirectory, done)
-      done()
+      wrench.rmdirRecursive(tempTestDirectory, done)
     else
       done()
 

@@ -2,7 +2,7 @@
     "author": "Charles Ferentchak <charles@rallydev.com>",
     "name": "rally-app-builder",
     "description": "A node module that assists in the building of Rally Apps",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "homepage": "https://github.com/ferentchak/rally-app-builder",
     "repository": {
         "type": "git",
@@ -28,7 +28,7 @@
         "wrench":"1.3.x"
     },
     "scripts":{
-        "test":"mocha -t 5000 --compilers iced:iced-coffee-script"
+        "test":"mocha -t 5000 --compilers coffee:coffee-script"
     },
 
     "bin": "./bin/rally-app-builder"
