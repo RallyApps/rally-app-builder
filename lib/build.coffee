@@ -10,17 +10,31 @@ deployFilePath = "deploy"
 templatePath = path.resolve(__dirname, '../templates/')
 sameExistsSync = fs.existsSync || path.existsSync
 
+getGitRepo = (appPath, callback)->
+  convertToJson = (error, file)->
+  if !error
+    callback(null, JSON.parse(file))
+  else
+    callback(error)
+
+  configPath = path.join(appPath, ".git","config")
+  if(sameExistsSync(configPath))
+    fs.readFile(configPath, "utf-8", convertToJson)
+  else
+    console.log("git not found!")
+
+
 getConfig = (appPath, callback) ->
   convertToJson = (error, file)->
-    if !error
-      callback(null, JSON.parse(file))
+    if !error then callback(null, JSON.parse(file))
     else
       callback(error)
 
   configPath = path.join(appPath, configFileName)
-  if(!sameExistsSync(configPath))
+  if !sameExistsSync(configPath)
     throw new Error("#{configFileName} not found at path #{configPath}")
-  fs.readFile(configPath, "utf-8", convertToJson)
+  else
+    fs.readFile(configPath, "utf-8", convertToJson)
 
 getScripts = ({appPath, scripts}, callback)->
   fullPathScripts = []
@@ -52,7 +66,7 @@ buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, cal
     callback
   )
 
-getFiles = ({configJson,appPath},callback)->
+getFiles = ({configJson, appPath}, callback)->
   async.parallel(
     javascript_files: (jsCallback)->
       getScripts {appPath, scripts: configJson.javascript }, jsCallback
@@ -69,7 +83,7 @@ module.exports = ({path}, callback)->
       if error then callback error
       else
       getFiles(
-        {configJson,appPath}
+        {configJson, appPath}
         (err, {javascript_files, css_files})->
           configJson.javascript_files = javascript_files
           configJson.css_files = css_files

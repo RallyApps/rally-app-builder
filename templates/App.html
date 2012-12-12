@@ -16,6 +16,9 @@
 
             Rally.launchApp('{{className}}', {
                 name:"{{name}}"
+                {{#extra}}
+                ,{{{.}}}
+                {{/extra}}
             });
 
         });
