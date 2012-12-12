@@ -7,3 +7,4 @@ App-local.html
 #IDE Files
 .idea
 .c9revisions
+node_modules
