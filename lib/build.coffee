@@ -12,10 +12,6 @@ sameExistsSync = fs.existsSync || path.existsSync
 
 getGitRepo = (appPath, callback)->
   convertToJson = (error, file)->
-  if !error
-    callback(null, JSON.parse(file))
-  else
-    callback(error)
 
   configPath = path.join(appPath, ".git","config")
   if(sameExistsSync(configPath))

@@ -2,7 +2,7 @@
     "name": "{{name}}",
     "className": "CustomApp",
     "server": "{{server}}",
-    "sdk": "{{version}}",
+    "sdk": "{{sdk_version}}",
     "javascript": [
         "App.js"
     ],
