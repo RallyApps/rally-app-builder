@@ -4,8 +4,8 @@
     "server": "https://rally1.rallydev.com",
     "sdk": "2.0p5",
     "javascript": [
-        "CustomCard.js",
-        "App.js"
+        "CustomCard.coffee",
+        "App.coffee"
     ],
     "css": [
         "app.css"

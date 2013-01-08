@@ -4,13 +4,14 @@ fs = require 'fs'
 wrench = require 'wrench'
 path = require 'path'
 
+
 tempTestDirectory = 'test/buildTemp'
 fixturesDirectory = path.join(__dirname, 'fixtures')
-sdk1FixturesDirectory = path.join(fixturesDirectory, 'sdk1')
-sdk2FixturesDirectory = path.join(fixturesDirectory, 'sdk2')
 
 sdk1TestDirectory = path.join(tempTestDirectory, 'sdk1')
 sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
+sdk2CoffeeTestDirectory = path.join(tempTestDirectory, 'coffeescript')
+
 existsSync = fs.existsSync || path.existsSync
 
 
@@ -42,12 +43,12 @@ describe('Build an App', ()->
     rallyAppBuilder.build config, done
 
   describe('with AppSDK 2.0',()->
-    createBuildAssert = (done)->
+    createBuildAssert = (baseDirectory,done)->
       (error)->
         if (error) then done(error)
         else
-          appFileName = path.join(sdk2TestDirectory,"deploy", rallyAppBuilder.build.appFileName)
-          appDebugFileName = path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
+          appFileName = path.join(baseDirectory,"deploy", rallyAppBuilder.build.appFileName)
+          appDebugFileName = path.join(baseDirectory, rallyAppBuilder.build.appDebugFileName)
           deployFileExists = existsSync appFileName
           assert(deployFileExists)
           debugFileExists = existsSync appDebugFileName
@@ -60,7 +61,7 @@ describe('Build an App', ()->
 
     it('should build an App', (done)->
       config = path: sdk2TestDirectory
-      rallyAppBuilder.build config, createBuildAssert(done)
+      rallyAppBuilder.build config, createBuildAssert(sdk2TestDirectory,done)
     )
 
     it('should be able to build and App after an App has been built', (done)->
@@ -68,8 +69,13 @@ describe('Build an App', ()->
       rallyAppBuilder.build config, (error)->
         if error then done(error)
         else
-          rallyAppBuilder.build config, createBuildAssert(done)
-
+          rallyAppBuilder.build config, createBuildAssert(sdk2TestDirectory,done)
+    )
+    describe('using coffescript',()->
+      it('should build an App', (done)->
+        config = path: sdk2CoffeeTestDirectory
+        rallyAppBuilder.build config, createBuildAssert(sdk2CoffeeTestDirectory,done)
+      )
     )
   )
 

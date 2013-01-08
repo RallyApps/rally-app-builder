@@ -3,6 +3,8 @@ fs = require 'fs'
 path = require 'path'
 async = require 'async'
 mustache = require 'mustache'
+coffeeScript = require 'coffee-script'
+
 configFileName = "config.json"
 appFileName = "App.html"
 appDebugFileName = "App-debug.html"
@@ -32,12 +34,18 @@ getConfig = (appPath, callback) ->
   else
     fs.readFile(configPath, "utf-8", convertToJson)
 
+readFile = (file, callback)->
+  wrapper = (error,fileContents)->
+    if file.match /.coffee$/
+      fileContents = coffeeScript.compile(fileContents)
+    callback(error,fileContents)
+  fs.readFile(file, "utf-8", wrapper)
+
 getScripts = ({appPath, scripts}, callback)->
   fullPathScripts = []
   for script in scripts || []
     fullPathScripts.push(path.resolve(appPath, script))
-  readFile = (file, callback)->
-    fs.readFile(file, "utf-8", callback)
+
   async.map(fullPathScripts, readFile, (err, results) ->
     if err then callback(err)
     else callback(null, results)
