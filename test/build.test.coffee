@@ -22,9 +22,9 @@ describe('Build an App', ()->
     catch e
 
   afterEach (done)->
-#    if(existsSync(tempTestDirectory))
-#      wrench.rmdirRecursive(tempTestDirectory, done)
-#    else
+    if(existsSync(tempTestDirectory))
+      wrench.rmdirRecursive(tempTestDirectory, done)
+    else
       done()
 
 
