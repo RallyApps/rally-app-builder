@@ -1,7 +1,7 @@
 Ext.define('CustomApp', {
     extend: 'Rally.app.App',
     componentCls: 'app',
-
+    uselessString:"Custom App File",
     launch: function() {
         var cardBoardConfig = {
             xtype: 'rallycardboard',

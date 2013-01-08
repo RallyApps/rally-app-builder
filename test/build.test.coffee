@@ -22,9 +22,9 @@ describe('Build an App', ()->
     catch e
 
   afterEach (done)->
-    if(existsSync(tempTestDirectory))
-      wrench.rmdirRecursive(tempTestDirectory, done)
-    else
+#    if(existsSync(tempTestDirectory))
+#      wrench.rmdirRecursive(tempTestDirectory, done)
+#    else
       done()
 
 
@@ -41,34 +41,36 @@ describe('Build an App', ()->
     config = path: sdk1TestDirectory
     rallyAppBuilder.build config, done
 
+  describe('with AppSDK 2.0',()->
+    createBuildAssert = (done)->
+      (error)->
+        if (error) then done(error)
+        else
+          appFileName = path.join(sdk2TestDirectory,"deploy", rallyAppBuilder.build.appFileName)
+          appDebugFileName = path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
+          deployFileExists = existsSync appFileName
+          assert(deployFileExists)
+          debugFileExists = existsSync appDebugFileName
+          assert(debugFileExists)
+          appFile = fs.readFileSync(appFileName, "utf-8")
+          assert(appFile.match /Custom App File/)
+          assert(appFile.match /Add app styles here/)
+          assert(appFile.match /customcard/)
+          done()
 
-  it('builds sdk2 Apps', (done)->
-    config = path: sdk2TestDirectory
-    assertSuccessfulBuild = (error)->
-      if (error) then done(error)
-      else
-        deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
-        assert(deployFileExists)
-        debugFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
-        assert(debugFileExists)
-        done()
-    rallyAppBuilder.build config, assertSuccessfulBuild
+    it('should build an App', (done)->
+      config = path: sdk2TestDirectory
+      rallyAppBuilder.build config, createBuildAssert(done)
+    )
+
+    it('should be able to build and App after an App has been built', (done)->
+      config = path: sdk2TestDirectory
+      rallyAppBuilder.build config, (error)->
+        if error then done(error)
+        else
+          rallyAppBuilder.build config, createBuildAssert(done)
+
+    )
   )
 
-  it('build operation is safely repeatable', (done)->
-    config = path: sdk2TestDirectory
-    assertSuccessfulBuild = (error)->
-      if (error) then done(error)
-      else
-        deployFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.deployFilePath, rallyAppBuilder.build.appFileName)
-        assert(deployFileExists)
-        debugFileExists = existsSync path.join(sdk2TestDirectory, rallyAppBuilder.build.appDebugFileName)
-        assert(debugFileExists)
-        done()
-    rallyAppBuilder.build config, (error)->
-      if error then done(error)
-      else
-        rallyAppBuilder.build config, assertSuccessfulBuild
-
-  )
 )
