@@ -4,6 +4,7 @@ path = require 'path'
 async = require 'async'
 mustache = require 'mustache'
 coffeeScript = require 'coffee-script'
+uglify = require 'uglify-js'
 
 configFileName = "config.json"
 appFileName = "App.html"
@@ -15,7 +16,7 @@ sameExistsSync = fs.existsSync || path.existsSync
 getGitRepo = (appPath, callback)->
   convertToJson = (error, file)->
 
-  configPath = path.join(appPath, ".git","config")
+  configPath = path.join(appPath, ".git", "config")
   if(sameExistsSync(configPath))
     fs.readFile(configPath, "utf-8", convertToJson)
   else
@@ -34,21 +35,32 @@ getConfig = (appPath, callback) ->
   else
     fs.readFile(configPath, "utf-8", convertToJson)
 
+compressJavaScript = (code)->
+  ast = uglify.parse(code)
+  ast.figure_out_scope()
+  compressor = uglify.Compressor({})
+  ast = ast.transform(compressor)
+  return ast.print_to_string()
+
 readFile = (file, callback)->
-  wrapper = (error,fileContents)->
+  wrapper = (error, fileContents)->
     if file.match /.coffee$/
       fileContents = coffeeScript.compile(fileContents)
-    callback(error,fileContents)
+    callback(error, fileContents)
   fs.readFile(file, "utf-8", wrapper)
 
-getScripts = ({appPath, scripts}, callback)->
+getScripts = ({appPath, scripts, compress}, callback)->
   fullPathScripts = []
   for script in scripts || []
     fullPathScripts.push(path.resolve(appPath, script))
 
   async.map(fullPathScripts, readFile, (err, results) ->
     if err then callback(err)
-    else callback(null, results)
+    else
+      if compress
+        for key,code of results
+          results[key] = compressJavaScript(code)
+      callback(null, results)
   )
 
 createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
@@ -73,7 +85,7 @@ buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, cal
 getFiles = ({configJson, appPath}, callback)->
   async.parallel(
     javascript_files: (jsCallback)->
-      getScripts {appPath, scripts: configJson.javascript }, jsCallback
+      getScripts {appPath, scripts: configJson.javascript, compress: true }, jsCallback
     css_files: (cssCallback)->
       getScripts {appPath, scripts: configJson.css }, cssCallback
     callback
