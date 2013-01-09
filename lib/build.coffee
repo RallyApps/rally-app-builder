@@ -3,9 +3,8 @@ fs = require 'fs'
 path = require 'path'
 async = require 'async'
 mustache = require 'mustache'
-coffeeScript = require 'coffee-script'
-uglify = require 'uglify-js'
-{JSHINT} = require 'jshint'
+
+getScript = require './build/get-script'
 configFileName = "config.json"
 appFileName = "App.html"
 appDebugFileName = "App-debug.html"
@@ -35,46 +34,6 @@ getConfig = (appPath, callback) ->
   else
     fs.readFile(configPath, "utf-8", convertToJson)
 
-hintJavaScriptFile = (code,fileName)->
-  if(!JSHINT(code, undef:false))
-    for error in JSHINT.errors
-      console.log  "Error in #{fileName} on line #{error.line}: #{error.reason}",
-
-processJavaScript = (code,fileName)->
-  hintJavaScriptFile(code,fileName)
-  ast = uglify.parse(code)
-  ast.figure_out_scope()
-  compressor = uglify.Compressor(
-    drop_debugger:true
-    unused:false
-  )
-  ast = ast.transform(compressor)
-  code = ast.print_to_string()
-
-  return code
-
-readFile = (file, callback)->
-  wrapper = (error, fileContents)->
-    if file.match /.coffee$/
-      fileContents = coffeeScript.compile(fileContents)
-    callback(error, fileContents)
-  fs.readFile(file, "utf-8", wrapper)
-
-getScripts = ({appPath, scripts, compress}, callback)->
-  fullPathScripts = []
-  for script in scripts || []
-    fullPathScripts.push(path.resolve(appPath, script))
-
-  async.map(fullPathScripts, readFile, (err, results) ->
-
-    if err then callback(err)
-    else
-      if compress
-        for key,code of results
-          fileName = scripts[key]
-          results[key] = processJavaScript(code,fileName)
-      callback(null, results)
-  )
 
 createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
   appTemplate = fs.readFileSync(path.join(templatePath, templateFileName), "utf-8")
@@ -95,15 +54,6 @@ buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, cal
     callback
   )
 
-getFiles = ({configJson, appPath}, callback)->
-  async.parallel(
-    javascript_files: (jsCallback)->
-      getScripts {appPath, scripts: configJson.javascript, compress: true }, jsCallback
-    css_files: (cssCallback)->
-      getScripts {appPath, scripts: configJson.css }, cssCallback
-    callback
-  )
-
 module.exports = ({path}, callback)->
   try
     callback = callback || ()->
@@ -111,7 +61,7 @@ module.exports = ({path}, callback)->
     getConfig(appPath, (error, configJson)->
       if error then callback error
       else
-      getFiles(
+      getScript.getFiles(
         {configJson, appPath}
         (err, {javascript_files, css_files})->
           configJson.javascript_files = javascript_files
@@ -119,10 +69,8 @@ module.exports = ({path}, callback)->
           buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
       )
     )
-
   catch error
     callback error
-
 
 #exports constants
 _.defaults module.exports, {configFileName, appFileName, deployFilePath, appDebugFileName}
