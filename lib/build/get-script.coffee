@@ -10,26 +10,25 @@ module.exports =
   getFiles : ({configJson, appPath}, callback)->
     async.parallel(
       javascript_files: (jsCallback)=>
-        @getScripts {appPath, scripts: configJson.javascript, compress: true }, jsCallback
+        @getJavaScripts {appPath, scripts: configJson.javascript}, jsCallback
       css_files: (cssCallback)=>
         @getScripts {appPath, scripts: configJson.css }, cssCallback
       callback
+    )
+  getJavaScripts:({appPath, scripts}, callback)->
+    @getScripts({appPath, scripts, compress:true}, (err, results) =>
+      if err then callback(err)
+      else
+        for key,code of results
+          fileName = scripts[key]
+          results[key] = @processJavaScript(code,fileName)
+        callback(null, results)
     )
   getScripts : ({appPath, scripts, compress}, callback)->
     fullPathScripts = []
     for script in scripts || []
       fullPathScripts.push(path.resolve(appPath, script))
-
-    async.map(fullPathScripts, @readFile, (err, results) =>
-
-      if err then callback(err)
-      else
-        if compress
-          for key,code of results
-            fileName = scripts[key]
-            results[key] = @processJavaScript(code,fileName)
-        callback(null, results)
-    )
+    async.map(fullPathScripts, @readFile, callback)
 
   compressJavaScript:(code)->
     ast = uglify.parse(code)
