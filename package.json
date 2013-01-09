@@ -2,7 +2,7 @@
   "author": "Charles Ferentchak <charles@rallydev.com>",
   "name": "rally-app-builder",
   "description": "A node module that assists in the building of Rally Apps",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://github.com/ferentchak/rally-app-builder",
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
     "commander": "0.6.x",
     "fetch-github-repo": "0.1.x",
     "async": "0.1.x",
-    "uglify-js": "~2.2.3"
+    "uglify-js": "~2.2.3",
+    "jshint": "~0.9.1"
   },
   "devDependencies": {
     "mocha": "1.6.x",

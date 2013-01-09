@@ -5,7 +5,7 @@ async = require 'async'
 mustache = require 'mustache'
 coffeeScript = require 'coffee-script'
 uglify = require 'uglify-js'
-
+{JSHINT} = require 'jshint'
 configFileName = "config.json"
 appFileName = "App.html"
 appDebugFileName = "App-debug.html"
@@ -35,7 +35,13 @@ getConfig = (appPath, callback) ->
   else
     fs.readFile(configPath, "utf-8", convertToJson)
 
-compressJavaScript = (code)->
+hintJavaScriptFile = (code,fileName)->
+  if(!JSHINT(code, undef:false))
+    for error in JSHINT.errors
+      console.log  "Error in #{fileName} on line #{error.line}: #{error.reason}",
+
+processJavaScript = (code,fileName)->
+  hintJavaScriptFile(code,fileName)
   ast = uglify.parse(code)
   ast.figure_out_scope()
   compressor = uglify.Compressor(
@@ -43,7 +49,9 @@ compressJavaScript = (code)->
     unused:false
   )
   ast = ast.transform(compressor)
-  return ast.print_to_string()
+  code = ast.print_to_string()
+
+  return code
 
 readFile = (file, callback)->
   wrapper = (error, fileContents)->
@@ -58,11 +66,13 @@ getScripts = ({appPath, scripts, compress}, callback)->
     fullPathScripts.push(path.resolve(appPath, script))
 
   async.map(fullPathScripts, readFile, (err, results) ->
+
     if err then callback(err)
     else
       if compress
         for key,code of results
-          results[key] = compressJavaScript(code)
+          fileName = scripts[key]
+          results[key] = processJavaScript(code,fileName)
       callback(null, results)
   )
 
