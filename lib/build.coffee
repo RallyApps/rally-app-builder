@@ -38,7 +38,10 @@ getConfig = (appPath, callback) ->
 compressJavaScript = (code)->
   ast = uglify.parse(code)
   ast.figure_out_scope()
-  compressor = uglify.Compressor({})
+  compressor = uglify.Compressor(
+    drop_debugger:true
+    unused:false
+  )
   ast = ast.transform(compressor)
   return ast.print_to_string()
 
