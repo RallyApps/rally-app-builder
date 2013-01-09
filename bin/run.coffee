@@ -34,4 +34,7 @@ cmdr
 
     RallyAppBuilder.clone {organization,repo}
 
+if process.argv.length == 2
+  process.argv.push("build")
+
 cmdr.parse process.argv
