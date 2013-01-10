@@ -1,10 +1,17 @@
 rally-app-builder
 =================
-[![Build Status](https://travis-ci.org/ferentchak/rally-app-builder.png?branch=master)](https://travis-ci.org/ferentchak/rally-app-builder)
+
 
 ## Install 
 
-`npm install rally-app-builder`
+First Install [Node.js](http://nodejs.org/)
+
+Second Install the Rally App Builder Globally
+`npm install -g rally-app-builder`
+
+If you don't have permission to install it globally you can install it locally like this
+
+`npm install -g rally-app-builder`
 
 ## API
 
