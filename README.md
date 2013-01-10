@@ -1,6 +1,6 @@
 rally-app-builder
 =================
-
+[![Build Status](https://travis-ci.org/ferentchak/rally-app-builder.png?branch=master)](https://travis-ci.org/ferentchak/rally-app-builder)
 
 ## Install 
 
