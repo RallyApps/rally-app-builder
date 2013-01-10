@@ -2,8 +2,6 @@ rally-app-builder
 =================
 
 
-### Replay Requestor
-
 ## Install 
 
 `npm install rally-app-builder`
