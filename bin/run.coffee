@@ -2,7 +2,7 @@ fs = require('fs')
 path = require ('path')
 cmdr = require('commander')
 RallyAppBuilder = require("../lib/main")
-
+usage = require("../lib/usage")
 packageLocation = path.normalize(__dirname + "/../package.json")
 version = JSON.parse(fs.readFileSync(packageLocation)).version
 
@@ -25,19 +25,21 @@ cmdr
   .description("Creates a new Rally App project template. ")
   .action (name, sdk_version, server)->
 
-
+    usage.log("init")
     RallyAppBuilder.init {name, sdk_version, server}, builder
 
 cmdr
   .command('build')
   .description("Builds the current App.")
   .action ()->
+    usage.log("build")
     RallyAppBuilder.build {}, errorHandler
 
 cmdr
   .command('clone [organization] [repo]')
   .description("Creates a new Rally App project locally from an existing GitHub project. ")
   .action (organization, repo)->
+    usage.log("clone")
     if !organization
       console.error("Please specify an organization when using the clone command.")
       return
