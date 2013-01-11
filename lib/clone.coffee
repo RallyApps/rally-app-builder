@@ -2,7 +2,6 @@ fetchGitHubRepo = require("fetch-github-repo")
 _ = require('underscore')
 fs = require 'fs'
 path = require 'path'
-existsSync = fs.existsSync || path.existsSync
 
 module.exports = (args, callback)->
   callback = callback || ()->
@@ -13,7 +12,7 @@ module.exports = (args, callback)->
 
   rakeFilePath = path.join( args.path, "Rakefile" )
   deleteRake = ()->
-    if existsSync(rakeFilePath)
+    if fs.existsSync(rakeFilePath)
       fs.unlink(rakeFilePath)
     callback.call(arguments)
 

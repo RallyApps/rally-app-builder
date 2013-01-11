@@ -12,9 +12,6 @@ sdk1TestDirectory = path.join(tempTestDirectory, 'sdk1')
 sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
 sdk2CoffeeTestDirectory = path.join(tempTestDirectory, 'coffeescript')
 
-existsSync = fs.existsSync || path.existsSync
-
-
 describe('Build an App', ()->
   beforeEach (done)->
     try
@@ -23,7 +20,7 @@ describe('Build an App', ()->
     catch e
 
   afterEach (done)->
-    if(existsSync(tempTestDirectory))
+    if(fs.existsSync(tempTestDirectory))
       wrench.rmdirRecursive(tempTestDirectory, done)
     else
       done()
@@ -49,9 +46,9 @@ describe('Build an App', ()->
         else
           appFileName = path.join(baseDirectory,"deploy", rallyAppBuilder.build.appFileName)
           appDebugFileName = path.join(baseDirectory, rallyAppBuilder.build.appDebugFileName)
-          deployFileExists = existsSync appFileName
+          deployFileExists = fs.existsSync appFileName
           assert(deployFileExists)
-          debugFileExists = existsSync appDebugFileName
+          debugFileExists = fs.existsSync appDebugFileName
           assert(debugFileExists)
           appFile = fs.readFileSync(appFileName, "utf-8")
           assert(appFile.match /Custom App File/)
