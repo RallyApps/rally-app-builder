@@ -3,7 +3,6 @@ rallyAppBuilder = require '../index'
 fs = require 'fs'
 path = require 'path'
 wrench = require 'wrench'
-existsSync = fs.existsSync || path.existsSync
 
 describe('Clone existing App', ()->
   baseDir = 'test/cloneTemp'
@@ -24,7 +23,7 @@ describe('Clone existing App', ()->
       if error
         done(error)
         return
-      if existsSync(path.join(baseDir,testFile ))
+      if fs.existsSync(path.join(baseDir,testFile ))
         done()
       else
         error = new Error("#{testFile} not found")
@@ -44,7 +43,7 @@ describe('Clone existing App', ()->
       if error
         done(error)
         return
-      if !existsSync(path.join(baseDir,testFile ))
+      if !fs.existsSync(path.join(baseDir,testFile ))
         done()
       else
         error = new Error("#{testFile} should not be found")

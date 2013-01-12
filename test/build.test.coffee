@@ -13,13 +13,13 @@ sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
 sdk2CoffeeTestDirectory = path.join(tempTestDirectory, 'coffeescript')
 
 describe('Build an App', ()->
-  beforeEach (done)->
+  before (done)->
     try
       copy = ()-> wrench.copyDirRecursive(fixturesDirectory, tempTestDirectory, done)
       fs.mkdir(tempTestDirectory, copy)
     catch e
 
-  afterEach (done)->
+  after (done)->
     if(fs.existsSync(tempTestDirectory))
       wrench.rmdirRecursive(tempTestDirectory, done)
     else

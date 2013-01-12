@@ -10,17 +10,7 @@ appDebugFileName = "App-debug.html"
 deployFilePath = "deploy"
 templatePath = path.resolve(__dirname, '../templates/')
 
-
 {getConfig,configFileName} = require('./config')
-
-getGitRepo = (appPath, callback)->
-  convertToJson = (error, file)->
-
-  configPath = path.join(appPath, ".git", "config")
-  if(fs.existsSync(configPath))
-    fs.readFile(configPath, "utf-8", convertToJson)
-  else
-    console.log("git not found!")
 
 
 
