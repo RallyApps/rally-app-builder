@@ -2,6 +2,9 @@ fetchGitHubRepo = require("fetch-github-repo")
 _ = require('underscore')
 fs = require 'fs'
 path = require 'path'
+{getConfig,saveConfig} = require('./config')
+
+
 
 module.exports = (args, callback)->
   callback = callback || ()->
@@ -16,8 +19,18 @@ module.exports = (args, callback)->
       fs.unlink(rakeFilePath)
     callback.call(arguments)
 
+  addParentRepoToConfig = ()->
+
+    getConfig args.path, (err,config)->
+      if err then callback(err)
+      else
+        config.name = "Son of " +config.name
+        config.parents = config.parents||[]
+        config.parents.push("#{args.organization}/#{args.repo}")
+        saveConfig({path:args.path,config},deleteRake)
+
   fetchGitHubRepo.download
     organization: args.organization
     repo: args.repo
     path: args.path
-    deleteRake
+    addParentRepoToConfig

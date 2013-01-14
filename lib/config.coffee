@@ -1,21 +1,24 @@
 _ = require('underscore')
 fs = require('fs')
-path = require('path')
+{join} = require('path')
 
 configFileName = "config.json"
 
 module.exports =
-  getConfig : (appPath, callback) ->
+  getConfig : (path, callback) ->
     convertToJson = (error, file)->
       if !error then callback(null, JSON.parse(file))
       else
         callback(error)
 
-    configPath = path.join(appPath, configFileName)
+    configPath = join(path, configFileName)
     if !fs.existsSync(configPath)
-      throw new Error("#{configFileName} not found at path #{configPath}")
+      throw new Error("#{configFileName} not found at path #{path}")
     else
       fs.readFile(configPath, "utf-8", convertToJson)
+  saveConfig : ({path,config},callback)->
+    configPath = join(path, configFileName)
+    fs.writeFile(configPath,JSON.stringify(config),callback)
 
 
 _.defaults module.exports, {configFileName}
