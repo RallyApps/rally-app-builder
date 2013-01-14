@@ -9,15 +9,16 @@ describe('Clone existing App', ()->
 
   before (done)->
     try
-      fs.mkdirSync(baseDir)
+      if(!fs.existsSync(baseDir))
+        fs.mkdirSync(baseDir)
       rallyAppBuilder.clone(
-        repo: 'rally-app-builder'
-        organization:'TeamBoard'
+        repo: 'TeamBoard'
+        organization:'ferentchak'
         path: baseDir
         done
       )
     catch e
-
+      done(e)
   after ()->
     try
       wrench.rmdirSyncRecursive(baseDir)
@@ -26,5 +27,10 @@ describe('Clone existing App', ()->
   it('should delete the RakeFile', ()->
     testFile = "Rakefile"
     assert(!fs.existsSync(path.join(baseDir,testFile )))
+  )
+
+  it('should have a config.json', ()->
+    testFile = "config.json"
+    assert(fs.existsSync(path.join(baseDir,testFile )))
   )
 )
