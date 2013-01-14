@@ -7,10 +7,13 @@ path = require('path')
 
 module.exports =
 
+  removeProtocol:(url)->
+    return url.split(":")[1];
+
   parseConfigFile : (fileContents)->
     matched = fileContents.match(/url =.*github\.com.*/)
     fullUrlLine = matched && matched[0]
-    url = fullUrlLine.split("=").pop().trim()
+    url = @removeProtocol(fullUrlLine.split("=").pop().trim())
     return url
 
   gatherGitInfo : (appPath, callback)->

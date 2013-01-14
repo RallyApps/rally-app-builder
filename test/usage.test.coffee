@@ -21,12 +21,12 @@ describe('Usage', ()->
            """
   describe('parseConfigFile',()->
     url = rallyAppBuilder.usage.parseConfigFile(config)
-    assert.strictEqual(url.split(":")[1],"//github.com/ferentchak/rally-app-builder.git")
+    assert.strictEqual(url,"//github.com/ferentchak/rally-app-builder.git")
   )
   describe('gatherGitInfo', ()->
     it('should get the current git repos name', (done)->
       process = (err,url)->
-        assert.strictEqual(url,"https://github.com/ferentchak/rally-app-builder.git")
+        assert.strictEqual(url,"//github.com/ferentchak/rally-app-builder.git")
         done()
 
       rallyAppBuilder.usage.gatherGitInfo(path: "../",process)
