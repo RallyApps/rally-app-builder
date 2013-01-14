@@ -6,7 +6,6 @@ wrench = require 'wrench'
 
 
 describe('Usage', ()->
-  #  before ()->
   config = """
            [core]
            repositoryformatversion = 0
@@ -20,7 +19,6 @@ describe('Usage', ()->
            remote = origin
            merge = refs/heads/master
            """
-  #  after ()->
   describe('parseConfigFile',()->
     url = rallyAppBuilder.usage.parseConfigFile(config)
     assert.strictEqual(url,"https://github.com/ferentchak/rally-app-builder.git")
