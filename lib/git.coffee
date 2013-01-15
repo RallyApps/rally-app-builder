@@ -6,7 +6,6 @@ path = require('path')
 
 
 module.exports =
-
   removeProtocol:(url)->
     return url.split(":")[1];
 
