@@ -5,7 +5,7 @@ path = require 'path'
 wrench = require 'wrench'
 
 
-describe('Usage', ()->
+describe('Git', ()->
   config = """
            [core]
            repositoryformatversion = 0
@@ -20,7 +20,7 @@ describe('Usage', ()->
            merge = refs/heads/master
            """
   describe('parseConfigFile',()->
-    url = rallyAppBuilder.usage.parseConfigFile(config)
+    url = rallyAppBuilder.git.parseConfigFile(config)
     assert.strictEqual(url,"//github.com/ferentchak/rally-app-builder.git")
   )
   describe('gatherGitInfo', ()->
@@ -29,7 +29,7 @@ describe('Usage', ()->
         assert.strictEqual(url,"//github.com/ferentchak/rally-app-builder.git")
         done()
 
-      rallyAppBuilder.usage.gatherGitInfo(path: "../",process)
+      rallyAppBuilder.git.gatherGitInfo(path: "../",process)
     )
   )
 

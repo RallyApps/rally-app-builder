@@ -1,10 +1,10 @@
-_ = require('underscore')
+_ = require 'underscore'
 fs = require 'fs'
 path = require 'path'
 async = require 'async'
 mustache = require 'mustache'
-
 getScript = require './build/get-script'
+
 appFileName = "App.html"
 appDebugFileName = "App-debug.html"
 deployFilePath = "deploy"
