@@ -23,18 +23,21 @@ cmdr
   .command('init [name] [sdk_version] [server=rally1.rallydev.com]')
   .description("Creates a new Rally App project template. ")
   .action (name, sdk_version, server)->
+    console.log("Creating a new App named #{name}")
     RallyAppBuilder.init {name, sdk_version, server}, builder
 
 cmdr
   .command('build')
   .description("Builds the current App.")
   .action ()->
+    console.log("Compiling the App.")
     RallyAppBuilder.build {}, errorHandler
 
 cmdr
   .command('clone [organization] [repo]')
   .description("Creates a new Rally App project locally from an existing GitHub project. ")
   .action (organization, repo)->
+    console.log("Cloning #{repo} repo from #{organization} account")
     if !organization
       console.error("Please specify an organization when using the clone command.")
       return

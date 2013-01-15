@@ -13,6 +13,7 @@ templatePath = path.resolve(__dirname, '../templates/')
 {getConfig,configFileName} = require('./config')
 
 createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
+  console.log("Creating #{templateFileName}")
   appTemplate = fs.readFileSync(path.join(templatePath, templateFileName), "utf-8")
   fullDeployFilePath = path.resolve(appPath, directory)
   filePath = path.join(fullDeployFilePath, templateFileName)
