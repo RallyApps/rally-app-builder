@@ -49,10 +49,7 @@ describe('Build an App', ()->
             appFile = fs.readFileSync(appFileName, "utf-8")
           it "should contain the string from the  Custom App File",
             ()->
-              try
-                assert(appFile.match /Custom App File/)
-              catch ex
-                console.log appFile
+              assert(appFile.match /Custom App File/)
           it "should contain the string from the CSS file",
             ()->
               assert(appFile.match /Add app styles here/)
