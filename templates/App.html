@@ -15,10 +15,8 @@
             {{/javascript_files}}
 
             Rally.launchApp('{{className}}', {
-                name:"{{name}}"
-                {{#extra}}
-                ,{{{.}}}
-                {{/extra}}
+                name:"{{name}}",
+	            parentRepos:"{{{parents}}}"
             });
 
         });

@@ -8,9 +8,7 @@ path = require 'path'
 tempTestDirectory = 'test/buildTemp'
 fixturesDirectory = path.join(__dirname, 'fixtures')
 
-sdk1TestDirectory = path.join(tempTestDirectory, 'sdk1')
 sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
-sdk2CoffeeTestDirectory = path.join(tempTestDirectory, 'coffeescript')
 
 describe('Build an App', ()->
   before (done)->
@@ -21,7 +19,7 @@ describe('Build an App', ()->
 
   after (done)->
     if(fs.existsSync(tempTestDirectory))
-      wrench.rmdirRecursive(tempTestDirectory, done)
+        wrench.rmdirRecursive(tempTestDirectory, done)
     else
       done()
 
@@ -35,43 +33,53 @@ describe('Build an App', ()->
         done(new Error("Error not thrown without config specified"))
     rallyAppBuilder.build config, testResponse
 
-  it 'passes with config', (done)->
-    config = path: sdk1TestDirectory
-    rallyAppBuilder.build config, done
-
   describe('with AppSDK 2.0',()->
-    createBuildAssert = (baseDirectory,done)->
-      (error)->
-        if (error) then done(error)
-        else
-          appFileName = path.join(baseDirectory,"deploy", rallyAppBuilder.build.appFileName)
-          appDebugFileName = path.join(baseDirectory, rallyAppBuilder.build.appDebugFileName)
-          deployFileExists = fs.existsSync appFileName
-          assert(deployFileExists)
-          debugFileExists = fs.existsSync appDebugFileName
-          assert(debugFileExists)
-          appFile = fs.readFileSync(appFileName, "utf-8")
-          assert(appFile.match /Custom App File/)
-          assert(appFile.match /Add app styles here/)
-          assert(appFile.match /customcard/)
-          done()
+    createBuildAssert = (baseDirectory)->
+        appFileName = path.join(baseDirectory,"deploy", rallyAppBuilder.build.appFileName)
+        appDebugFileName = path.join(baseDirectory, rallyAppBuilder.build.appDebugFileName)
+        appFile = ""
+        it "should have a #{rallyAppBuilder.build.appFileName}",()->
+          assert(fs.existsSync appFileName)
+        it "should have a #{rallyAppBuilder.build.appDebugFileName}",()->
+          assert(fs.existsSync appDebugFileName)
 
-    it('should build an App', (done)->
-      config = path: sdk2TestDirectory
-      rallyAppBuilder.build config, createBuildAssert(sdk2TestDirectory,done)
-    )
+        describe "in the #{rallyAppBuilder.build.appFileName}",()->
+          appFile = ""
+          before ()->
+            appFile = fs.readFileSync(appFileName, "utf-8")
+          it "should contain the string from the  Custom App File",
+            ()->
+              try
+                assert(appFile.match /Custom App File/)
+              catch ex
+                console.log appFile
+          it "should contain the string from the CSS file",
+            ()->
+              assert(appFile.match /Add app styles here/)
+          it "should contain the string from the CustomCard file",
+            ()->
+              assert(appFile.match /customcard/)
+          it "should contain the string from the parent collection",
+            ()->
+              assert(appFile.match /ferentchak.*ninjas/)
+          it "should contain the process the coffeescript file",
+            ()->
+              assert(appFile.match /CoffeeCard/)
 
-    it('should be able to build and App after an App has been built', (done)->
-      config = path: sdk2TestDirectory
-      rallyAppBuilder.build config, (error)->
-        if error then done(error)
-        else
-          rallyAppBuilder.build config, createBuildAssert(sdk2TestDirectory,done)
-    )
-    describe('using coffescript',()->
-      it('should build an App', (done)->
-        config = path: sdk2CoffeeTestDirectory
-        rallyAppBuilder.build config, createBuildAssert(sdk2CoffeeTestDirectory,done)
+
+
+    describe('with JavaScript files', ()->
+      before (done)->
+        config = path: sdk2TestDirectory
+        rallyAppBuilder.build config, done
+      createBuildAssert(sdk2TestDirectory)
+
+
+    describe('when already built', ()->
+        before (done)->
+          config = path: sdk2TestDirectory
+          rallyAppBuilder.build config, done
+        createBuildAssert(sdk2TestDirectory)
       )
     )
   )

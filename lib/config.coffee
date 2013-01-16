@@ -18,7 +18,7 @@ module.exports =
       fs.readFile(configPath, "utf-8", convertToJson)
   saveConfig : ({path,config},callback)->
     configPath = join(path, configFileName)
-    fs.writeFile(configPath,JSON.stringify(config),callback)
+    fs.writeFile(configPath,JSON.stringify(config,null,'   '),callback)
 
 
 _.defaults module.exports, {configFileName}
