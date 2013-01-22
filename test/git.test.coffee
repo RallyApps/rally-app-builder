@@ -23,14 +23,5 @@ describe('Git', ()->
     url = rallyAppBuilder.git.parseConfigFile(config)
     assert.strictEqual(url,"//github.com/ferentchak/rally-app-builder.git")
   )
-  describe('gatherGitInfo', ()->
-    it('should get the current git repos name', (done)->
-      process = (err,url)->
-        assert.strictEqual(url,"//github.com/ferentchak/rally-app-builder.git")
-        done()
-
-      rallyAppBuilder.git.gatherGitInfo(path: "../",process)
-    )
-  )
 
 )
