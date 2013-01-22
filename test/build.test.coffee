@@ -9,6 +9,7 @@ tempTestDirectory = 'test/buildTemp'
 fixturesDirectory = path.join(__dirname, 'fixtures')
 
 sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
+sdk2CustomSdkVersionDirectory = path.join(tempTestDirectory, 'sdk2CustomSdkVersion')
 
 describe('Build an App', ()->
   before (done)->
@@ -62,6 +63,9 @@ describe('Build an App', ()->
           it "should contain the process the coffeescript file",
             ()->
               assert(appFile.match /CoffeeCard/)
+          it "should have the correct sdk debug file name",()->
+            file = fs.readFileSync appDebugFileName, "utf-8"
+            assert(file.match /https:\/\/rally1\.rallydev\.com/)
 
 
 
@@ -78,6 +82,19 @@ describe('Build an App', ()->
           rallyAppBuilder.build config, done
         createBuildAssert(sdk2TestDirectory)
       )
+    )
+
+    describe('with new SDK specified', ()->
+      appDebugFileName=""
+      before (done)->
+        config = path: sdk2CustomSdkVersionDirectory
+        rallyAppBuilder.build config, done
+        appDebugFileName = path.join(sdk2CustomSdkVersionDirectory, rallyAppBuilder.build.appDebugFileName)
+      it "should have a #{rallyAppBuilder.build.appDebugFileName}",()->
+        assert(fs.existsSync appDebugFileName)
+      it "should have the correct sdk debug file name",()->
+        file = fs.readFileSync appDebugFileName, "utf-8"
+        assert(file.match /https:\/\/testserver\.konami\.com/)
     )
   )
 
