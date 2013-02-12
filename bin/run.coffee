@@ -20,7 +20,7 @@ cmdr
   .version(version)
 
 cmdr
-  .command('init [name] [sdk_version] [server=rally1.rallydev.com]')
+  .command('init [name] [sdk_version] [server=https://rally1.rallydev.com]')
   .description("Creates a new Rally App project template. ")
   .action (name, sdk_version, server)->
     console.log("Creating a new App named #{name}")
