@@ -13,15 +13,14 @@ templatePath = path.resolve(__dirname, '../templates/')
 {getConfig,configFileName} = require('./config')
 
 createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
-  console.log("Creating #{templateFileName}")
+  console.log "Creating #{templateFileName}"
   appTemplate = fs.readFileSync(path.join(templatePath, templateFileName), "utf-8")
   fullDeployFilePath = path.resolve(appPath, directory)
-  filePath = path.join(fullDeployFilePath, templateFileName)
+  filePath = path.join fullDeployFilePath, templateFileName
   if(!fs.existsSync(fullDeployFilePath))
-    fs.mkdirSync(fullDeployFilePath)
+    fs.mkdirSync fullDeployFilePath
   compiledApp = mustache.render(appTemplate, templateData)
   fs.writeFile(filePath, compiledApp, callback)
-
 buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, callback)->
   async.forEach(
     [
@@ -41,9 +40,11 @@ module.exports = ({path}, callback)->
       else
       getScript.getFiles(
         {configJson, appPath}
-        (err, {javascript_files, css_files})->
+        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files})->
           configJson.javascript_files = javascript_files
           configJson.css_files = css_files
+          configJson.remote_javascript_files = remote_javascript_files
+          configJson.local_javascript_files = local_javascript_files
           buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
       )
     )
