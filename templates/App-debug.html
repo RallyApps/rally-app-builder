@@ -3,15 +3,18 @@
 <head>
     <title>{{name}}</title>
 
+    {{#remote_javascript_files}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/remote_javascript_files}}
     <script type="text/javascript" src="{{{server}}}/apps/{{{sdk}}}/sdk-debug.js"></script>
 
     <script type="text/javascript">
         // I am keeping the extra , in there to simplify my code. If someone is actually using an old version of IE to make an app let me know.
         Rally.loadScripts(
                 [
-                    {{#javascript}}
+                    {{#local_javascript_files}}
                       "{{{.}}}",
-                    {{/javascript}}
+                    {{/local_javascript_files}}
                 ],
         function() {
             Rally.launchApp('{{className}}', {

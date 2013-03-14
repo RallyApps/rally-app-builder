@@ -12,8 +12,8 @@ describe('Clone existing App', ()->
       if(!fs.existsSync(baseDir))
         fs.mkdirSync(baseDir)
       rallyAppBuilder.clone(
-        repo: 'TeamBoard'
-        organization: 'ferentchak'
+        repo: 'PortfolioKanban'
+        organization: 'RallyApps'
         path: baseDir
         done
       )
@@ -34,14 +34,14 @@ describe('Clone existing App', ()->
 
   it('should have add a parent repo', (done)->
     assertWrapper = (error,config)->
-      assert.strictEqual(config.parents[0],'ferentchak/TeamBoard')
+      assert.strictEqual(config.parents[0],'RallyApps/PortfolioKanban')
       done(error)
     rallyAppBuilder.config.getConfig(baseDir,assertWrapper)
   )
 
   it('should change the name', (done)->
     assertWrapper = (error,config)->
-      assert.strictEqual(config.name,'Son of TeamBoard')
+      assert.strictEqual(config.name,'Son of Portfolio Kanban Board')
       done(error)
     rallyAppBuilder.config.getConfig(baseDir,assertWrapper)
   )

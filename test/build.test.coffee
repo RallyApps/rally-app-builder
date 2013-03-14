@@ -18,11 +18,11 @@ describe('Build an App', ()->
       fs.mkdir(tempTestDirectory, copy)
     catch e
 
-  after (done)->
-    if(fs.existsSync(tempTestDirectory))
-        wrench.rmdirRecursive(tempTestDirectory, done)
-    else
-      done()
+#  after (done)->
+#    if(fs.existsSync(tempTestDirectory))
+#        wrench.rmdirRecursive(tempTestDirectory, done)
+#    else
+#      done()
 
 
   it 'errors if no config', (done)->
@@ -57,10 +57,19 @@ describe('Build an App', ()->
           it "should contain the string from the CustomCard file",
             ()->
               assert(appFile.match /customcard/)
+          it "should have a link to underscore",
+              ()->
+                assert(appFile.indexOf("cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js" ) >= 0)
+          it "should have a link to secret js using https",
+          ()->
+            assert(appFile.indexOf("https://www.secure.com/secret.js" ) >= 0)
+          it "should have a link to stuff js using http",
+          ()->
+            assert(appFile.indexOf("http://www.regular.com/stuff.js" ) >= 0)
           it "should contain the string from the parent collection",
             ()->
               assert(appFile.match /ferentchak.*ninjas/)
-          it "should contain the process the coffeescript file",
+          it "should contain the processed coffeescript file",
             ()->
               assert(appFile.match /CoffeeCard/)
           it "should have the correct sdk debug file name",()->
