@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>{{name}}</title>
-
+    {{#remote_javascript_files}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/remote_javascript_files}}
     <script type="text/javascript" src="/apps/{{{sdk}}}/sdk.js"></script>
 
 
