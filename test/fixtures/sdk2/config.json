@@ -6,10 +6,7 @@
     "javascript": [
         "CustomCard.js",
         "App.js",
-        "TestCoffee.coffee",
-        "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js",
-        "http://www.regular.com/stuff.js",
-        "https://www.secure.com/secret.js"
+        "TestCoffee.coffee"
     ],
     "css": [
         "app.css"
