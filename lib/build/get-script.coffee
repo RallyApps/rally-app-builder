@@ -64,4 +64,5 @@ module.exports =
   hintJavaScriptFile: (code, fileName)->
     if(!JSHINT(code, undef: false))
       for error in JSHINT.errors
-        console.log "Error in #{fileName} on line #{error.line}: #{error.reason}"
+        console.log "Error in #{fileName} on line #{error.line}: #{error.reason}" unless !error
+
