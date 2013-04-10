@@ -12,7 +12,7 @@ module.exports = (args, callback)->
     organization: 'No Organization'
     repo: 'No Repo'
     path: process.cwd()
-
+  console.log "Cloning #{args.organization}/#{args.repo}"
   rakeFilePath = path.join( args.path, "Rakefile" )
   deleteRake = ()->
     if fs.existsSync(rakeFilePath)
