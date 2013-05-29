@@ -4,9 +4,9 @@
     "server": "{{{server}}}",
     "sdk": "{{sdk_version}}",
     "javascript": [
-        "App.js"
+        "src/App.js"
     ],
     "css": [
-        "app.css"
+        "styles/app.css"
     ]
 }
