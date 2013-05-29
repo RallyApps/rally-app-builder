@@ -33,9 +33,6 @@
     init [name] [sdk_version] [server]
     Creates a new Rally App project in the working directory
     
-    build 
-    Builds the App in the working directory
-    
     clone [organization] [repo]
     Creates a new Rally App project in the working directory from an existing GitHub project. 
 
@@ -48,7 +45,7 @@
 
 ### init
 `rally-app-builder init myNewApp`
-Creating a new Rally App is as easy as using init. The init command creates you an App for use inside of Rally. After init creates your App it will automatically run the build command on it for you.
+Creating a new Rally App is as easy as using init. The init command creates you an App for use inside of Rally.
 
 The init command takes a few parameters.
 *name : The first is the name for your new App.
@@ -57,12 +54,6 @@ The init command takes a few parameters.
     *`rally-app-builder init myNewApp 2.0p2`
 *server(optional) : The server you want the debug file to point to. The command below will create a new App using version 2.0p2 and pointing to the server myownRally.com
     * `rally-app-builder init myNewApp 2.0p2 https://myOwnRally.com`
-
-### build
-
-Use the build command to compile your App into a single HTML page that can be copy and pasted into a Rally customer html [page](http://www.rallydev.com/custom-html)
-Run this command before you check your file into source control or whenever you make a change to your config.json file.
-
 
 
 ### clone
