@@ -32,10 +32,10 @@ module.exports = (args, callback)->
     delete args.path
     view = args
     templatePath = path.resolve(__dirname, '../templates/')
-    fs.mkdirSync('styles')
-    fs.mkdirSync('src')
-    fs.mkdirSync('templates')
-    fs.mkdirSync('test')
+    fs.mkdirSync("#{filePath}/styles")
+    fs.mkdirSync("#{filePath}/src")
+    fs.mkdirSync("#{filePath}/templates")
+    fs.mkdirSync("#{filePath}/test")
     _.each(templates,
     (value, key) ->
       templateFile = "#{templatePath}/#{key}"
