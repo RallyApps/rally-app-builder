@@ -8,6 +8,7 @@ files =
   "App.js": "src/App.js"
   "AppSpec.js": "test/AppSpec.js"
   "config.json": "config.json"
+  "package.json": "package.json"
   "gitignore": ".gitignore"
   "LICENSE": "LICENSE"
   "README.md": "README.md"
