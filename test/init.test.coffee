@@ -1,36 +1,35 @@
-assert = require 'assert'
 rallyAppBuilder = require '../index'
 fs = require 'fs'
 wrench = require 'wrench'
-describe('Init new App', ()->
+
+describe 'Init new App', ->
   baseDir = 'test/initTemp'
 
-  before ()->
+  before ->
     try
       fs.mkdirSync(baseDir)
     catch e
 
-  after ()->
+  after ->
     try
       wrench.rmdirSyncRecursive(baseDir)
     catch e
 
-  it('tests files created', (done)->
-    checkFilesFetched = ()->
+  it 'tests files created', (done) ->
+
+    checkFilesFetched = ->
       files = fs.readdirSync(baseDir)
       error = new Error("README.md not found")
+
       for file in files
         if file.indexOf("README.md") > -1
           error = null
-      if error
-        done(error)
-      else
-        done()
 
-    rallyAppBuilder.init(
+      done(error) if error
+      
+      done()
+
+    rallyAppBuilder.init
       name: 'App'
       path: baseDir
       checkFilesFetched
-    )
-  )
-)
