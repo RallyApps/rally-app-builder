@@ -5,6 +5,10 @@
 
     <script type="text/javascript" src="{{{server}}}/apps/{{{sdk}}}/sdk-debug.js"></script>
 
+{{#remote_javascript}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+{{/remote_javascript}}
+
     <script type="text/javascript">
         // I am keeping the extra , in there to simplify my code. If someone is actually using an old version of IE to make an app let me know.
         Rally.loadScripts(
@@ -20,9 +24,14 @@
         }, true);
     </script>
 
+{{#remote_css}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+{{/remote_css}}
+
 {{#css}}
     <link rel="stylesheet" type="text/css" href="{{{.}}}">
 {{/css}}
+
 </head>
 <body></body>
 </html>

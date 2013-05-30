@@ -3,8 +3,14 @@
     "className": "CustomApp",
     "server": "{{{server}}}",
     "sdk": "{{sdk_version}}",
+    "remote_javascript": [
+        //"http://underscorejs.org/underscore.js"
+    ],
     "javascript": [
         "src/App.js"
+    ],
+    "remote_css": [
+        //"http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
     ],
     "css": [
         "styles/app.css"
