@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Jasmine Spec Runner</title>
+
+{{#remote_css}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+{{/remote_css}}
+
+{{#css}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+{{/css}}
+
+    <% css.forEach(function(style){ %>
+    <link rel="stylesheet" type="text/css" href="<%= style %>">
+    <% }) %>
+    
+    <script type="text/javascript" src="{{{server}}}/apps/{{{sdk}}}/sdk-debug.js"></script>
+
+{{#remote_javascript}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+{{/remote_javascript}}
+
+    <% with (scripts) { %>
+    <% [].concat(jasmine, vendor, helpers, reporters, src, specs).forEach(function(script){ %>
+    <script type="text/javascript" src="<%= script %>"></script>
+    <% }) %>
+    <% }; %>
+
+
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+    Ext.require([
+        'Rally.sdk.Bootstrapper'
+    ], function () {
+        //Redefine onReady - bug in phantomjs such that onload isn't triggered for <link>, so the default Rally onReady won't work consistently
+        Rally.sdk.Bootstrapper.onReady = function (onready) {
+            if (!Rally.environment) {
+                Ext.create('Rally.sdk.env.Global').setup();
+            }
+            onready();
+        };
+        Rally.onReady(function () {
+            Ext.onReady(function() {
+                var jasmineEnv = jasmine.getEnv();
+
+                jasmineEnv.updateInterval = 1000;
+                var htmlReporter = new jasmine.HtmlReporter();
+                jasmineEnv.addReporter(htmlReporter);
+
+                jasmineEnv.specFilter = function (spec) {
+                    return htmlReporter.specFilter(spec);
+                };
+
+                jasmineEnv.execute();
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
