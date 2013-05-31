@@ -25,7 +25,7 @@ module.exports = (args, callback)->
   try
     args = _.defaults args,
       name: 'Random App Name' + Math.floor(Math.random() * 100000)
-      sdk_version: '2.0p5',
+      sdk_version: '2.0rc1',
       server: 'https://rally1.rallydev.com'
       path: '.'
     filePath = args.path
