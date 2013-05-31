@@ -8,10 +8,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-templater');
+  grunt.loadNpmTasks('rally-app-builder');
 
   grunt.registerTask('default', ['clean', 'concat', 'template']);
   grunt.registerTask('test', ['default', 'jasmine']);
-  grunt.registerTask('build', ['concat', 'template:build'])
+  grunt.registerTask('build', ['concat', 'template:build']);
 
   spec = grunt.option('spec') || '*';
   config = grunt.file.readJSON('config.json');
@@ -77,12 +78,24 @@ module.exports = function(grunt) {
         dest: 'deploy/App.html',
         engine: 'handlebars',
         variables: function() {
-          config.javascript = grunt.file.read('gen/all.js')
-          config.css = grunt.file.read('gen/all.css')
+          config.javascript = grunt.file.read('gen/all.js');
+          config.css = grunt.file.read('gen/all.css');
           return config;
         }
       }
+    },
+
+    rallydeploy: {
+      options: {
+        server: "rally1.rallydev.com",
+        projectOid: 0
+      },
+      prod: {
+
+      },
+      test: {
+
+      }
     }
-    
   });
 };

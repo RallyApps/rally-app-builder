@@ -1,6 +1,7 @@
 request = require 'request'
 jsdom = require 'jsdom'
 fs = require 'fs'
+async = require 'async'
 
 class Deploy
 	constructor: (@username, @password, @server) ->
@@ -10,13 +11,13 @@ class Deploy
     dashboardOid = null
     panelOid = null
 
-		callback ?= () ->
+		#callback ?= () ->
 		async.waterfall(
       [
         @_login
       ,
         (res, b, cb) ->
-          tab ?= 'myhome'
+          mtab = tab or 'myhome'
           options =
             url: "https://#{@server}/slm/wt/edit/create.sp"
             method: 'POST'
@@ -26,12 +27,12 @@ class Deploy
               #html: content
               type: 'DASHBOARD'
               timeboxFilter: 'none'
-              pid: tab
+              pid: mtab
               editorMode: 'create'
               cpoid: cpoid
               version: 0
 
-		    request(options, cb)
+          request(options, cb)
       ,
         (results, body, cb) ->
           jsdom.env(body, cb)
@@ -40,9 +41,10 @@ class Deploy
           oidElt = window.document.getElementsByName 'oid'
           dashboardOid = oidElt?[0]?.value
 
-          options =
-            url: "https://#{@server}/slm/panel/getCatalogPanels.sp?cpoid=#{cpoid}&ignorePanelDefOids&gesture=getcatalogpaneldefs&_slug=/custom/#{dashboardOid}"
+          options = {
+            url: "https://#{@server}/slm/panel/getCatalogPanels.sp?cpoid=#{cpoid}&ignorePanelDefOids&gesture=getcatalogpaneldefs&_slug=/custom/#{dashboardOid}",
             method: 'GET'
+          }
 
           request(options, cb)
       ,
@@ -101,10 +103,10 @@ class Deploy
       )
 
 	updatePage: (doid, poid, cpoid, name, tab, content, callback) ->
-		callback ?= () ->
+		#callback ?= () ->
 
 		@_login (err, res, b) ->
-      tab ?= 'myhome'
+      mtab = tab or 'myhome'
 
       options =
         url: "https://#{@server}/slm/dashboard/changepanelsettings.sp?cpoid=#{cpoid}&_slug=/custom/#{doid}"
@@ -120,7 +122,7 @@ class Deploy
         callback()
 
 	_login: (callback) ->
-		callback ?= () ->
+		#callback ?= () ->
 
 		options =
 			url: "https://#{@server}/slm/platform/j_platform_security_check.op"
