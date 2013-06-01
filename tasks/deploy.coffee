@@ -28,6 +28,7 @@ module.exports = (grunt) ->
       deployer.createNewPage @options().projectOid, @options().pageName, appContents, @options().tab, (err, pageId, appId) =>
         #console.log(pageId, appId)
         grunt.file.write(@options().deployFile, JSON.stringify({pageId: pageId + "", appId: appId + ""}, null, '\t'))
+        grunt.log.writeLn("Page created at https://#{@options().server}.rallydev.com/#/#{projectOid}d/custom/#{pageId}")
         done(err is null)
     else
       deployer.updatePage deployData.pageId, deployData.appId, @options().projectOid, @options().pageName, @options().tab, appContents, (err) ->
