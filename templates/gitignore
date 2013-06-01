@@ -1,9 +1,18 @@
 # Ignore login credentials
-deploy.json
+credentials.json
+
 # Ignore debug build version of App
 App-debug.html
+
 # Ignore 'local' build version of App
 App-local.html
+
+# Ignore generated files
+gen
+
+# Ignore node_modules
+node_modules
+
 #IDE Files
 .idea
 .c9revisions
