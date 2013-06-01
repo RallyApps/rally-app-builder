@@ -23,6 +23,7 @@
 * Run `grunt` to compile and build everything
 * Run `grunt test` to run jasmine tests
 * Run `grunt build` to build the deployable HTML file for running inside Rally
+* Run `grunt deploy` to test and deploy your app to Rally
 
 ## API
 
@@ -63,3 +64,57 @@ Most Rally Apps are created by using an existing App as a template.
 By using the rally-app-builder clone command you can get a copy of the existing App without installing the Git CLI.
 This command makes some changes to the config file so that we can tell which App you based your work on. As we determine
 which apps you are most interested in customizing we take that as input on ways to improve the existing catalog App.
+
+## Rally Deploy Grunt Task
+
+```shell
+npm install rally-app-builder
+```
+
+```js
+grunt.loadNpmTasks('rally-app-builder');
+```
+
+### Options
+
+#### server
+Type: `string`
+Default "rally1.rallydev.com"
+
+#### projectOid
+Type: `integer`
+
+This needs to be any valid Project Object ID.  You can find this in the URI when logged into Rally
+
+#### deployFile
+Type: `string`
+Default: "deploy.json"
+
+This file stores the Rally generated Page and App IDs when deploying a new app
+
+#### credentialsFile
+Type: `string`
+Default: "credentials.json"
+
+This file is by default not checked into source respository and contains the username and password IN CLEAR TEXT to be used in the deploy task
+
+
+#### tab
+Type: `string`
+Valid Options: `myhome`, `backlogandschedules`, 
+Default: "myhome"
+
+This is the Rally tab that the newly created app will be placed
+
+#### pageName
+Type: `string`
+Default: "App Name"
+
+This is the name of the Page on the tab that will be created
+
+#### shared
+Type: `string` or `boolean`
+Default: "off"
+
+This option will make a newly created page shared on the Workspace.  You must be a Workspace Admin to use the `on` option
+
