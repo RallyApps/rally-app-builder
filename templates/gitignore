@@ -1,5 +1,5 @@
 # Ignore login credentials
-deploy.json
+credentials.json
 
 # Ignore debug build version of App
 App-debug.html

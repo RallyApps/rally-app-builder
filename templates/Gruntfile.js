@@ -88,12 +88,13 @@ module.exports = function(grunt) {
     rallydeploy: {
       options: {
         server: "rally1.rallydev.com",
-        projectOid: 0
+        projectOid: 0,
+        deployFile: "deploy.json",
+        credentialsFile: "credentials.json",
+        tab: "myhome",
+        pageName: "App Name"
       },
       prod: {
-
-      },
-      test: {
 
       }
     }

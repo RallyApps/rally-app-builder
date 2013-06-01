@@ -9,6 +9,7 @@
     "grunt-contrib-watch": "0.1.4",
     "grunt-templater": "0.0.4",
     "rally-app-builder": "0.4.x",
+    "prompt": "0.2.x",
     "handlebars": "1.0.11"
   }
 }

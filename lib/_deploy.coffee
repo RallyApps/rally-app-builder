@@ -4,16 +4,16 @@ fs = require 'fs'
 async = require 'async'
 
 class Deploy
-	constructor: (@username, @password, @server) ->
-		@server ?= 'rally1.rallydev.com'
+  constructor: (@username, @password, @server) ->
+    @server ?= 'rally1.rallydev.com'
 
-	createNewPage: (cpoid, name, content, tab, callback) ->
+  createNewPage: (cpoid, name, content, tab, callback) ->
     dashboardOid = null
     panelOid = null
 
-		#callback ?= () ->
-		async.waterfall(
-      [
+    #callback ?= () ->
+
+    tasks = [
         @_login
       ,
         (res, b, cb) ->
@@ -97,15 +97,16 @@ class Deploy
 
           request(options, cb)
       ,
-        (results, body, cb) ->
-      ], (err) ->
+        (results, body, cb) -> cb(null)
+      ]
+
+      async.waterfall tasks, (err) ->
         callback(dashboardOid, panelOid)
-      )
 
-	updatePage: (doid, poid, cpoid, name, tab, content, callback) ->
-		#callback ?= () ->
+  updatePage: (doid, poid, cpoid, name, tab, content, callback) ->
+    #callback ?= () ->
 
-		@_login (err, res, b) ->
+    @_login (err, res, b) ->
       mtab = tab or 'myhome'
 
       options =
@@ -121,18 +122,18 @@ class Deploy
       request options, (error, results, body) ->
         callback()
 
-	_login: (callback) ->
-		#callback ?= () ->
+  _login: (callback) ->
+    #callback ?= () ->
 
-		options =
-			url: "https://#{@server}/slm/platform/j_platform_security_check.op"
-			method: 'POST'
-			followAllRedirects: true
-			form:
-				j_username: @username
-				j_password: @password
+    options =
+      url: "https://#{@server}/slm/platform/j_platform_security_check.op"
+      method: 'POST'
+      followAllRedirects: true
+      form:
+        j_username: @username
+        j_password: @password
 
-		request options, (err, res, body) ->
+    request options, (err, res, body) ->
       callback(err, res, body)
 
 exports.Deploy = Deploy
