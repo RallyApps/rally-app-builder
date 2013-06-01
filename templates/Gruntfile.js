@@ -86,6 +86,12 @@ module.exports = function(grunt) {
       }
     },
 
+    rallytestrunner {
+      options: {
+        browserName: 'phantomjs'
+      }
+    }
+
     rallydeploy: {
       options: {
         server: "rally1.rallydev.com",
@@ -96,7 +102,7 @@ module.exports = function(grunt) {
       prod: {
         options: {
           tab: "myhome",
-          pageName: "App Name"
+          pageName: "App Name",
           shared: false
         }
       }
