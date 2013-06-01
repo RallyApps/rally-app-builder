@@ -88,12 +88,14 @@ This needs to be any valid Project Object ID.  You can find this in the URI when
 
 #### deployFile
 Type: `string`
+
 Default: "deploy.json"
 
 This file stores the Rally generated Page and App IDs when deploying a new app
 
 #### credentialsFile
 Type: `string`
+
 Default: "credentials.json"
 
 This file is by default not checked into source respository and contains the username and password IN CLEAR TEXT to be used in the deploy task
@@ -101,19 +103,23 @@ This file is by default not checked into source respository and contains the use
 
 #### tab
 Type: `string`
-Valid Options: `myhome`, `backlogandschedules`, 
+
+Valid Options: `myhome`, `backlogandschedules`
+
 Default: "myhome"
 
 This is the Rally tab that the newly created app will be placed
 
 #### pageName
 Type: `string`
+
 Default: "App Name"
 
 This is the name of the Page on the tab that will be created
 
 #### shared
 Type: `string` or `boolean`
+
 Default: "off"
 
 This option will make a newly created page shared on the Workspace.  You must be a Workspace Admin to use the `on` option
