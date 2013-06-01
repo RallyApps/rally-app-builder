@@ -3,13 +3,22 @@ fs = require 'fs'
 path = require 'path'
 mustache = require 'mustache'
 
-files =
-  "app.css": "app.css"
-  "App.js": "App.js"
+templates =
   "config.json": "config.json"
+  "package.json": "package.json"
+  "README.md": "README.md"
+
+files =
+  "app.css": "styles/app.css"
+  "App.js": "src/App.js"
+  "AppSpec.js": "test/AppSpec.js"
   "gitignore": ".gitignore"
   "LICENSE": "LICENSE"
-  "README.md": "README.md"
+  "Gruntfile.js": "Gruntfile.js"
+  "App-debug.html": "templates/App-debug.html"
+  "App.html": "templates/App.html"
+  "specs.tmpl": "templates/specs.tmpl"
+  "credentials.json": "credentials.json"
 
 
 module.exports = (args, callback)->
@@ -24,13 +33,24 @@ module.exports = (args, callback)->
     delete args.path
     view = args
     templatePath = path.resolve(__dirname, '../templates/')
-    _.each(files,
-    (value, key)->
+    fs.mkdirSync("#{filePath}/styles")
+    fs.mkdirSync("#{filePath}/src")
+    fs.mkdirSync("#{filePath}/templates")
+    fs.mkdirSync("#{filePath}/test")
+    _.each(templates,
+    (value, key) ->
       templateFile = "#{templatePath}/#{key}"
       destinationFile = "#{filePath}/#{value}"
       file = fs.readFileSync(templateFile, "utf-8")
       parsed = mustache.render(file, view)
       fs.writeFileSync(destinationFile, parsed)
+    )
+    _.each(files,
+    (value, key)->
+      templateFile = "#{templatePath}/#{key}"
+      destinationFile = "#{filePath}/#{value}"
+      file = fs.readFileSync(templateFile, "utf-8")
+      fs.writeFileSync(destinationFile, file)
     )
   catch err
     error = err

@@ -3,10 +3,14 @@
     "className": "CustomApp",
     "server": "{{{server}}}",
     "sdk": "{{sdk_version}}",
+    "remote_javascript": [
+    ],
     "javascript": [
-        "App.js"
+        "src/App.js"
+    ],
+    "remote_css": [
     ],
     "css": [
-        "app.css"
+        "styles/app.css"
     ]
 }

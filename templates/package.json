@@ -1,0 +1,14 @@
+{
+  "name": "{{name}}",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "0.3.x",
+    "grunt-contrib-jasmine": "0.4.x",
+    "grunt-contrib-clean": "0.4.x",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-templater": "~0.0.4",
+    "rally-app-builder": "0.4.x",
+    "handlebars": "~1.0.11"
+  }
+}
