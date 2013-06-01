@@ -18,6 +18,7 @@ files =
   "App-debug.html": "templates/App-debug.html"
   "App.html": "templates/App.html"
   "specs.tmpl": "templates/specs.tmpl"
+  "credentials.json": "credentials.json"
 
 
 module.exports = (args, callback)->

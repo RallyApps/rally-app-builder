@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['clean', 'concat', 'template']);
   grunt.registerTask('test', ['default', 'jasmine']);
   grunt.registerTask('build', ['concat', 'template:build']);
+  grunt.registerTask('deploy', ['build', 'test', 'rallydeploy:prod'])
 
   spec = grunt.option('spec') || '*';
   config = grunt.file.readJSON('config.json');
@@ -91,11 +92,13 @@ module.exports = function(grunt) {
         projectOid: 0,
         deployFile: "deploy.json",
         credentialsFile: "credentials.json",
-        tab: "myhome",
-        pageName: "App Name"
       },
       prod: {
-
+        options: {
+          tab: "myhome",
+          pageName: "App Name"
+          shared: false
+        }
       }
     }
   });
