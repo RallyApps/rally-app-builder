@@ -8,7 +8,7 @@
     "grunt-contrib-clean": "0.4.x",
     "grunt-contrib-watch": "~0.4.4",
     "grunt-templater": "~0.0.4",
-    "rally-app-builder": "0.4.x",
+    "rally-app-builder": "0.5.x",
     "handlebars": "~1.0.11"
   }
 }
