@@ -3,10 +3,10 @@
   "name": "rally-app-builder",
   "description": "A node module that assists in the building of Rally Apps",
   "version": "0.5.2",
-  "homepage": "https://github.com/ferentchak/rally-app-builder",
+  "homepage": "https://github.com/RallyApps/rally-app-builder",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ferentchak/rally-app-builder.git"
+    "url": "git://github.com/RallyApps/rally-app-builder.git"
   },
   "contributors": [{
     "name": "Colin O'Brien",
