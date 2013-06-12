@@ -59,6 +59,8 @@ The init command takes a few parameters.
 
 ### clone
 `rally-app-builder clone RallyApps StoryBoard`
+The first pararmeter, in this case "RallyApps", is the name of the GitHub organization.
+The second parameter, "StoryBoard", is the name of the repository.
 
 Most Rally Apps are created by using an existing App as a template.
 By using the rally-app-builder clone command you can get a copy of the existing App without installing the Git CLI.
