@@ -20,9 +20,9 @@ describe('Build an App', ()->
     catch e
 
   after (done)->
-    if(fs.existsSync(tempTestDirectory))
-      wrench.rmdirRecursive(tempTestDirectory, done)
-    else
+#    if(fs.existsSync(tempTestDirectory))
+#      wrench.rmdirRecursive(tempTestDirectory, done)
+#    else
       done()
 
 
@@ -39,10 +39,13 @@ describe('Build an App', ()->
     describe 'basic functionality', ()->
       createBuildAssert = (baseDirectory)->
         appFileName = path.join(baseDirectory, "deploy", rallyAppBuilder.build.appFileName)
+        appUncompressedFileName = path.join(baseDirectory, "deploy", rallyAppBuilder.build.appUncompressedFileName)
         appDebugFileName = path.join(baseDirectory, rallyAppBuilder.build.appDebugFileName)
         appFile = ""
         it "should have a #{rallyAppBuilder.build.appFileName}", ()->
           assert(fs.existsSync appFileName)
+        it "should have a #{rallyAppBuilder.build.appUncompressedFileName}", ()->
+          assert(fs.existsSync appUncompressedFileName)
         it "should have a #{rallyAppBuilder.build.appDebugFileName}", ()->
           assert(fs.existsSync appDebugFileName)
 
@@ -70,6 +73,13 @@ describe('Build an App', ()->
             file = fs.readFileSync appDebugFileName, "utf-8"
             assert(file.match /https:\/\/rally1\.rallydev\.com/)
 
+        describe "in the #{rallyAppBuilder.build.appUncompressedFileName}", ()->
+          appFile = ""
+          before ()->
+            appFile = fs.readFileSync(appUncompressedFileName, "utf-8")
+          it "should still have the comment string since it is unminified",
+          ()->
+            assert(appFile.match /Important Comment/)
 
       describe 'that has JavaScript files', ()->
         before (done)->
