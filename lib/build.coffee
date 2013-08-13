@@ -6,6 +6,7 @@ mustache = require 'mustache'
 getScript = require './build/get-script'
 git = require('./git')
 appFileName = "App.html"
+appUncompressedFileName = "App-uncompressed.html"
 appDebugFileName = "App-debug.html"
 deployFilePath = "deploy"
 templatePath = path.resolve(__dirname, '../templates/')
@@ -26,6 +27,7 @@ buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, cal
     [
       {appPath, templateData, templateFileName: appDebugFileName, directory: '.'},
       {appPath, templateData, templateFileName: appFileName, directory: deployFilePath}
+      {appPath, templateData, templateFileName: appUncompressedFileName, directory: deployFilePath,compress:false}
     ]
     createDeployFile
     callback
@@ -39,12 +41,13 @@ module.exports = ({path}, callback)->
       if error then callback error
       else
       getScript.getFiles(
-        {configJson, appPath}
-        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files})->
+        {configJson, appPath,compress:false}
+        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files})->
           configJson.javascript_files = javascript_files
           configJson.css_files = css_files
           configJson.remote_javascript_files = remote_javascript_files
           configJson.local_javascript_files = local_javascript_files
+          configJson.uncompressed_javascript_files = uncompressed_javascript_files
           buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
       )
     )
@@ -52,4 +55,4 @@ module.exports = ({path}, callback)->
     callback error
 
 #exports constants
-_.defaults module.exports, {configFileName, appFileName, deployFilePath, appDebugFileName}
+_.defaults module.exports, {configFileName, appFileName, deployFilePath, appDebugFileName,appUncompressedFileName}
