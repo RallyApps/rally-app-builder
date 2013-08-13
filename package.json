@@ -2,7 +2,7 @@
     "author":"Charles Ferentchak <charles@rallydev.com>",
     "name":"rally-app-builder",
     "description":"A node module that assists in the building of Rally Apps",
-    "version":"0.7.3",
+    "version":"0.7.4",
     "homepage":"https://github.com/rallyapps/rally-app-builder",
     "repository":{
         "type":"git",

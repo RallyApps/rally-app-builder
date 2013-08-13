@@ -16,7 +16,9 @@ module.exports =
     localFiles =  _.filter(configJson.javascript, isScriptLocal)
     async.parallel(
       javascript_files: (jsCallback)=>
-        @getJavaScripts {appPath, scripts: localFiles}, jsCallback
+        @getJavaScripts {appPath, scripts: localFiles,compress:true}, jsCallback
+      uncompressed_javascript_files: (jsCallback)=>
+        @getJavaScripts {appPath, scripts: localFiles, compress:false}, jsCallback
       css_files: (cssCallback)=>
         @getScripts {appPath, scripts: configJson.css }, cssCallback
       remote_javascript_files: (remoteJsFilesCallback)=>
@@ -25,13 +27,14 @@ module.exports =
         localJsFilesCallback null, localFiles
       callback
     )
-  getJavaScripts: ({appPath, scripts}, callback)->
-    @getScripts({appPath, scripts, compress: true}, (err, results) =>
+  getJavaScripts: ({appPath, scripts,compress}, callback)->
+    @getScripts({appPath, scripts}, (err, results) =>
       if err then callback(err)
       else
         for key,code of results
           fileName = scripts[key]
-          results[key] = @processJavaScript(code, fileName)
+          @hintJavaScriptFile(code, fileName)
+          results[key] = if compress then @compressJavaScript(code) else code
         callback(null, results)
     )
   getScripts: ({appPath, scripts, compress}, callback)->
@@ -49,10 +52,6 @@ module.exports =
     )
     ast = ast.transform(compressor)
     return ast.print_to_string()
-
-  processJavaScript: (code, fileName)->
-    @hintJavaScriptFile(code, fileName)
-    return @compressJavaScript(code)
 
   readFile: (file, callback)=>
     wrapper = (error, fileContents)->
