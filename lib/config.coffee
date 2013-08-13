@@ -4,21 +4,32 @@ fs = require('fs')
 
 configFileName = "config.json"
 
-module.exports =
-  getConfig : (path, callback) ->
-    convertToJson = (error, file)->
-      if !error then callback(null, JSON.parse(file))
-      else
-        callback(error)
 
-    configPath = join(path, configFileName)
-    if !fs.existsSync(configPath)
-      throw new Error("#{configFileName} not found at path #{path}")
+_updateConfig = (config)->
+  config.server = config.server || "https://rally1.rallydev.com"
+  config
+
+saveConfig = ({path, config}, callback)->
+  configPath = join(path, configFileName)
+  fs.writeFile(configPath, JSON.stringify(config, null, '   '), callback)
+
+getConfig = (path, callback) ->
+  convertToJson = (error, file)->
+    if !error
+      config = JSON.parse(file)
+      _updateConfig(config)
+      saveConfig({config, path})
+      callback(null, config)
     else
-      fs.readFile(configPath, "utf-8", convertToJson)
-  saveConfig : ({path,config},callback)->
-    configPath = join(path, configFileName)
-    fs.writeFile(configPath,JSON.stringify(config,null,'   '),callback)
+      callback(error)
+
+  configPath = join(path, configFileName)
+  if !fs.existsSync(configPath)
+    throw new Error("#{configFileName} not found at path #{path}")
+  else
+    fs.readFile(configPath, "utf-8", convertToJson)
 
 
+
+module.exports = {_updateConfig,getConfig,saveConfig}
 _.defaults module.exports, {configFileName}
