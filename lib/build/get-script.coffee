@@ -55,6 +55,8 @@ module.exports =
 
   readFile: (file, callback)=>
     wrapper = (error, fileContents)->
+      if error
+        error = new Error "#{file} could not be loaded. Is the path correct?"
       if file.match /.coffee$/
         fileContents = coffeeScript.compile(fileContents)
       callback(error, fileContents)

@@ -13,7 +13,7 @@ builder = (error)->
 
 errorHandler = (error) ->
   if error
-    console.error(error)
+    console.error(error.message)
   else
     console.log("Success")
 cmdr

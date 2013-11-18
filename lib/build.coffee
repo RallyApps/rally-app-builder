@@ -43,12 +43,15 @@ module.exports = ({path}, callback)->
       getScript.getFiles(
         {configJson, appPath,compress:false}
         (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files})->
-          configJson.javascript_files = javascript_files
-          configJson.css_files = css_files
-          configJson.remote_javascript_files = remote_javascript_files
-          configJson.local_javascript_files = local_javascript_files
-          configJson.uncompressed_javascript_files = uncompressed_javascript_files
-          buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
+          if err
+            callback err
+          else
+            configJson.javascript_files = javascript_files
+            configJson.css_files = css_files
+            configJson.remote_javascript_files = remote_javascript_files
+            configJson.local_javascript_files = local_javascript_files
+            configJson.uncompressed_javascript_files = uncompressed_javascript_files
+            buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
       )
     )
   catch error
