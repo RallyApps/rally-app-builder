@@ -1,4 +1,4 @@
-_ = require('underscore')
+_ = require('lodash')
 request = require('request')
 fs = require('fs')
 path = require('path')

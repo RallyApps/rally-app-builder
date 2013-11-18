@@ -1,5 +1,5 @@
 fetchGitHubRepo = require("fetch-github-repo")
-_ = require('underscore')
+_ = require('lodash')
 fs = require 'fs'
 path = require 'path'
 {getConfig,saveConfig} = require('./config')
