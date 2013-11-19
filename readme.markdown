@@ -68,3 +68,12 @@ Most Rally Apps are created by using an existing App as a template.
 By using the rally-app-builder clone command you can get a copy of the existing App without installing the Git CLI.
 This command makes some changes to the config file so that we can tell which App you based your work on. As we determine
 which apps you are most interested in customizing we take that as input on ways to improve the existing catalog App.
+
+
+### Unit Testing your new App.
+
+The guide for unit testing your App can be found on this [page](testing.markdown).
+
+
+
+### Rally-App-Builder is provided under the MIT license.
