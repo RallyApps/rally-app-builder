@@ -1,4 +1,4 @@
-_ = require 'underscore'
+_ = require 'lodash'
 fs = require 'fs'
 path = require 'path'
 mustache = require 'mustache'
@@ -10,6 +10,12 @@ files =
   "gitignore": ".gitignore"
   "LICENSE": "LICENSE"
   "README.md": "README.md"
+  "Gruntfile.js":"Gruntfile.js"
+  "package.json":"package.json"
+  "specs.tmpl":"test/specs.tmpl"
+  "AppSpec.js":"test/AppSpec.js"
+
+directories = ["test"]
 
 
 module.exports = (args, callback)->
@@ -21,9 +27,15 @@ module.exports = (args, callback)->
       server: 'https://rally1.rallydev.com'
       path: '.'
     filePath = args.path
-    delete args.path
     view = args
     templatePath = path.resolve(__dirname, '../templates/')
+
+    _.each(directories,
+    (value)->
+      if !fs.existsSync "#{filePath}/#{value}"
+        fs.mkdirSync "#{filePath}/#{value}"
+    )
+
     _.each(files,
     (value, key)->
       templateFile = "#{templatePath}/#{key}"

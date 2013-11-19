@@ -1,37 +1,44 @@
 {
-    "author":"Charles Ferentchak <charles@rallydev.com>",
-    "name":"rally-app-builder",
-    "description":"A node module that assists in the building of Rally Apps",
-    "version":"0.7.5",
-    "homepage":"https://github.com/rallyapps/rally-app-builder",
-    "repository":{
-        "type":"git",
-        "url":"git://github.com/rallyapps/rally-app-builder.git"
-    },
-    "main":"index",
-    "engines":{
-        "node":">0.8.12"
-    },
-    "dependencies":{
-        "underscore":"~1.3.1",
-        "coffee-script":"1.4.x",
-        "request":"~2.11.4",
-        "mustache":"0.7.x",
-        "commander":"0.6.x",
-        "fetch-github-repo":"0.1.x",
-        "async":"0.1.x",
-        "uglify-js":"~2.2.3",
-        "jshint":"~0.9.1"
-    },
-    "devDependencies":{
-        "mocha":"1.6.x",
-        "wrench":"1.3.x"
-    },
-    "scripts":{
-        "test":"mocha -t 20000 --compilers coffee:coffee-script"
-    },
-    "bin":{
-        "rally-app-builder":"./bin/rally-app-builder",
-        "rab":"./bin/rally-app-builder"
-    }
+  "author": "Charles Ferentchak <charles@rallydev.com>",
+  "name": "rally-app-builder",
+  "description": "A node module that assists in the building of Rally Apps",
+  "version": "0.8.0",
+  "homepage": "https://github.com/rallyapps/rally-app-builder",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rallyapps/rally-app-builder.git"
+  },
+  "main": "index",
+  "engines": {
+    "node": ">0.10.1"
+  },
+  "dependencies": {
+    "coffee-script": "1.4.x",
+    "request": "~2.11.4",
+    "mustache": "0.7.x",
+    "commander": "0.6.x",
+    "fetch-github-repo": "0.1.x",
+    "async": "0.1.x",
+    "uglify-js": "~2.2.3",
+    "jshint": "~0.9.1",
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
+    "grunt-contrib-concat": "0.3.x",
+    "grunt-contrib-jasmine": "0.4.x",
+    "grunt-contrib-clean": "0.4.x",
+    "grunt-contrib-watch": "~0.4.4",
+    "handlebars": "~1.0.11",
+    "lodash": "~2.3.0"
+  },
+  "devDependencies": {
+    "mocha": "1.6.x",
+    "wrench": "1.3.x"
+  },
+  "scripts": {
+    "test": "mocha -t 20000 --compilers coffee:coffee-script"
+  },
+  "bin": {
+    "rally-app-builder": "./bin/rally-app-builder",
+    "rab": "./bin/rally-app-builder"
+  }
 }
