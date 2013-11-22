@@ -3,10 +3,12 @@ rallyAppBuilder = require '../index'
 fs = require 'fs'
 path = require 'path'
 wrench = require 'wrench'
+if process.env.TRAVIS
+  console.log "Clone tests not ran during Travis build process due to timeouts."
+  return
 
 describe('Clone existing App', ()->
   baseDir = 'test/cloneTemp'
-
   before (done)->
     try
       if(!fs.existsSync(baseDir))

@@ -8,6 +8,7 @@ files =
   "App.js": "App.js"
   "config.json": "config.json"
   "gitignore": ".gitignore"
+  ".travis.yml": ".travis.yml"
   "LICENSE": "LICENSE"
   "README.md": "README.md"
   "Gruntfile.js":"Gruntfile.js"

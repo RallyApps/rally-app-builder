@@ -9,6 +9,7 @@ if (module) {
         grunt.loadNpmTasks('grunt-contrib-jasmine');
 
         grunt.registerTask('default', ['jasmine']);
+        grunt.registerTask('test', ['jasmine']);
 
         spec = grunt.option('spec') || '*';
         config = grunt.file.readJSON('config.json');
