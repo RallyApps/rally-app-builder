@@ -7,9 +7,10 @@ if (module) {
 
         var config, debug, environment, spec;
         grunt.loadNpmTasks('grunt-contrib-jasmine');
+        grunt.loadNpmTasks('grunt-contrib-jshint');
 
-        grunt.registerTask('default', ['jasmine']);
-        grunt.registerTask('test', ['jasmine']);
+        grunt.registerTask('test', ['jshint','jasmine']);
+        grunt.registerTask('default', ['test']);
 
         spec = grunt.option('spec') || '*';
         config = grunt.file.readJSON('config.json');
@@ -28,24 +29,12 @@ if (module) {
                     }
                 }
             },
-
-            rallydeploy: {
-                options: {
-                    server: config.server,
-                    projectOid: 0,
-                    deployFile: "deploy.json",
-                    credentialsFile: "credentials.json",
-                    timeboxFilter: "none"
-                },
-                prod: {
-                    options: {
-                        tab: "myhome",
-                        pageName: config.name,
-                        shared: false
-                    }
-                }
+            jshint:{
+              all: ['test/**/*.js']
             }
         });
-    };
+  }
+
 
 }
+
