@@ -2,7 +2,7 @@
 =================
 [![Build Status](https://travis-ci.org/RallyApps/rally-app-builder.png?branch=master)](https://travis-ci.org/RallyApps/rally-app-builder)
 
-## Install 
+
 
 First Install [Node.js](http://nodejs.org/)
 
@@ -74,6 +74,7 @@ which apps you are most interested in customizing we take that as input on ways 
 
 The guide for unit testing your App can be found on this [page](testing.markdown).
 
-
+[![NPM](https://nodei.co/npm/rally-app-builder.png?downloads=true)](https://nodei.co/npm/rally-app-builder/)
+## Install 
 
 ### Rally-App-Builder is provided under the MIT license.
