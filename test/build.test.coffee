@@ -18,13 +18,8 @@ describe('Build an App', ()->
       copy = ()-> wrench.copyDirRecursive(fixturesDirectory, tempTestDirectory, done)
       fs.mkdir(tempTestDirectory, copy)
     catch e
-
   after (done)->
-#    if(fs.existsSync(tempTestDirectory))
-#      wrench.rmdirRecursive(tempTestDirectory, done)
-#    else
       done()
-
 
   it 'errors if no config', (done)->
     config = path: '.'
@@ -87,7 +82,6 @@ describe('Build an App', ()->
           rallyAppBuilder.build config, done
         createBuildAssert sdk2TestDirectory
 
-
       describe 'that has already been built', ()->
         before (done)->
           config = path: sdk2TestDirectory
@@ -129,5 +123,4 @@ describe('Build an App', ()->
         it "should have a link to stuff js using http",
         ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.js") >= 0)
-
 )

@@ -4,7 +4,6 @@ path = require 'path'
 async = require 'async'
 mustache = require 'mustache'
 getScript = require './build/get-script'
-git = require('./git')
 appFileName = "App.html"
 appUncompressedFileName = "App-uncompressed.html"
 appDebugFileName = "App-debug.html"

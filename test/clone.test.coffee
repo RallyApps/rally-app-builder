@@ -9,6 +9,7 @@ if process.env.TRAVIS
 
 describe('Clone existing App', ()->
   baseDir = 'test/cloneTemp'
+
   before (done)->
     try
       if(!fs.existsSync(baseDir))

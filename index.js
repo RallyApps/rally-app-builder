@@ -1,3 +1,3 @@
-require("coffee-script");
+require( "coffee-script" );
 
-module.exports = require("./lib/main.coffee");
+module.exports = require( "./lib/index.coffee" );

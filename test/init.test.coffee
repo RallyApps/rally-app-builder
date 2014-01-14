@@ -9,7 +9,6 @@ describe('Init new App', ()->
     try
       fs.mkdirSync(baseDir)
     catch e
-
   after ()->
     try
       wrench.rmdirSyncRecursive(baseDir)

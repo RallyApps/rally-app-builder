@@ -1,7 +1,7 @@
 fs = require('fs')
 path = require ('path')
 cmdr = require('commander')
-RallyAppBuilder = require("../lib/main")
+RallyAppBuilder = require("../lib/")
 packageLocation = path.normalize(__dirname + "/../package.json")
 version = JSON.parse(fs.readFileSync(packageLocation)).version
 

@@ -18,7 +18,6 @@ files =
 
 directories = ["test"]
 
-
 module.exports = (args, callback)->
   callback = callback || ()->
   try
