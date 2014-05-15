@@ -28,6 +28,9 @@ If you don't have permission to install it globally you can install it locally l
     clone [organization] [repo]
     Creates a new Rally App project from an existing GitHub project. 
 
+    watch
+    Automatically builds the App when files are changed
+
   Options:
 
     -h, --help     output usage information
@@ -69,6 +72,11 @@ By using the rally-app-builder clone command you can get a copy of the existing 
 This command makes some changes to the config file so that we can tell which App you based your work on. As we determine
 which apps you are most interested in customizing we take that as input on ways to improve the existing catalog App.
 
+
+### watch
+`rally-app-builder watch`
+
+The watch command listens for changes to app files and automatically rebuilds the app.
 
 ### Unit Testing your new App.
 
