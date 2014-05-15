@@ -3,3 +3,4 @@ module.exports =
  clone : require './clone'
  build : require './build'
  config: require './config'
+ run: require './run'
