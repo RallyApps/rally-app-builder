@@ -30,7 +30,9 @@
     "handlebars": "~1.0.11",
     "lodash": "~2.3.0",
     "promise-to-validate": "~0.3.0",
-    "node-watch": "~0.3.4"
+    "node-watch": "~0.3.4",
+    "express": "4.2.x",
+    "open": "~0.0.5"
   },
   "devDependencies": {
     "mocha": "1.6.x",

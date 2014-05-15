@@ -21,12 +21,15 @@ If you don't have permission to install it globally you can install it locally l
 
     init [name] [sdk_version] [server]
     Creates a new Rally App project
-    
-    build 
+
+    build
     Builds the current App
-    
+
     clone [organization] [repo]
-    Creates a new Rally App project from an existing GitHub project. 
+    Creates a new Rally App project from an existing GitHub project.
+
+    run [port=1337]
+    Starts a local server and launches the App in the default browser
 
     watch
     Automatically builds the App when files are changed
@@ -62,8 +65,6 @@ The init command takes a few parameters.
 Use the build command to compile your App into a single HTML page that can be copy and pasted into a Rally customer html [page](http://www.rallydev.com/custom-html)
 Run this command before you check your file into source control or whenever you make a change to your config.json file.
 
-
-
 ### clone
 `rally-app-builder clone RallyApps StoryBoard`
 
@@ -72,6 +73,13 @@ By using the rally-app-builder clone command you can get a copy of the existing 
 This command makes some changes to the config file so that we can tell which App you based your work on. As we determine
 which apps you are most interested in customizing we take that as input on ways to improve the existing catalog App.
 
+### run
+`rally-app-builder run`
+
+The run command starts a local http server and launches your App-debug.html file in the default browser for quick an easy development.
+By default the server listens on port 1337.  This can be changed as follows:
+
+`rally-app-builder run 9999'
 
 ### watch
 `rally-app-builder watch`
@@ -82,6 +90,6 @@ The watch command listens for changes to app files and automatically rebuilds th
 
 The guide for unit testing your App can be found on this [page](testing.markdown).
 
-## Install 
+## Install
 
 ### Rally-App-Builder is provided under the MIT license.
