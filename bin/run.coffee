@@ -46,6 +46,18 @@ cmdr
       return
     RallyAppBuilder.clone {organization,repo}, builder
 
+cmdr
+  .command('watch')
+  .description('Watch the current app files for changes and automatically rebuild it')
+  .action ()->
+    RallyAppBuilder.watch()
+
+cmdr
+  .command('run [port=1337]')
+  .description('Launch the current app in a browser')
+  .action (port) ->
+    RallyAppBuilder.run({port})
+
 if process.argv.length == 2
   process.argv.push("build")
 
