@@ -15,7 +15,7 @@ If you don't have permission to install it globally you can install it locally l
 
 ## API
 
-  Usage: rally-app-builder [options] [command]
+  Usage: rally-app-builder [command] [options]
 
   Commands:
 
