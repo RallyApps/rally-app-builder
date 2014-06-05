@@ -14,3 +14,7 @@ results
 test/temp
 node_modules
 npm-debug.log
+*.less.css
+*.iml
+*.iws
+*.ipr
