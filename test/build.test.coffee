@@ -4,13 +4,13 @@ fs = require 'fs'
 wrench = require 'wrench'
 path = require 'path'
 
-
 tempTestDirectory = 'test/buildTemp'
 fixturesDirectory = path.join(__dirname, 'fixtures')
 
 sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
 sdk2CustomSdkVersionDirectory = path.join(tempTestDirectory, 'sdk2CustomSdkVersion')
 sdk2WithExternalJavaScript = path.join(tempTestDirectory, 'sdk2WithExternalJavaScript')
+sdk2WithLessDirectory = path.join(tempTestDirectory, 'sdk2less')
 
 describe('Build an App', ()->
   before (done)->
@@ -53,7 +53,7 @@ describe('Build an App', ()->
             assert(appFile.match /Custom App File/)
           it "should contain the string from the CSS file",
           ()->
-            assert(appFile.match /Add app styles here/)
+            assert(appFile.match /[.]app[{]/)
           it "should contain the string from the CustomCard file",
           ()->
             assert(appFile.match /customcard/)
@@ -72,6 +72,7 @@ describe('Build an App', ()->
           appFile = ""
           before ()->
             appFile = fs.readFileSync(appUncompressedFileName, "utf-8")
+            console.log appUncompressedFileName
           it "should still have the comment string since it is unminified",
           ()->
             assert(appFile.match /Important Comment/)
@@ -88,6 +89,50 @@ describe('Build an App', ()->
           rallyAppBuilder.build config, done
         createBuildAssert sdk2TestDirectory
 
+      describe 'with less files', ()->
+        before (done)->
+          config = path: sdk2WithLessDirectory
+          rallyAppBuilder.build config, done
+
+        createBuildAssert sdk2WithLessDirectory
+
+        describe 'the built app file', ->
+          appFileContents = ''
+          before () ->
+            appFileName = path.join sdk2WithLessDirectory, "deploy", rallyAppBuilder.build.appFileName
+            appFileContents = fs.readFileSync appFileName, "utf-8"
+
+          it 'should contain app.css styles', ->
+            assert appFileContents.indexOf('.app{') != -1
+
+          it 'should contain app.less styles', ->
+            assert appFileContents.indexOf('.app-less-style{') != -1
+            assert appFileContents.indexOf('.x-foo{') != -1
+
+        describe 'the built uncompressed app file', ->
+          appFileContents = ''
+          before () ->
+            appFileName = path.join sdk2WithLessDirectory, "deploy", rallyAppBuilder.build.appUncompressedFileName
+            appFileContents = fs.readFileSync appFileName, "utf-8"
+
+          it 'should contain app.css styles', ->
+            assert appFileContents.indexOf('.app {') != -1
+
+          it 'should contain app.less styles', ->
+            assert appFileContents.indexOf('.app-less-style {') != -1
+            assert appFileContents.indexOf('.x-foo {') != -1
+
+        describe 'the app debug file', ->
+          appFileContents = ''
+          before () ->
+            appFileName = path.join sdk2WithLessDirectory, rallyAppBuilder.build.appDebugFileName
+            appFileContents = fs.readFileSync appFileName, "utf-8"
+
+          it 'should contain app.css', ->
+            assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.css">') != -1
+
+          it 'should contain app.less.css', ->
+            assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.less.css">') != -1
 
     describe 'with new SDK specified', ()->
       appDebugFileName=""

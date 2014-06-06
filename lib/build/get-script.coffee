@@ -1,34 +1,41 @@
-_ = require('lodash')
+_ = require 'lodash'
 fs = require 'fs'
 path = require 'path'
 async = require 'async'
 coffeeScript = require 'coffee-script'
 uglify = require 'uglify-js'
 {JSHINT} = require 'jshint'
-
+less = require 'less'
+css = require './css'
 
 isScriptLocal = (scriptName)->
   return !scriptName.match /^.*\/\//
 isScriptRemote = (scriptName)->
   return !isScriptLocal(scriptName)
+
 module.exports =
+
   getFiles: ({configJson, appPath}, callback)->
     localFiles =  _.filter(configJson.javascript, isScriptLocal)
-    async.parallel(
+    async.parallel
       javascript_files: (jsCallback)=>
         @getJavaScripts {appPath, scripts: localFiles,compress:true}, jsCallback
       uncompressed_javascript_files: (jsCallback)=>
         @getJavaScripts {appPath, scripts: localFiles, compress:false}, jsCallback
+      css_file_names: (cssCallback)=>
+        cssCallback null, _.map configJson.css, css.getGeneratedFileName
       css_files: (cssCallback)=>
-        @getScripts {appPath, scripts: configJson.css }, cssCallback
+        @getStylesheets {appPath, scripts: configJson.css, compress: true}, cssCallback
+      uncompressed_css_files: (cssCallback)=>
+        @getStylesheets {appPath, scripts: configJson.css, compress: false}, cssCallback
       remote_javascript_files: (remoteJsFilesCallback)=>
         remoteJsFilesCallback null, _.filter(configJson.javascript, isScriptRemote)
       local_javascript_files: (localJsFilesCallback)=>
         localJsFilesCallback null, localFiles
       callback
-    )
+
   getJavaScripts: ({appPath, scripts,compress}, callback)->
-    @getScripts({appPath, scripts}, (err, results) =>
+    @getScripts {appPath, scripts}, (err, results) =>
       if err then callback(err)
       else
         for key,code of results
@@ -36,7 +43,15 @@ module.exports =
           @hintJavaScriptFile(code, fileName)
           results[key] = if compress then @compressJavaScript(code) else code
         callback(null, results)
-    )
+
+  getStylesheets: ({appPath, scripts, compress}, callback)->
+    @getScripts {appPath, scripts}, (err, results) =>
+      if err then callback(err)
+      else
+        async.map results, (cssCode, cb) ->
+          css.compile cssCode, compress, cb
+        , callback
+
   getScripts: ({appPath, scripts, compress}, callback)->
     fullPathScripts = []
     for script in scripts || []
@@ -66,4 +81,3 @@ module.exports =
     if(!JSHINT(code, undef: false))
       for error in JSHINT.errors
         console.log "Error in #{fileName} on line #{error.line}: #{error.reason}" unless !error
-
