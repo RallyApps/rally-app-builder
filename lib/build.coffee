@@ -41,7 +41,7 @@ module.exports = ({path}, callback)->
       if error then callback error
       else
       getScript.getFiles {configJson, appPath,compress:false},
-        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files,uncompressed_css_files, css_file_names})->
+        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files,uncompressed_css_files, css_file_names, html_files})->
           if err
             callback err
           else
@@ -52,6 +52,7 @@ module.exports = ({path}, callback)->
             configJson.remote_javascript_files = remote_javascript_files
             configJson.local_javascript_files = local_javascript_files
             configJson.uncompressed_javascript_files = uncompressed_javascript_files
+            configJson.html_files = html_files
             async.forEach configJson.css, (c, callback) ->
               cssPath = pathUtil.resolve appPath, c
               css.compileInPlace cssPath, false, callback
