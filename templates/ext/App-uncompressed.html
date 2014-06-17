@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{name}}</title>
+
+    <script type="text/javascript" src="/apps/{{{sdk}}}/sdk.js"></script>
+    {{#remote_javascript_files}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/remote_javascript_files}}
+
+    <script type="text/javascript">
+        Rally.onReady(function () {
+            {{#uncompressed_javascript_files}}
+                {{{.}}}
+            {{/uncompressed_javascript_files}}
+
+            Rally.launchApp('{{className}}', {
+                name:"{{name}}",
+	            parentRepos:"{{{parents}}}"
+            });
+
+        });
+    </script>
+
+
+{{#uncompressed_css_files}}
+    <style type="text/css">
+        {{{.}}}
+    </style>
+{{/uncompressed_css_files}}
+</head>
+<body>
+{{#html_files}}
+    {{{.}}}
+{{/html_files}}
+</body>
+</html>

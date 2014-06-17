@@ -3,33 +3,40 @@ fs = require 'fs'
 pathUtil = require 'path'
 async = require 'async'
 mustache = require 'mustache'
-getScript = require './build/get-script'
-css = require './build/css'
+getScript = require './get-script'
+css = require './css'
 appFileName = "App.html"
 appUncompressedFileName = "App-uncompressed.html"
 appDebugFileName = "App-debug.html"
 deployFilePath = "deploy"
-templatePath = pathUtil.resolve(__dirname, '../templates/')
+templateDirectory = pathUtil.resolve(__dirname, '../../templates/')
 
-{getConfig,configFileName} = require('./config')
+{getConfig,configFileName} = require('../config')
 
-createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
+createDeployFile = ({appPath, templateBase, templateData, templateFileName, directory}, callback)->
   console.log "Creating #{templateFileName}"
-  appTemplate = fs.readFileSync(pathUtil.join(templatePath, templateFileName), "utf-8")
+  appTemplate = fs.readFileSync(pathUtil.join(templateBase, templateFileName), "utf-8")
   fullDeployFilePath = pathUtil.resolve(appPath, directory)
   filePath = pathUtil.join fullDeployFilePath, templateFileName
   if(!fs.existsSync(fullDeployFilePath))
     fs.mkdirSync fullDeployFilePath
   compiledApp = mustache.render(appTemplate, templateData)
   fs.writeFile(filePath, compiledApp, callback)
-buildDeployFiles = ({appPath, templateData, appFileName, appDebugFileName }, callback)->
+
+buildDeployFiles = ({appPath, templateData, templateBase, appFileName, appDebugFileName, appUncompressedFileName }, callback)->
   async.forEach(
     [
-      {appPath, templateData, templateFileName: appDebugFileName, directory: '.'},
-      {appPath, templateData, templateFileName: appFileName, directory: deployFilePath}
-      {appPath, templateData, templateFileName: appUncompressedFileName, directory: deployFilePath,compress:false}
+      {templateFileName: appDebugFileName, directory: '.'},
+      {templateFileName: appFileName, directory: deployFilePath}
+      {templateFileName: appUncompressedFileName, directory: deployFilePath,compress:false}
     ]
-    createDeployFile
+    (options, cb)->
+      options = _.extend {
+        appPath
+        templateData
+        templateBase
+      }, options
+      createDeployFile options, cb
     callback
   )
 
@@ -41,7 +48,7 @@ module.exports = ({path}, callback)->
       if error then callback error
       else
       getScript.getFiles {configJson, appPath,compress:false},
-        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files,uncompressed_css_files, css_file_names})->
+        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files,uncompressed_css_files, css_file_names, html_files})->
           if err
             callback err
           else
@@ -52,13 +59,28 @@ module.exports = ({path}, callback)->
             configJson.remote_javascript_files = remote_javascript_files
             configJson.local_javascript_files = local_javascript_files
             configJson.uncompressed_javascript_files = uncompressed_javascript_files
+            configJson.html_files = html_files
             async.forEach configJson.css, (c, callback) ->
               cssPath = pathUtil.resolve appPath, c
               css.compileInPlace cssPath, false, callback
             , (err)->
               if err then callback err
               else
-                buildDeployFiles({appPath, templateData: configJson, appFileName, appDebugFileName }, callback)
+                templateBase = pathUtil.join templateDirectory, 
+                  switch configJson.framework
+                    when "angular" then "ng"
+                    when "ext" then "ext"
+                    else "ext"
+
+                options = {
+                  appPath
+                  templateData: configJson
+                  appFileName: appFileName
+                  appDebugFileName: appDebugFileName
+                  appUncompressedFileName: appUncompressedFileName
+                  templateBase
+                }
+                buildDeployFiles(options, callback)
   catch error
     callback error
 

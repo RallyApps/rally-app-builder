@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{name}}</title>
+
+    <script type="text/javascript" src="{{{server}}}/apps/{{{sdk}}}/sdk-debug.js"></script>
+    {{#remote_javascript_files}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/remote_javascript_files}}
+
+    {{#local_javascript_files}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/local_javascript_files}}
+
+{{#css_file_names}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+{{/css_file_names}}
+</head>
+<body ng-app="{{name}}">
+{{#html_files}}
+    {{{.}}}
+{{/html_files}}
+</body>
+</html>

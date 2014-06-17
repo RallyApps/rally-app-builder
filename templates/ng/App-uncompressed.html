@@ -9,17 +9,9 @@
     {{/remote_javascript_files}}
 
     <script type="text/javascript">
-        Rally.onReady(function () {
-            {{#uncompressed_javascript_files}}
-                {{{.}}}
-            {{/uncompressed_javascript_files}}
-
-            Rally.launchApp('{{className}}', {
-                name:"{{name}}",
-	            parentRepos:"{{{parents}}}"
-            });
-
-        });
+        {{#uncompressed_javascript_files}}
+            {{{.}}}
+        {{/uncompressed_javascript_files}}
     </script>
 
 
@@ -29,5 +21,9 @@
     </style>
 {{/uncompressed_css_files}}
 </head>
-<body></body>
+<body ng-app="{{name}}">
+{{#html_files}}
+    {{{.}}}
+{{/html_files}}
+</body>
 </html>

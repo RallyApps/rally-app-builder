@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{name}}</title>
+
+    <script type="text/javascript" src="/apps/{{{sdk}}}/sdk.js"></script>
+    {{#remote_javascript_files}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/remote_javascript_files}}
+
+    <script type="text/javascript">
+        {{#javascript_files}}
+            {{{.}}}
+        {{/javascript_files}}
+    </script>
+
+
+{{#css_files}}
+    <style type="text/css">
+        {{{.}}}
+    </style>
+{{/css_files}}
+</head>
+<body ng-app="{{name}}">
+{{#html_files}}
+    {{{.}}}
+{{/html_files}}
+</body>
+</html>

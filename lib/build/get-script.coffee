@@ -32,6 +32,8 @@ module.exports =
         remoteJsFilesCallback null, _.filter(configJson.javascript, isScriptRemote)
       local_javascript_files: (localJsFilesCallback)=>
         localJsFilesCallback null, localFiles
+      html_files: (htmlFilesCallback)=>
+        @getScripts {appPath, scripts: configJson.html}, htmlFilesCallback
       callback
 
   getJavaScripts: ({appPath, scripts,compress}, callback)->
