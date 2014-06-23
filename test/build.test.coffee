@@ -3,6 +3,8 @@ rallyAppBuilder = require '../index'
 fs = require 'fs'
 wrench = require 'wrench'
 path = require 'path'
+sinon = require 'sinon'
+shell = require 'shelljs'
 
 tempTestDirectory = 'test/buildTemp'
 fixturesDirectory = path.join(__dirname, 'fixtures')
@@ -142,7 +144,7 @@ describe 'Build an App', ()->
             assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.less.css">') != -1
 
     describe 'with new SDK specified', ()->
-      appDebugFileName=""
+      appDebugFileName = ""
       before (done)->
         config = path: sdk2CustomSdkVersionDirectory
         rallyAppBuilder.build config, done
@@ -156,8 +158,8 @@ describe 'Build an App', ()->
         assert(file.match /https:\/\/testserver\.konami\.com/)
 
     describe 'with external JavaScript files specified', ()->
-      appDebugFileContents=""
-      appFileContents=""
+      appDebugFileContents = ""
+      appFileContents = ""
       before (done)->
         config = path: sdk2WithExternalJavaScript
         rallyAppBuilder.build config, (error)->
@@ -177,3 +179,71 @@ describe 'Build an App', ()->
 
         it "should have a link to stuff js using http",  ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.js") >= 0)
+
+    describe 'with build scripts', ->
+      
+      beforeEach ->
+        @config = require('../lib/config')
+
+        @sandbox = sinon.sandbox.create()
+        @sandbox.stub(rallyAppBuilder.build, 'runBuild')
+        @sandbox.stub(rallyAppBuilder.build, 'runScript')
+        @sandbox.stub(@config, 'getConfig')
+
+      afterEach ->
+        @sandbox.restore()
+
+      it 'should invoke the prebuild step before building the app', (done)->
+        @config.getConfig.yields(null, {})
+        rallyAppBuilder.build.runBuild.yields(null, {})
+        rallyAppBuilder.build.runScript.yields(null, {})
+        rallyAppBuilder.build {}, (err)->
+          assert(not err?)
+          preBuild = rallyAppBuilder.build.runScript.withArgs(sinon.match.any, sinon.match.any, 'prebuild', sinon.match.any)
+          assert(preBuild.calledBefore(rallyAppBuilder.build.runBuild))
+          done()
+
+      it 'should invoke the postbuild step after building the app', (done)->
+        @config.getConfig.yields(null, {})
+        rallyAppBuilder.build.runBuild.yields(null, {})
+        rallyAppBuilder.build.runScript.yields(null, {})
+        rallyAppBuilder.build {}, (err)->
+          assert(not err?)
+          postBuild = rallyAppBuilder.build.runScript.withArgs(sinon.match.any, sinon.match.any, 'postbuild', sinon.match.any)
+          assert(rallyAppBuilder.build.runBuild.calledBefore(postBuild))
+          done()
+
+  describe 'running build scripts', ->
+    beforeEach ->
+      @sandbox = sinon.sandbox.create()
+      @sandbox.stub(shell, 'pushd')
+      @sandbox.stub(shell, 'popd')
+      @sandbox.stub(shell, 'exec').yields()
+
+    afterEach ->
+      @sandbox.restore()
+    
+    it 'should push and pop the app path directory', (done)->
+      rallyAppBuilder.build.runScript {scripts: {prebuild: 'cmd'}}, 'appPath', 'prebuild', (err)->
+        assert(shell.pushd.calledWith('appPath'))
+        assert(shell.pushd.calledBefore(shell.exec))
+        assert(shell.popd.called)
+        assert(shell.exec.calledBefore(shell.popd))
+        done()
+    
+    it 'should exec the script step', (done)->
+      rallyAppBuilder.build.runScript {scripts: {prebuild: 'cmd'}}, 'appPath', 'prebuild', (err)->
+        assert(shell.exec.calledWith('cmd'))       
+        done()
+
+    it 'should error if attempting and undefined step', (done)->
+      rallyAppBuilder.build.runScript {scripts: {prebuild: 'cmd'}}, 'appPath', 'foo', (err)->
+        assert(err?)
+        done()
+
+    it 'should callback without error if the step is undefined in configuration', (done)->
+      rallyAppBuilder.build.runScript {}, 'appPath', 'prebuild', (err)->
+        assert(not err?)
+        assert(not shell.exec.called)
+        done()
+
