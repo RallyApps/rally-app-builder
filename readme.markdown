@@ -67,7 +67,7 @@ Run this command before you check your file into source control or whenever you 
 
 #### Custom build steps
 
-You can define pre and post build commands to be executed by adding them to your config.json. These can be used to extend and support the rally app build/concatenation steps. An example using grunt to prep your app for rally-app-builder:
+You can define pre and post build commands to be executed by adding them to your config.json. These can be used to extend and support the rally app build/concatenation steps. An example using grunt (which by default will run your tests):
 ```
 {
    "scripts": {
