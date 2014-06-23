@@ -6,6 +6,7 @@ mustache = require 'mustache'
 getScript = require './get-script'
 css = require './css'
 appFileName = "App.html"
+appExternalFileName = "App-external.html"
 appUncompressedFileName = "App-uncompressed.html"
 appDebugFileName = "App-debug.html"
 deployFilePath = "deploy"
@@ -23,12 +24,13 @@ createDeployFile = ({appPath, templateBase, templateData, templateFileName, dire
   compiledApp = mustache.render(appTemplate, templateData)
   fs.writeFile(filePath, compiledApp, callback)
 
-buildDeployFiles = ({appPath, templateData, templateBase, appFileName, appDebugFileName, appUncompressedFileName }, callback)->
+buildDeployFiles = ({appPath, templateData, templateBase, appFileName, appExternalFileName, appDebugFileName, appUncompressedFileName }, callback)->
   async.forEach(
     [
       {templateFileName: appDebugFileName, directory: '.'},
       {templateFileName: appFileName, directory: deployFilePath}
-      {templateFileName: appUncompressedFileName, directory: deployFilePath,compress:false}
+      {templateFileName: appExternalFileName, directory: deployFilePath}
+      {templateFileName: appUncompressedFileName, directory: deployFilePath, compress:false}
     ]
     (options, cb)->
       options = _.extend {
@@ -48,7 +50,7 @@ module.exports = ({path}, callback)->
       if error then callback error
       else
       getScript.getFiles {configJson, appPath,compress:false},
-        (err, {javascript_files, css_files,remote_javascript_files,local_javascript_files,uncompressed_javascript_files,uncompressed_css_files, css_file_names, html_files})->
+        (err, {javascript_files, css_files, remote_javascript_files, local_javascript_files, uncompressed_javascript_files, uncompressed_css_files, css_file_names, html_files})->
           if err
             callback err
           else
@@ -78,6 +80,7 @@ module.exports = ({path}, callback)->
                   appFileName: appFileName
                   appDebugFileName: appDebugFileName
                   appUncompressedFileName: appUncompressedFileName
+                  appExternalFileName: appExternalFileName
                   templateBase
                 }
                 buildDeployFiles(options, callback)
@@ -85,4 +88,4 @@ module.exports = ({path}, callback)->
     callback error
 
 #exports constants
-_.defaults module.exports, {configFileName, appFileName, deployFilePath, appDebugFileName,appUncompressedFileName}
+_.defaults module.exports, {configFileName, appFileName, deployFilePath, appDebugFileName, appUncompressedFileName, appExternalFileName}

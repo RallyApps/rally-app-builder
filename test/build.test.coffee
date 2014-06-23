@@ -12,7 +12,7 @@ sdk2CustomSdkVersionDirectory = path.join(tempTestDirectory, 'sdk2CustomSdkVersi
 sdk2WithExternalJavaScript = path.join(tempTestDirectory, 'sdk2WithExternalJavaScript')
 sdk2WithLessDirectory = path.join(tempTestDirectory, 'sdk2less')
 
-describe('Build an App', ()->
+describe 'Build an App', ()->
   before (done)->
     try
       copy = ()-> wrench.copyDirRecursive(fixturesDirectory, tempTestDirectory, done)
@@ -30,11 +30,12 @@ describe('Build an App', ()->
         done(new Error("Error not thrown without config specified"))
     rallyAppBuilder.build config, testResponse
 
-  describe 'with AppSDK 2.0', ()->
-    describe 'basic functionality', ()->
-      createBuildAssert = (baseDirectory)->
+  describe 'with AppSDK 2.0', () ->
+    describe 'basic functionality', () ->
+      createBuildAssert = (baseDirectory) ->
         appFileName = path.join(baseDirectory, "deploy", rallyAppBuilder.build.appFileName)
         appUncompressedFileName = path.join(baseDirectory, "deploy", rallyAppBuilder.build.appUncompressedFileName)
+        appExternalFileName = path.join(baseDirectory, "deploy", rallyAppBuilder.build.appExternalFileName)
         appDebugFileName = path.join(baseDirectory, rallyAppBuilder.build.appDebugFileName)
         appFile = ""
         it "should have a #{rallyAppBuilder.build.appFileName}", ()->
@@ -43,29 +44,35 @@ describe('Build an App', ()->
           assert(fs.existsSync appUncompressedFileName)
         it "should have a #{rallyAppBuilder.build.appDebugFileName}", ()->
           assert(fs.existsSync appDebugFileName)
+        it "should have a #{rallyAppBuilder.build.appExternalFileName}", ()->
+          assert(fs.existsSync appExternalFileName)
 
         describe "in the #{rallyAppBuilder.build.appFileName}", ()->
           appFile = ""
           before ()->
             appFile = fs.readFileSync(appFileName, "utf-8")
-          it "should contain the string from the  Custom App File",
-          ()->
+
+          it "should contain the string from the  Custom App File", ()->
             assert(appFile.match /Custom App File/)
-          it "should contain the string from the CSS file",
-          ()->
+
+          it "should contain the string from the CSS file", ()->
             assert(appFile.match /[.]app[{]/)
-          it "should contain the string from the CustomCard file",
-          ()->
+
+          it "should contain the string from the CustomCard file", ()->
             assert(appFile.match /customcard/)
 
-          it "should contain the string from the parent collection",
-          ()->
+          it "should contain the string from the parent collection", ()->
             assert(appFile.match /ferentchak.*ninjas/)
-          it "should contain the processed coffeescript file",
-          ()->
+
+          it "should contain the processed coffeescript file", ()->
             assert(appFile.match /CoffeeCard/)
-          it "should have the correct sdk debug file name", ()->
+
+          it "should have the fully qualified sdk in the debug file", ()->
             file = fs.readFileSync appDebugFileName, "utf-8"
+            assert(file.match /https:\/\/rally1\.rallydev\.com/)
+
+          it "should have the fully qualified sdk in the external file", ()->
+            file = fs.readFileSync appExternalFileName, "utf-8"
             assert(file.match /https:\/\/rally1\.rallydev\.com/)
 
         describe "in the #{rallyAppBuilder.build.appUncompressedFileName}", ()->
@@ -73,8 +80,8 @@ describe('Build an App', ()->
           before ()->
             appFile = fs.readFileSync(appUncompressedFileName, "utf-8")
             console.log appUncompressedFileName
-          it "should still have the comment string since it is unminified",
-          ()->
+
+          it "should still have the comment string since it is unminified", ()->
             assert(appFile.match /Important Comment/)
 
       describe 'that has JavaScript files', ()->
@@ -140,8 +147,10 @@ describe('Build an App', ()->
         config = path: sdk2CustomSdkVersionDirectory
         rallyAppBuilder.build config, done
         appDebugFileName = path.join(sdk2CustomSdkVersionDirectory, rallyAppBuilder.build.appDebugFileName)
+
       it "should have a #{rallyAppBuilder.build.appDebugFileName}", ()->
         assert(fs.existsSync appDebugFileName)
+
       it "should have the correct sdk debug file name", ()->
         file = fs.readFileSync appDebugFileName, "utf-8"
         assert(file.match /https:\/\/testserver\.konami\.com/)
@@ -159,13 +168,12 @@ describe('Build an App', ()->
           done(error)
 
       describe "debug file", ()->
-        it "should have a link to underscore",
-        ()->
+
+        it "should have a link to underscore", ()->
           assert(appDebugFileContents.indexOf("cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js") >= 0)
-        it "should have a link to secret js using https",
-        ()->
+
+        it "should have a link to secret js using https", ()->
           assert(appDebugFileContents.indexOf("https://www.secure.com/secret.js") >= 0)
-        it "should have a link to stuff js using http",
-        ()->
+
+        it "should have a link to stuff js using http",  ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.js") >= 0)
-)
