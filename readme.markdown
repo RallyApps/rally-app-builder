@@ -65,6 +65,18 @@ The init command takes a few parameters.
 Use the build command to compile your App into a single HTML page that can be copy and pasted into a Rally customer html [page](http://www.rallydev.com/custom-html)
 Run this command before you check your file into source control or whenever you make a change to your config.json file.
 
+#### Custom build steps
+
+You can define pre and post build commands to be executed by adding them to your config.json. These can be used to extend and support the rally app build/concatenation steps. An example using grunt (which by default will run your tests):
+```
+{
+   "scripts": {
+      "prebuild": "./node_modules/.bin/grunt"
+      "postbuild": "echo 'build completed'"
+   }
+}
+```
+
 ### clone
 `rally-app-builder clone RallyApps StoryBoard`
 
