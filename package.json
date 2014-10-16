@@ -2,7 +2,7 @@
   "author": "Charles Ferentchak <charles@rallydev.com>",
   "name": "rally-app-builder",
   "description": "A node module that assists in the building of Rally Apps",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "homepage": "https://github.com/rallyapps/rally-app-builder",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   },
   "main": "index",
   "engines": {
-    "node": ">0.10.1"
+    "node": ">0.10.32"
   },
   "dependencies": {
     "coffee-script": "1.4.x",
