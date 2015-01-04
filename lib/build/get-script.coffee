@@ -17,6 +17,7 @@ module.exports =
 
   getFiles: ({configJson, appPath}, callback)->
     localFiles =  _.filter(configJson.javascript, isScriptLocal)
+    localCssFiles =  _.filter(configJson.css, isScriptLocal)
     async.parallel
       javascript_files: (jsCallback)=>
         @getJavaScripts {appPath, scripts: localFiles,compress:true}, jsCallback
@@ -64,7 +65,6 @@ module.exports =
     ast = uglify.parse(code)
     ast.figure_out_scope()
     compressor = uglify.Compressor(
-      drop_debugger: true
       unused: false
     )
     ast = ast.transform(compressor)
