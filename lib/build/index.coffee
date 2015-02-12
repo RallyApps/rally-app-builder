@@ -58,7 +58,7 @@ buildDeployFiles = ({appPath, templateData, templateBase, appFileName, appExtern
 
 runBuild = (configJson, appPath, callback)->
   getScript.getFiles {configJson, appPath,compress:false},
-    (err, {javascript_files, css_files, remote_javascript_files, local_javascript_files, uncompressed_javascript_files, uncompressed_css_files, css_file_names, html_files})->
+    (err, {javascript_files, css_files, remote_javascript_files, local_javascript_files, uncompressed_javascript_files, uncompressed_css_files, css_file_names, html_files, remote_css_files})->
       if err
         callback err
       else
@@ -70,6 +70,7 @@ runBuild = (configJson, appPath, callback)->
         configJson.local_javascript_files = local_javascript_files
         configJson.uncompressed_javascript_files = uncompressed_javascript_files
         configJson.html_files = html_files
+        configJson.remote_css_files = remote_css_files
         async.forEach configJson.css, (c, callback) ->
           cssPath = pathUtil.resolve appPath, c
           css.compileInPlace cssPath, false, callback

@@ -23,8 +23,12 @@
         }, true);
     </script>
 
+{{#remote_css_files}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}"/>
+{{/remote_css_files}}
+
 {{#css_file_names}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+    <link rel="stylesheet" type="text/css" href="{{{.}}}"/>
 {{/css_file_names}}
 </head>
 <body>
