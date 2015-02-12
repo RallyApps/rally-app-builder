@@ -13,6 +13,7 @@ sdk2TestDirectory = path.join(tempTestDirectory, 'sdk2')
 sdk2CustomSdkVersionDirectory = path.join(tempTestDirectory, 'sdk2CustomSdkVersion')
 sdk2WithExternalJavaScript = path.join(tempTestDirectory, 'sdk2WithExternalJavaScript')
 sdk2WithLessDirectory = path.join(tempTestDirectory, 'sdk2less')
+sdk2WithExternalStylesDirectory = path.join(tempTestDirectory, 'sdk2WithExternalStyles')
 
 describe 'Build an App', ()->
   before (done)->
@@ -138,10 +139,10 @@ describe 'Build an App', ()->
             appFileContents = fs.readFileSync appFileName, "utf-8"
 
           it 'should contain app.css', ->
-            assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.css">') != -1
+            assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.css"/>') != -1
 
           it 'should contain app.less.css', ->
-            assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.less.css">') != -1
+            assert appFileContents.indexOf('<link rel="stylesheet" type="text/css" href="app.less.css"/>') != -1
 
     describe 'with new SDK specified', ()->
       appDebugFileName = ""
@@ -179,6 +180,29 @@ describe 'Build an App', ()->
 
         it "should have a link to stuff js using http",  ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.js") >= 0)
+
+    describe 'with external styles specified', ()->
+      appDebugFileContents = ""
+      appFileContents = ""
+      before (done)->
+        config = path: sdk2WithExternalStylesDirectory
+        rallyAppBuilder.build config, (error)->
+          appDebugFileName = path.join(sdk2WithExternalStylesDirectory, rallyAppBuilder.build.appDebugFileName)
+          appDebugFileContents = file = fs.readFileSync appDebugFileName, "utf-8"
+          appFileName = path.join(sdk2WithExternalStylesDirectory,"deploy", rallyAppBuilder.build.appFileName)
+          appFileContents = file = fs.readFileSync appFileName, "utf-8"
+          done(error)
+
+      describe "debug file", ()->
+
+        it "should have a link to underscore", ()->
+          assert(appDebugFileContents.indexOf("cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore.css") >= 0)
+
+        it "should have a link to secret js using https", ()->
+          assert(appDebugFileContents.indexOf("https://www.secure.com/secret.css") >= 0)
+
+        it "should have a link to stuff js using http",  ()->
+          assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.css") >= 0)
 
     describe 'with build scripts', ->
       
