@@ -204,6 +204,24 @@ describe 'Build an App', ()->
         it "should have a link to stuff js using http",  ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.css") >= 0)
 
+		describe 'with environment variables in path', ()->
+      appDebugFileContents = ""
+      appFileContents = ""
+      before (done)->
+				process.env.APPDIR = path.join(fixturesDirectory, 'sdk2WithEnvVars')
+        config = path: sdk2WithEnvVars
+        rallyAppBuilder.build config, (error)->
+          appDebugFileName = path.join(sdk2WithEnvVars, rallyAppBuilder.build.appDebugFileName)
+          appDebugFileContents = file = fs.readFileSync appDebugFileName, "utf-8"
+          appFileName = path.join(sdk2WithEnvVars,"deploy", rallyAppBuilder.build.appFileName)
+          appFileContents = file = fs.readFileSync appFileName, "utf-8"
+          done(error)
+
+      describe "debug file", ()->
+        it "should have App.js and app.css files", ()->
+          assert(appDebugFileContents.indexOf("JS_TOKEN") >= 0)
+          assert(appDebugFileContents.indexOf("CSS_TOKEN") >= 0)
+
     describe 'with build scripts', ->
       
       beforeEach ->
