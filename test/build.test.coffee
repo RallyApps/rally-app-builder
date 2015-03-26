@@ -208,7 +208,7 @@ describe 'Build an App', ()->
       appDebugFileContents = ""
       appFileContents = ""
       before (done)->
-				process.env.APPDIR = path.join(fixturesDirectory, 'sdk2WithEnvVars')
+        process.env.APPDIR = path.join(fixturesDirectory, 'sdk2WithEnvVars')
         config = path: sdk2WithEnvVars
         rallyAppBuilder.build config, (error)->
           appDebugFileName = path.join(sdk2WithEnvVars, rallyAppBuilder.build.appDebugFileName)
@@ -216,7 +216,11 @@ describe 'Build an App', ()->
           appFileName = path.join(sdk2WithEnvVars,"deploy", rallyAppBuilder.build.appFileName)
           appFileContents = file = fs.readFileSync appFileName, "utf-8"
           done(error)
-
+      
+			after (done)->
+        process.env.APPDIR = undefined
+        done()
+				
       describe "debug file", ()->
         it "should have App.js and app.css files", ()->
           assert(appDebugFileContents.indexOf("JS_TOKEN") >= 0)
