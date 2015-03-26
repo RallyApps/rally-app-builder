@@ -217,7 +217,7 @@ describe 'Build an App', ()->
           appFileContents = file = fs.readFileSync appFileName, "utf-8"
           done(error)
       
-			after (done)->
+      after (done)->
         process.env.APPDIR = undefined
         done()
 				

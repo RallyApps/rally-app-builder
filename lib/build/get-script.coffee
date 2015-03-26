@@ -12,11 +12,10 @@ isScriptLocal = (scriptName)->
   return !scriptName.match /^.*\/\//
 isScriptRemote = (scriptName)->
   return !isScriptLocal(scriptName)
-
+convertEnvVars = (file) ->
+  return file.replace(/%([^%]+)%/g, (_, n)-> return process.env[n])
+	
 module.exports =
-  convertEnvVars: (file) ->
-    return file.replace(/%([^%]+)%/g, (_, n)-> return process.env[n])
-    
   getFiles: ({configJson, appPath}, callback)->
     localFiles =  _.map(_.filter(configJson.javascript, isScriptLocal), convertEnvVars)
     localCssFiles =  _.map(_.filter(configJson.css, isScriptLocal), convertEnvVars)
