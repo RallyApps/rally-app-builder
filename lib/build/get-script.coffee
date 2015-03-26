@@ -14,10 +14,12 @@ isScriptRemote = (scriptName)->
   return !isScriptLocal(scriptName)
 
 module.exports =
-
+  convertEnvVars: (file) ->
+    return file.replace(/%([^%]+)%/g, (_, n)-> return process.env[n])
+    
   getFiles: ({configJson, appPath}, callback)->
-    localFiles =  _.filter(configJson.javascript, isScriptLocal)
-    localCssFiles =  _.filter(configJson.css, isScriptLocal)
+    localFiles =  _.map(_.filter(configJson.javascript, isScriptLocal), convertEnvVars)
+    localCssFiles =  _.map(_.filter(configJson.css, isScriptLocal), convertEnvVars)
     async.parallel
       javascript_files: (jsCallback)=>
         @getJavaScripts {appPath, scripts: localFiles, compress:true}, jsCallback
