@@ -1,4 +1,4 @@
-//JS_TOKEN
+var token = "JS_TOKEN";
 Ext.define('CustomApp', {
     extend: 'Rally.app.App',
     componentCls: 'app',
