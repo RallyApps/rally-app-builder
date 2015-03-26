@@ -14,6 +14,7 @@ sdk2CustomSdkVersionDirectory = path.join(tempTestDirectory, 'sdk2CustomSdkVersi
 sdk2WithExternalJavaScript = path.join(tempTestDirectory, 'sdk2WithExternalJavaScript')
 sdk2WithLessDirectory = path.join(tempTestDirectory, 'sdk2less')
 sdk2WithExternalStylesDirectory = path.join(tempTestDirectory, 'sdk2WithExternalStyles')
+sdk2WithEnvVarsDirectory = path.join(tempTestDirectory, 'sdk2WithEnvVars')
 
 describe 'Build an App', ()->
   before (done)->
@@ -208,12 +209,12 @@ describe 'Build an App', ()->
       appDebugFileContents = ""
       appFileContents = ""
       before (done)->
-        process.env.APPDIR = path.join(fixturesDirectory, 'sdk2WithEnvVars')
-        config = path: sdk2WithEnvVars
+        process.env.APPDIR = sdk2WithEnvVarsDirectory
+        config = path: sdk2WithEnvVarsDirectory
         rallyAppBuilder.build config, (error)->
-          appDebugFileName = path.join(sdk2WithEnvVars, rallyAppBuilder.build.appDebugFileName)
+          appDebugFileName = path.join(sdk2WithEnvVarsDirectory, rallyAppBuilder.build.appDebugFileName)
           appDebugFileContents = file = fs.readFileSync appDebugFileName, "utf-8"
-          appFileName = path.join(sdk2WithEnvVars,"deploy", rallyAppBuilder.build.appFileName)
+          appFileName = path.join(sdk2WithEnvVarsDirectory,"deploy", rallyAppBuilder.build.appFileName)
           appFileContents = file = fs.readFileSync appFileName, "utf-8"
           done(error)
       
