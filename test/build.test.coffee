@@ -14,6 +14,7 @@ sdk2CustomSdkVersionDirectory = path.join(tempTestDirectory, 'sdk2CustomSdkVersi
 sdk2WithExternalJavaScript = path.join(tempTestDirectory, 'sdk2WithExternalJavaScript')
 sdk2WithLessDirectory = path.join(tempTestDirectory, 'sdk2less')
 sdk2WithExternalStylesDirectory = path.join(tempTestDirectory, 'sdk2WithExternalStyles')
+sdk2WithEnvVarsDirectory = path.join(tempTestDirectory, 'sdk2WithEnvVars')
 
 describe 'Build an App', ()->
   before (done)->
@@ -203,6 +204,28 @@ describe 'Build an App', ()->
 
         it "should have a link to stuff js using http",  ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.css") >= 0)
+
+		describe 'with environment variables in path', ()->
+      appDebugFileContents = ""
+      appFileContents = ""
+      before (done)->
+        process.env.APPDIR = path.join(fixturesDirectory, 'sdk2WithEnvVars')
+        config = path: sdk2WithEnvVarsDirectory
+        rallyAppBuilder.build config, (error)->
+          appDebugFileName = path.join(sdk2WithEnvVarsDirectory, rallyAppBuilder.build.appDebugFileName)
+          appDebugFileContents = file = fs.readFileSync appDebugFileName, "utf-8"
+          appFileName = path.join(sdk2WithEnvVarsDirectory,"deploy", rallyAppBuilder.build.appFileName)
+          appFileContents = file = fs.readFileSync appFileName, "utf-8"
+          done(error)
+      
+      after (done)->
+        process.env.APPDIR = undefined
+        done()
+				
+      describe "app file", ()->
+        it "should have App.js and app.css file Tokens included", ()->
+          assert(appFileContents.indexOf("JS_TOKEN") >= 0)
+          assert(appFileContents.indexOf("CSS_TOKEN") >= 0)
 
     describe 'with build scripts', ->
       

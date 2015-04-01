@@ -12,17 +12,19 @@ isScriptLocal = (scriptName)->
   return !scriptName.match /^.*\/\//
 isScriptRemote = (scriptName)->
   return !isScriptLocal(scriptName)
-
+convertEnvVars = (file) ->
+  return file.replace(/%([^%]+)%/g, (_, n)-> return process.env[n])
+	
 module.exports =
-
   getFiles: ({configJson, appPath}, callback)->
-    localFiles =  _.filter(configJson.javascript, isScriptLocal)
-    localCssFiles =  _.filter(configJson.css, isScriptLocal)
+    localFiles =  _.map(_.filter(configJson.javascript, isScriptLocal), convertEnvVars)
+    localCssFiles =  _.map(_.filter(configJson.css, isScriptLocal), convertEnvVars)
+    ignoreJSHint =  _.map(configJson.ignoreJSHint, convertEnvVars)
     async.parallel
       javascript_files: (jsCallback)=>
-        @getJavaScripts {appPath, scripts: localFiles, compress:true}, jsCallback
+        @getJavaScripts {appPath, scripts: localFiles, compress:true, hint:false}, jsCallback
       uncompressed_javascript_files: (jsCallback)=>
-        @getJavaScripts {appPath, scripts: localFiles, compress:false}, jsCallback
+        @getJavaScripts {appPath, scripts: localFiles, compress:false, hint:true, ignoreJSHint:ignoreJSHint}, jsCallback
       css_file_names: (cssCallback)=>
         cssCallback null, _.map localCssFiles, css.getGeneratedFileName
       css_files: (cssCallback)=>
@@ -39,13 +41,13 @@ module.exports =
         @getScripts {appPath, scripts: configJson.html}, htmlFilesCallback
       callback
 
-  getJavaScripts: ({appPath, scripts,compress}, callback)->
+  getJavaScripts: ({appPath, scripts, compress, hint, ignoreJSHint}, callback)->
     @getScripts {appPath, scripts}, (err, results) =>
       if err then callback(err)
       else
         for key,code of results
           fileName = scripts[key]
-          @hintJavaScriptFile(code, fileName)
+          if hint and fileName not in ignoreJSHint then @hintJavaScriptFile(code, fileName)
           results[key] = if compress then @compressJavaScript(code) else code
         callback(null, results)
 
