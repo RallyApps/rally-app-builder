@@ -20,15 +20,17 @@ module.exports =
     localCssFiles =  _.filter(configJson.css, isScriptLocal)
     async.parallel
       javascript_files: (jsCallback)=>
-        @getJavaScripts {appPath, scripts: localFiles,compress:true}, jsCallback
+        @getJavaScripts {appPath, scripts: localFiles, compress:true}, jsCallback
       uncompressed_javascript_files: (jsCallback)=>
         @getJavaScripts {appPath, scripts: localFiles, compress:false}, jsCallback
       css_file_names: (cssCallback)=>
-        cssCallback null, _.map configJson.css, css.getGeneratedFileName
+        cssCallback null, _.map localCssFiles, css.getGeneratedFileName
       css_files: (cssCallback)=>
-        @getStylesheets {appPath, scripts: configJson.css, compress: true}, cssCallback
+        @getStylesheets {appPath, scripts: localCssFiles, compress: true}, cssCallback
       uncompressed_css_files: (cssCallback)=>
-        @getStylesheets {appPath, scripts: configJson.css, compress: false}, cssCallback
+        @getStylesheets {appPath, scripts: localCssFiles, compress: false}, cssCallback
+      remote_css_files: (remoteCssFilesCallback) =>
+        remoteCssFilesCallback null, _.filter(configJson.css, isScriptRemote)
       remote_javascript_files: (remoteJsFilesCallback)=>
         remoteJsFilesCallback null, _.filter(configJson.javascript, isScriptRemote)
       local_javascript_files: (localJsFilesCallback)=>
