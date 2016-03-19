@@ -10,7 +10,7 @@ errorHandler = (error) ->
     console.log 'Success'
 
 build = (args) ->
-  templates = args.templates
+  {templates} = args
   console.log 'Compiling the App.'
   RallyAppBuilder.build {templates}, errorHandler
 
@@ -31,8 +31,8 @@ init = (args) ->
 
 clone = (args) ->
   {org, repo} = args
-  org = args._[1] || name
-  repo = args._[2] || name
+  organization = args._[1] || org
+  repo = args._[2] || repo
   if !organization
     console.error 'Please specify an organization when using the clone command.'
     return
@@ -40,10 +40,17 @@ clone = (args) ->
     console.error 'Please specify a repo when using the clone command.'
     return
   console.log "Cloning #{repo} repo from #{organization} account"
-  RallyAppBuilder.clone {organization,repo}, builder
+  RallyAppBuilder.clone(
+    {organization, repo},
+    (error) ->
+      if error
+        errorHandler error
+      else
+        build()
+  )
 
 watch = (args) ->
-  templates = args.templates
+  {templates} = args
   RallyAppBuilder.watch {templates}
 
 run = (args) ->
