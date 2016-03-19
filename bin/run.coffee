@@ -30,7 +30,7 @@ init = (args) ->
   )
 
 clone = (args) ->
-  {org, repo} = args
+  {org, repo, templates} = args
   organization = args._[1] || org
   repo = args._[2] || repo
   if !organization
@@ -46,7 +46,7 @@ clone = (args) ->
       if error
         errorHandler error
       else
-        build()
+        build {templates}
   )
 
 watch = (args) ->
@@ -62,35 +62,36 @@ yargs
   .command(
     'init',
     'Creates a new Rally App project template.',
-    name: {alias: 'n'}
-    version: {alias: 'v'}
-    server: {alias: 's'}
-    templates: {alias: 't'}
+    name: {alias: 'n', describe: 'The name of the app'}
+    version: {alias: 'v', describe: 'The SDK version to target', default: '2.0'}
+    server: {alias: 's', describe: 'The server to target'}
+    templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
     , init
   )
   .command(
     'build',
     'Builds the current App.',
-    templates: {alias: 't'}
+    templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
     , build
   )
   .command(
     'clone',
     'Creates a new Rally App project locally from an existing GitHub project.',
-    org: {alias: 'o'}
-    repo: {alias: 'r'}
+    org: {alias: 'o', describe: 'The GitHub organization'}
+    repo: {alias: 'r', describe: 'The GitHub repo name'}
+    templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
     , clone
   )
   .command(
     'watch',
     'Watch the current app files for changes and automatically rebuild it.',
-    templates: {alias: 't'}
+    templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
     , watch
   )
   .command(
     'run',
     'Start a local server and launch the current app in the default browser.',
-    port: {alias: 'p', default: 1337}
+    port: {alias: 'p', default: 1337, describe: 'The port on which to start the local http server'}
     , run
   )
   .help()
