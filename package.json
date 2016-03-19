@@ -2,7 +2,7 @@
   "author": "Kyle Morse <kyle.morse@ca.com>",
   "name": "rally-app-builder",
   "description": "A node module that assists in the building of Rally Apps",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "homepage": "https://github.com/rallyapps/rally-app-builder",
   "repository": {
     "type": "git",
