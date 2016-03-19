@@ -1,64 +1,86 @@
 fs = require('fs')
-path = require ('path')
-cmdr = require('commander')
+path = require('path')
+yargs = require('yargs');
 RallyAppBuilder = require("../lib/")
-packageLocation = path.normalize(__dirname + "/../package.json")
-version = JSON.parse(fs.readFileSync(packageLocation)).version
 
-
-builder = (error)->
-  if(error)  then errorHandler(error)
+builder = (error) ->
+  if error
+    errorHandler error
   else
     RallyAppBuilder.build {}, errorHandler
 
 errorHandler = (error) ->
   if error
-    console.error(error.message)
+    console.error error.message
   else
-    console.log("Success")
-cmdr
-  .version(version)
+    console.log 'Success'
 
-cmdr
-  .command('init [name] [sdk_version] [server=https://rally1.rallydev.com]')
-  .description("Creates a new Rally App project template. ")
-  .action (name, sdk_version, server)->
-    console.log("Creating a new App named #{name}")
-    RallyAppBuilder.init {name, sdk_version, server}, builder
+init = (args) ->
+  {name, version, server} = args
+  name = args._[1] || name
+  sdk_version = args._[2] || version
+  server = args._[3] || server
+  console.log "Creating a new App named #{name}."
+  RallyAppBuilder.init({name, sdk_version, server}, builder)
 
-cmdr
-  .command('build')
-  .description("Builds the current App.")
-  .action ()->
-    console.log("Compiling the App.")
-    RallyAppBuilder.build {}, errorHandler
+build = (args) ->
+  console.log 'Compiling the App.'
+  RallyAppBuilder.build {}, errorHandler
 
-cmdr
-  .command('clone [organization] [repo]')
-  .description("Creates a new Rally App project locally from an existing GitHub project. ")
-  .action (organization, repo)->
-    console.log("Cloning #{repo} repo from #{organization} account")
-    if !organization
-      console.error("Please specify an organization when using the clone command.")
-      return
-    if !repo
-      console.error("Please specify a repo when using the clone command.")
-      return
-    RallyAppBuilder.clone {organization,repo}, builder
+clone = (args) ->
+  {org, repo} = args
+  org = args._[1] || name
+  repo = args._[2] || name
+  if !organization
+    console.error 'Please specify an organization when using the clone command.'
+    return
+  if !repo
+    console.error 'Please specify a repo when using the clone command.'
+    return
+  console.log "Cloning #{repo} repo from #{organization} account"
+  RallyAppBuilder.clone {organization,repo}, builder
 
-cmdr
-  .command('watch')
-  .description('Watch the current app files for changes and automatically rebuild it')
-  .action ()->
-    RallyAppBuilder.watch()
+watch = (args) ->
+  RallyAppBuilder.watch()
 
-cmdr
-  .command('run [port=1337]')
-  .description('Launch the current app in a browser')
-  .action (port) ->
-    RallyAppBuilder.run({port})
+run = (args) ->
+  {port} = args
+  port = args._[1] || port
+  RallyAppBuilder.run {port}
 
-if process.argv.length == 2
-  process.argv.push("build")
-
-cmdr.parse process.argv
+yargs
+  .command(
+    'init',
+    'Creates a new Rally App project template.',
+    name: {alias: 'n', default: 'MyApp'}
+    version: {alias: 'v', default: '2.0'}
+    server: {alias: 's', default: 'https://rally1.rallydev.com'}
+    , init
+  )
+  .command(
+    'build',
+    'Builds the current App.',
+    {}
+    , build
+  )
+  .command(
+    'clone',
+    'Creates a new Rally App project locally from an existing GitHub project.',
+    org: {alias: 'o'}
+    repo: {alias: 'r'}
+    , clone
+  )
+  .command(
+    'watch',
+    'Watch the current app files for changes and automatically rebuild it.',
+    {}
+    , watch
+  )
+  .command(
+    'run',
+    'Start a local server and launch the current app in the default browser.',
+    port: {alias: 'p', default: 1337}
+    , run
+  )
+  .help()
+  .argv
