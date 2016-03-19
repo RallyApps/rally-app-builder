@@ -28,8 +28,9 @@ runScript = (configJson, appPath, step, callback)->
   else
     callback()
 
-createDeployFile = ({appPath, templateBase, templateData, templateFileName, directory}, callback)->
+createDeployFile = ({appPath, templateData, templateFileName, directory}, callback)->
   console.log "Creating #{templateFileName}"
+  templateBase = templateData.templates
   appTemplate = fs.readFileSync(pathUtil.join(templateBase, templateFileName), "utf-8")
   fullDeployFilePath = pathUtil.resolve(appPath, directory)
   filePath = pathUtil.join fullDeployFilePath, templateFileName
@@ -38,7 +39,8 @@ createDeployFile = ({appPath, templateBase, templateData, templateFileName, dire
   compiledApp = mustache.render(appTemplate, templateData)
   fs.writeFile(filePath, compiledApp, callback)
 
-buildDeployFiles = ({appPath, templateData, templateBase, appFileName, appExternalFileName, appDebugFileName, appUncompressedFileName }, callback)->
+buildDeployFiles = ({appPath, templateData, appFileName, appExternalFileName, appDebugFileName, appUncompressedFileName }, callback)->
+  templateBase = templateData.templates
   async.forEach(
     [
       {templateFileName: appDebugFileName, directory: '.'},
@@ -50,7 +52,6 @@ buildDeployFiles = ({appPath, templateData, templateBase, appFileName, appExtern
       options = _.extend {
         appPath
         templateData
-        templateBase
       }, options
       createDeployFile options, cb
     callback
@@ -76,12 +77,6 @@ runBuild = (configJson, appPath, callback)->
         , (err)->
           if err then callback err
           else
-            templateBase = pathUtil.join templateDirectory, 
-              switch configJson.framework
-                when "angular" then "ng"
-                when "ext" then "ext"
-                else "ext"
-
             options = {
               appPath
               templateData: configJson
@@ -89,24 +84,25 @@ runBuild = (configJson, appPath, callback)->
               appDebugFileName: appDebugFileName
               appUncompressedFileName: appUncompressedFileName
               appExternalFileName: appExternalFileName
-              templateBase
             }
             buildDeployFiles(options, callback)
 
-module.exports = ({path}, callback)->
+module.exports = ({path,templates}, callback)->
   try
     callback = callback || ()->
     appPath = path || process.cwd()
     configModule.getConfig appPath, (error, configJson)->
       if error then callback error
       else
-      async.series [
-        (callback)-> module.exports.runScript configJson, appPath, 'prebuild', callback 
-        (callback)-> module.exports.runBuild configJson, appPath, callback
-        (callback)-> module.exports.runScript configJson, appPath, 'postbuild', callback
-      ]
-      , (err)->
-        callback(err)
+        configJson = _.defaults configJson,
+          templates: templates || pathUtil.join templateDirectory, 'deploy'
+        async.series [
+          (callback)-> module.exports.runScript configJson, appPath, 'prebuild', callback
+          (callback)-> module.exports.runBuild configJson, appPath, callback
+          (callback)-> module.exports.runScript configJson, appPath, 'postbuild', callback
+        ]
+        , (err)->
+          callback(err)
   catch error
     callback error
 

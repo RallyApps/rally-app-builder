@@ -11,7 +11,7 @@ _updateConfig = (config)->
 
 saveConfig = ({path, config}, callback)->
   configPath = join(path, configFileName)
-  fs.writeFile(configPath, JSON.stringify(config, null, '   '), callback)
+  fs.writeFile(configPath, JSON.stringify(config, null, '    '), callback)
 
 getConfig = (path, callback) ->
   convertToJson = (error, file)->

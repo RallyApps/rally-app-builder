@@ -3,29 +3,31 @@ path = require('path')
 yargs = require('yargs');
 RallyAppBuilder = require("../lib/")
 
-builder = (error) ->
-  if error
-    errorHandler error
-  else
-    RallyAppBuilder.build {}, errorHandler
-
 errorHandler = (error) ->
   if error
     console.error error.message
   else
     console.log 'Success'
 
+build = (args) ->
+  templates = args.templates
+  console.log 'Compiling the App.'
+  RallyAppBuilder.build {templates}, errorHandler
+
 init = (args) ->
-  {name, version, server} = args
+  {name, version, server, templates} = args
   name = args._[1] || name
   sdk_version = args._[2] || version
   server = args._[3] || server
-  console.log "Creating a new App named #{name}."
-  RallyAppBuilder.init({name, sdk_version, server}, builder)
-
-build = (args) ->
-  console.log 'Compiling the App.'
-  RallyAppBuilder.build {}, errorHandler
+  console.log 'Creating a new App.'
+  RallyAppBuilder.init(
+    {name, sdk_version, server, templates},
+    (error) ->
+      if error
+        errorHandler error
+      else
+        build {templates}
+  )
 
 clone = (args) ->
   {org, repo} = args
@@ -41,7 +43,8 @@ clone = (args) ->
   RallyAppBuilder.clone {organization,repo}, builder
 
 watch = (args) ->
-  RallyAppBuilder.watch()
+  templates = args.templates
+  RallyAppBuilder.watch {templates}
 
 run = (args) ->
   {port} = args
@@ -52,15 +55,16 @@ yargs
   .command(
     'init',
     'Creates a new Rally App project template.',
-    name: {alias: 'n', default: 'MyApp'}
-    version: {alias: 'v', default: '2.0'}
-    server: {alias: 's', default: 'https://rally1.rallydev.com'}
+    name: {alias: 'n'}
+    version: {alias: 'v'}
+    server: {alias: 's'}
+    templates: {alias: 't'}
     , init
   )
   .command(
     'build',
     'Builds the current App.',
-    {}
+    templates: {alias: 't'}
     , build
   )
   .command(
@@ -73,7 +77,7 @@ yargs
   .command(
     'watch',
     'Watch the current app files for changes and automatically rebuild it.',
-    {}
+    templates: {alias: 't'}
     , watch
   )
   .command(

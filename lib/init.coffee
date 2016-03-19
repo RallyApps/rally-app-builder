@@ -50,6 +50,3 @@ module.exports = (args, callback)->
     callback(error)
   else
     callback()
-
-
-
