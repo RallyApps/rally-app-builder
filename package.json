@@ -1,13 +1,14 @@
 {
-  "author": "Charles Ferentchak <charles@rallydev.com>",
+  "author": "Kyle Morse <kyle.morse@ca.com>",
   "name": "rally-app-builder",
   "description": "A node module that assists in the building of Rally Apps",
-  "version": "1.0.2",
+  "version": "1.2.2",
   "homepage": "https://github.com/rallyapps/rally-app-builder",
   "repository": {
     "type": "git",
     "url": "git://github.com/rallyapps/rally-app-builder.git"
   },
+  "license": "MIT",
   "main": "index",
   "engines": {
     "node": ">0.10.32"
@@ -21,20 +22,21 @@
     "async": "0.1.x",
     "uglify-js": "~2.2.3",
     "jshint": "~0.9.1",
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.5",
     "grunt-cli": "~0.1.9",
     "grunt-contrib-concat": "0.3.x",
     "grunt-contrib-jasmine": "0.4.x",
     "grunt-contrib-clean": "0.4.x",
     "grunt-contrib-watch": "~0.4.4",
     "handlebars": "~1.0.11",
-    "lodash": "~2.3.0",
+    "lodash": "~3.0.0",
     "promise-to-validate": "~0.3.0",
     "node-watch": "~0.3.4",
     "express": "4.2.x",
     "open": "~0.0.5",
     "less": "~1.7.0",
-    "shelljs": "^0.3.0"
+    "shelljs": "^0.3.0",
+    "yargs": "4.3.1"
   },
   "devDependencies": {
     "mocha": "1.6.x",
