@@ -19,7 +19,7 @@ If you don't have permission to install it globally you can install it locally l
 
   Commands:
 
-    init [--name] [--version] [--server] [--templates]
+    init [--name] [--sdk] [--server]
     Creates a new Rally App project
 
     build [--templates]
@@ -37,7 +37,7 @@ If you don't have permission to install it globally you can install it locally l
   Options:
 
     -h, --help     output usage information
-    -h, --version  output the version number
+    -v, --version  output the version number
 
 
 ## Run Tests
@@ -55,10 +55,10 @@ Creating a new Rally App is as easy as using init. The init command creates you 
 The init command takes a few parameters.  
 *  name : The first is the name for your new App.
     *  `rally-app-builder init --name=myNewApp`
-*  sdk_version(optional) : The version of the SDK your App will be created against.
-    *  `rally-app-builder init --name=myNewApp --version=2.0`
+*  sdk(optional) : The version of the SDK your App will be created against.
+    *  `rally-app-builder init --name=myNewApp --sdk=2.0`
 *  server(optional) : The server you want the debug file to point to. The command below will create a new App using version 2.0 and pointing to the server myownRally.com
-    *  `rally-app-builder init --name=myNewApp --version=2.0 --server=https://myOwnRally.com`
+    *  `rally-app-builder init --name=myNewApp --sdk=2.0 --server=https://myOwnRally.com`
 
 ### build
 
