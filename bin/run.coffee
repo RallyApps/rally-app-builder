@@ -15,9 +15,9 @@ build = (args) ->
   RallyAppBuilder.build {templates}, errorHandler
 
 init = (args) ->
-  {name, version, server, templates} = args
+  {name, sdk, server, templates} = args
   name = args._[1] || name
-  sdk_version = args._[2] || version
+  sdk_version = args._[2] || sdk
   server = args._[3] || server
   console.log 'Creating a new App.'
   RallyAppBuilder.init(
@@ -63,8 +63,8 @@ yargs
     'init',
     'Creates a new Rally App project template.',
     name: {alias: 'n', describe: 'The name of the app'}
-    version: {alias: 'v', describe: 'The SDK version to target', default: '2.0'}
-    server: {alias: 's', describe: 'The server to target'}
+    sdk: {alias: 's', describe: 'The SDK version to target', default: '2.0'}
+    server: {alias: 'r', describe: 'The server to target'}
     templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
     , init
   )
@@ -94,6 +94,6 @@ yargs
     port: {alias: 'p', default: 1337, describe: 'The port on which to start the local http server'}
     , run
   )
-  .help()
-  .version()
+  .help().alias('h', 'help')
+  .version().alias('v', 'version')
   .argv
