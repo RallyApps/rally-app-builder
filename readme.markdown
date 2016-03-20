@@ -97,7 +97,7 @@ which apps you are most interested in customizing we take that as input on ways 
 The run command starts a local http server and launches your App-debug.html file in the default browser for quick an easy development.
 By default the server listens on port 1337.  This can be changed as follows:
 
-`rally-app-builder run --port=9999'
+`rally-app-builder run --port=9999`
 
 ### watch
 `rally-app-builder watch [--templates]`
