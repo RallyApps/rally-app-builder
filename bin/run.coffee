@@ -95,4 +95,5 @@ yargs
     , run
   )
   .help()
+  .version()
   .argv
