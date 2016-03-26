@@ -56,9 +56,9 @@ The init command takes a few parameters.
 *  name : The first is the name for your new App.
     *  `rally-app-builder init --name=myNewApp`
 *  sdk_version(optional) : The version of the SDK your App will be created against.
-    *  `rally-app-builder init --name=myNewApp --version=2.0`
-*  server(optional) : The server you want the debug file to point to. The command below will create a new App using version 2.0 and pointing to the server myownRally.com
-    *  `rally-app-builder init --name=myNewApp --version=2.0 --server=https://myOwnRally.com`
+    *  `rally-app-builder init --name=myNewApp --version=2.1`
+*  server(optional) : The server you want the debug file to point to. The command below will create a new App using version 2.1 and pointing to the server myownRally.com
+    *  `rally-app-builder init --name=myNewApp --version=2.1 --server=https://myOwnRally.com`
 
 ### build
 

@@ -63,7 +63,7 @@ yargs
     'init',
     'Creates a new Rally App project template.',
     name: {alias: 'n', describe: 'The name of the app'}
-    sdk: {alias: 's', describe: 'The SDK version to target', default: '2.0'}
+    sdk: {alias: 's', describe: 'The SDK version to target', default: '2.1'}
     server: {alias: 'r', describe: 'The server to target'}
     templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
     , init
