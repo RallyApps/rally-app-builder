@@ -19,7 +19,7 @@ If you don't have permission to install it globally you can install it locally l
 
   Commands:
 
-    init [--name] [--version] [--server] [--templates]
+    init [--name] [--sdk] [--server]
     Creates a new Rally App project
 
     build [--templates]
@@ -37,7 +37,7 @@ If you don't have permission to install it globally you can install it locally l
   Options:
 
     -h, --help     output usage information
-    -h, --version  output the version number
+    -v, --version  output the version number
 
 
 ## Run Tests
@@ -55,10 +55,10 @@ Creating a new Rally App is as easy as using init. The init command creates you 
 The init command takes a few parameters.  
 *  name : The first is the name for your new App.
     *  `rally-app-builder init --name=myNewApp`
-*  sdk_version(optional) : The version of the SDK your App will be created against.
-    *  `rally-app-builder init --name=myNewApp --version=2.1`
-*  server(optional) : The server you want the debug file to point to. The command below will create a new App using version 2.1 and pointing to the server myownRally.com
-    *  `rally-app-builder init --name=myNewApp --version=2.1 --server=https://myOwnRally.com`
+*  sdk(optional) : The version of the SDK your App will be created against.
+    *  `rally-app-builder init --name=myNewApp --sdk=2.1`
+*  server(optional) : The server you want the debug file to point to. The command below will create a new App using version 2.0 and pointing to the server myownRally.com
+    *  `rally-app-builder init --name=myNewApp --sdk=2.1 --server=https://myOwnRally.com`
 
 ### build
 
@@ -97,7 +97,7 @@ which apps you are most interested in customizing we take that as input on ways 
 The run command starts a local http server and launches your App-debug.html file in the default browser for quick an easy development.
 By default the server listens on port 1337.  This can be changed as follows:
 
-`rally-app-builder run --port=9999'
+`rally-app-builder run --port=9999`
 
 ### watch
 `rally-app-builder watch [--templates]`
