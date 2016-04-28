@@ -3,7 +3,7 @@ build = require './build'
 watcher = null
 
 onChange = (args) ->
-  console.log "\nRebuilding...\n"
+  console.log('Rebuilding...\n');
   path = process.cwd()
   {templates} = args
   watcher.close()
@@ -13,6 +13,8 @@ watch = (args) ->
   {templates} = args
   console.log('\nWatching for changes...')
   watcher = chokidar.watch process.cwd(), { usePolling: true, interval: 500 }
-  watcher.on 'change', () -> onChange {templates}
+  watcher.on 'change', (path) ->
+    console.log('\nChange detected:', path);
+    onChange {templates}
 
 module.exports = watch
