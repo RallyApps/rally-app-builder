@@ -18,7 +18,7 @@ module.exports =
   getFiles: ({configJson, appPath}, callback)->
     localFiles =  _.filter(configJson.javascript, isScriptLocal)
     localCssFiles =  _.filter(configJson.css, isScriptLocal)
-    async.parallel
+    async.series
       javascript_files: (jsCallback)=>
         @getJavaScripts {appPath, scripts: localFiles, compress:true}, jsCallback
       uncompressed_javascript_files: (jsCallback)=>
@@ -46,7 +46,14 @@ module.exports =
         for key,code of results
           fileName = scripts[key]
           @hintJavaScriptFile(code, fileName)
-          results[key] = if compress then @compressJavaScript(code) else code
+          if compress
+            try
+              results[key] = @compressJavaScript code
+            catch e
+              callback new Error()
+              return
+          else
+            results[key] = code
         callback(null, results)
 
   getStylesheets: ({appPath, scripts, compress}, callback)->
@@ -66,9 +73,8 @@ module.exports =
   compressJavaScript: (code)->
     ast = uglify.parse(code)
     ast.figure_out_scope()
-    compressor = uglify.Compressor(
+    compressor = uglify.Compressor
       unused: false
-    )
     ast = ast.transform(compressor)
     return ast.print_to_string()
 
