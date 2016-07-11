@@ -11,10 +11,11 @@ files =
   ".travis.yml": ".travis.yml"
   "LICENSE": "LICENSE"
   "README.md": "README.md"
-  "Gruntfile.js":"Gruntfile.js"
-  "package.json":"package.json"
-  "specs.tmpl":"test/specs.tmpl"
-  "AppSpec.js":"test/AppSpec.js"
+  "Gruntfile.js": "Gruntfile.js"
+  "package.json": "package.json"
+  "specs.tmpl": "test/specs.tmpl"
+  "AppSpec.js": "test/AppSpec.js"
+  ".jshintrc": ".jshintrc"
 
 directories = ["test"]
 
