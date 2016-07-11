@@ -39,13 +39,13 @@ module.exports =
         @getScripts {appPath, scripts: configJson.html}, htmlFilesCallback
       callback
 
-  getJavaScripts: ({appPath, scripts,compress}, callback)->
+  getJavaScripts: ({appPath, scripts, compress}, callback)->
     @getScripts {appPath, scripts}, (err, results) =>
       if err then callback(err)
       else
         for key,code of results
           fileName = scripts[key]
-          @hintJavaScriptFile(code, fileName)
+          @hintJavaScriptFile(code, fileName) unless compress
           if compress
             try
               results[key] = @compressJavaScript code
@@ -87,7 +87,9 @@ module.exports =
       callback(error, fileContents)
     fs.readFile(file, "utf-8", wrapper)
 
-  hintJavaScriptFile: (code, fileName)->
-    if(!JSHINT(code, undef: false))
+  hintJavaScriptFile: (code, fileName) ->
+    if(!JSHINT(code))
+      console.error()
       for error in JSHINT.errors
-        console.log "Error in #{fileName} on line #{error.line}: #{error.reason}" unless !error
+        console.error "Error in #{fileName} on line #{error.line}: #{error.reason}" unless !error
+      console.error()
