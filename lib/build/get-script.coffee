@@ -39,22 +39,25 @@ module.exports =
         @getScripts {appPath, scripts: configJson.html}, htmlFilesCallback
       callback
 
-  getJavaScripts: ({appPath, scripts,compress}, callback)->
-    @getScripts {appPath, scripts}, (err, results) =>
-      if err then callback(err)
-      else
-        for key,code of results
-          fileName = scripts[key]
-          @hintJavaScriptFile(code, fileName)
-          if compress
-            try
-              results[key] = @compressJavaScript code
-            catch e
-              callback new Error()
-              return
-          else
-            results[key] = code
-        callback(null, results)
+  getJavaScripts: ({appPath, scripts, compress}, callback) ->
+    jshintrc = path.resolve appPath, '.jshintrc'
+    @readFile jshintrc, (e, jshintConfig) =>
+      jshintOptions = JSON.parse jshintConfig || "{}"
+      @getScripts {appPath, scripts}, (err, results) =>
+        if err then callback(err)
+        else
+          for key,code of results
+            fileName = scripts[key]
+            @hintJavaScriptFile(code, jshintOptions, fileName) unless compress
+            if compress
+              try
+                results[key] = @compressJavaScript code
+              catch e
+                callback new Error()
+                return
+            else
+              results[key] = code
+          callback(null, results)
 
   getStylesheets: ({appPath, scripts, compress}, callback)->
     @getScripts {appPath, scripts}, (err, results) =>
@@ -87,7 +90,9 @@ module.exports =
       callback(error, fileContents)
     fs.readFile(file, "utf-8", wrapper)
 
-  hintJavaScriptFile: (code, fileName)->
-    if(!JSHINT(code, undef: false))
+  hintJavaScriptFile: (code, jshintOptions, fileName) ->
+    if(!JSHINT(code, jshintOptions))
+      console.error()
       for error in JSHINT.errors
-        console.log "Error in #{fileName} on line #{error.line}: #{error.reason}" unless !error
+        console.error "Error in #{fileName} on line #{error.line}: #{error.reason}" unless !error
+      console.error()
