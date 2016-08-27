@@ -73,5 +73,5 @@
     "yui"           : false,
 
     "globals"       : {},
-    "predef"        : ["Ext", "Deft", "_", "moment"]
+    "predef"        : ["Ext", "Deft", "_", "moment", "Rally"]
 }
