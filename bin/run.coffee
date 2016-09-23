@@ -50,13 +50,17 @@ clone = (args) ->
   )
 
 watch = (args) ->
-  {templates} = args
-  RallyAppBuilder.watch {templates}
+  {templates, ci} = args
+  RallyAppBuilder.watch {templates, ci}
 
 run = (args) ->
   {port} = args
   port = args._[1] || port
   RallyAppBuilder.run {port}
+
+test = (args) ->
+  {debug, spec} = args
+  RallyAppBuilder.test {debug, spec}
 
 yargs
   .command(
@@ -86,6 +90,7 @@ yargs
     'watch',
     'Watch the current app files for changes and automatically rebuild it.',
     templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
+    ci: { alias: 'c', describe: 'Also run the tests on each change after rebuilding the app'}
     , watch
   )
   .command(
@@ -93,6 +98,13 @@ yargs
     'Start a local server and launch the current app in the default browser.',
     port: {alias: 'p', default: 1337, describe: 'The port on which to start the local http server'}
     , run
+  )
+  .command(
+    'test',
+    'Run the tests for the current app.',
+    debug: {alias: 'd', describe: 'If specified tests will be run in the default browser rather than headlessly.'}
+    spec: {alias: 's', describe: 'Specific test file name or glob pattern to run.  If not specified all tests will be run.'}
+    , test
   )
   .help().alias('h', 'help')
   .version().alias('v', 'version')

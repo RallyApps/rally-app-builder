@@ -13,8 +13,7 @@ files =
   "README.md": "README.md"
   "Gruntfile.js": "Gruntfile.js"
   "package.json": "package.json"
-  "specs.tmpl": "test/specs.tmpl"
-  "AppSpec.js": "test/AppSpec.js"
+  "test/AppSpec.js": "test/AppSpec.js"
   ".jshintrc": ".jshintrc"
 
 directories = ["test"]
