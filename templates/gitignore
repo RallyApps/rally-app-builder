@@ -8,3 +8,5 @@ App-local.html
 .idea
 .c9revisions
 node_modules
+#test files
+_SpecRunner.html

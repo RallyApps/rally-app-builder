@@ -5,3 +5,4 @@ module.exports =
  config: require './config'
  watch: require './watch'
  run: require './run'
+ test: require './test'

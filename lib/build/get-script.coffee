@@ -53,7 +53,9 @@ module.exports =
               try
                 results[key] = @compressJavaScript code
               catch e
-                callback new Error()
+                console.error "\r\nError in #{fileName} on line #{e.line}:"
+                console.error e.message
+                callback e
                 return
             else
               results[key] = code
