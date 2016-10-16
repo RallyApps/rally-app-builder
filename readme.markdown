@@ -101,14 +101,14 @@ By default the server listens on port 1337.  This can be changed as follows:
 `rally-app-builder watch [--templates] [--ci]`
 
 The watch command listens for changes to app files and automatically rebuilds the app.
-If the optional ci flag is passed the tests will also be run.
+If the optional `--ci` flag is passed the tests will also be run.
 
 ### test
 `rally-app-builder test [--debug] [--spec]`
 
 The test command runs the tests.  By default all tests will be run headlessly.
-If the --debug flag is specified the tests will be run in the default browser instead.
-If the --spec flag is specified only the test(s) matching the specified file pattern will be run.
+If the `--debug` flag is specified the tests will be run in the default browser instead.
+If the `--spec` flag is specified only the test(s) matching the specified file pattern will be run.
 
 More information on writing and running tests can be found [here](testing.markdown).
 
