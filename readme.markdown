@@ -1,15 +1,16 @@
-#rally-app-builder
-=================
+#Rally App Builder
+
 [![Build Status](https://travis-ci.org/RallyApps/rally-app-builder.png?branch=master)](https://travis-ci.org/RallyApps/rally-app-builder)
 
+Rally App Builder is a [Node.js](http://nodejs.org/) command line utility for building apps using the [Rally App SDK](https://help.rallydev.com/apps/2.1/doc/).
 
+## Installation
 
-First Install [Node.js](http://nodejs.org/)
+Rally App Builder is most easily used when installed globally:
 
-Second Install the Rally App Builder Globally
 `npm install -g rally-app-builder`
 
-If you don't have permission to install it globally you can install it locally like this
+However, if that does't work (permission errors, etc.) it can be installed locally as well:
 
 `npm install rally-app-builder`
 
@@ -26,24 +27,21 @@ If you don't have permission to install it globally you can install it locally l
     Builds the current App
 
     clone [--organization] [--repo]
-    Creates a new Rally App project from an existing GitHub project.
+    Creates a new Rally App project from an existing GitHub project
 
     run [--port]
     Starts a local server and launches the App in the default browser
 
-    watch [--templates]
+    watch [--templates] [--ci]
     Automatically builds the App when files are changed
+    
+    test [--debug] [--spec]
+    Runs the App tests
 
   Options:
 
     -h, --help     output usage information
     -v, --version  output the version number
-
-
-## Run Tests
-
-To run the tests:
-npm test
 
 
 ## Commands
@@ -86,7 +84,7 @@ You can define pre and post build commands to be executed by adding them to your
 ### clone
 `rally-app-builder clone --org=RallyApps --repo=StoryBoard`
 
-Most Rally Apps are created by using an existing App as a template.
+Many Rally Apps are created by using an existing App as a template.
 By using the rally-app-builder clone command you can get a copy of the existing App without installing the Git CLI.
 This command makes some changes to the config file so that we can tell which App you based your work on. As we determine
 which apps you are most interested in customizing we take that as input on ways to improve the existing catalog App.
@@ -100,14 +98,18 @@ By default the server listens on port 1337.  This can be changed as follows:
 `rally-app-builder run --port=9999`
 
 ### watch
-`rally-app-builder watch [--templates]`
+`rally-app-builder watch [--templates] [--ci]`
 
 The watch command listens for changes to app files and automatically rebuilds the app.
+If the optional ci flag is passed the tests will also be run.
 
-### Unit Testing your new App.
+### test
+`rally-app-builder test [--debug] [--spec]`
 
-The guide for unit testing your App can be found on this [page](testing.markdown).
+The test command runs the tests.  By default all tests will be run headlessly.
+If the --debug flag is specified the tests will be run in the default browser instead.
+If the --spec flag is specified only the test(s) matching the specified file pattern will be run.
 
-## Install
+More information on writing and running tests can be found [here](testing.markdown).
 
-### Rally-App-Builder is provided under the MIT license.
+
