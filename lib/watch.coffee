@@ -8,7 +8,6 @@ onChange = (args) ->
   {templates} = args
   watcher.close()
   build {templates, path}, (err) ->
-    console.error err if err
     watch {templates}
 
 watch = (args) ->
