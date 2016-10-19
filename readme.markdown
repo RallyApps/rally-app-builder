@@ -110,6 +110,6 @@ The test command runs the tests.  By default all tests will be run headlessly.
 If the `--debug` flag is specified the tests will be run in the default browser instead.
 If the `--spec` flag is specified only the test(s) matching the specified file pattern will be run.
 
-More information on writing and running tests can be found [here](testing.markdown).
+The [Testing Apps](https://help.rallydev.com/apps/2.1/#!guide/testing_apps) guide in the App SDK help documentation is a great resource to learn how to get started writing tests for your apps.
 
 
