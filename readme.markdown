@@ -34,7 +34,7 @@ However, if that does't work (permission errors, etc.) it can be installed local
 
     watch [--templates] [--ci]
     Automatically builds the App when files are changed
-    
+
     test [--debug] [--spec]
     Runs the App tests
 
@@ -111,5 +111,3 @@ If the `--debug` flag is specified the tests will be run in the default browser 
 If the `--spec` flag is specified only the test(s) matching the specified file pattern will be run.
 
 The [Testing Apps](https://help.rallydev.com/apps/2.1/doc/#!/guide/testing_apps) guide in the App SDK help documentation is a great resource to learn how to get started writing tests for your apps.
-
-
