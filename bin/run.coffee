@@ -5,6 +5,7 @@ RallyAppBuilder = require("../lib/")
 
 errorHandler = (error) ->
   if error
+    console.error '\r\n' + (error[0] || error)
     console.error '\r\nBuild aborted due to error.'
   else
     console.log 'Success'

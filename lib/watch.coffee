@@ -2,6 +2,7 @@ chokidar = require('chokidar')
 build = require './build'
 watcher = null
 test = require './test'
+config = require './config'
 
 onChange = (args) ->
   console.log('Rebuilding...\n');
@@ -15,9 +16,11 @@ onChange = (args) ->
 watch = (args) ->
   {templates, ci} = args
   console.log('\nWatching for changes...')
-  watcher = chokidar.watch process.cwd(), { ignored: '**/*.html', usePolling: true, interval: 500 }
-  watcher.on 'change', (path) ->
-    console.log('\nChange detected:', path);
-    onChange {templates, ci}
+  appPath = args.path || process.cwd()
+  config.getAppSourceRoot appPath, (error, srcRoot) ->
+    watcher = chokidar.watch srcRoot, { ignored: '**/*.html', usePolling: true, interval: 500 }
+    watcher.on 'change', (path) ->
+      console.log('\nChange detected:', path);
+      onChange {templates, ci}
 
 module.exports = watch

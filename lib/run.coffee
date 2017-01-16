@@ -4,11 +4,17 @@ _ = require 'lodash'
 app = express()
 path = require 'path'
 
+configModule = require('./config')
+
 module.exports = (args) ->
-  args = _.defaults args,
-    port: 1337
-  app.use express.static process.cwd()
-  app.listen args.port
-  url = "http://localhost:#{args.port}/App-debug.html"
-  console.log "Launching #{url}..."
-  open(url)
+  appPath = args.path || process.cwd()
+  configModule.getAppSourceRoot appPath, (error, srcRoot) ->
+    pathToApp = path.relative srcRoot, appPath
+    pathToApp = '/' + pathToApp if pathToApp
+    args = _.defaults args,
+      port: 1337
+    app.use express.static srcRoot
+    app.listen args.port
+    url = "http://localhost:#{args.port}#{pathToApp}/App-debug.html"
+    console.log "Launching #{url}..."
+    open(url)

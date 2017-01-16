@@ -1,0 +1,15 @@
+{
+    "name": "Test",
+    "className": "CustomApp",
+    "server": "https://rally1.rallydev.com",
+    "sdk": "2.1",
+    "javascript": [
+        "App.js",
+        "../File2.js",
+        "../../a/File1.js",
+        "https://code.jquery.com/jquery-3.1.1.min.js"
+    ],
+    "css": [
+        "app.css"
+    ]
+}
