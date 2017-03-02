@@ -32,7 +32,7 @@ init = (args) ->
 
 clone = (args) ->
   {org, repo, templates} = args
-  organization = args._[1] || org
+  organization = args._[1] || org || args.organization
   repo = args._[2] || repo
   if !organization
     console.error 'Please specify an organization when using the clone command.'

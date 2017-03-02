@@ -1,7 +1,7 @@
 assert = require 'assert'
 rallyAppBuilder = require '../index'
 fs = require 'fs'
-wrench = require 'wrench'
+fsextra = require 'fs-extra'
 describe('Init new App', ()->
   baseDir = 'test/initTemp'
 
@@ -11,7 +11,7 @@ describe('Init new App', ()->
     catch e
   after ()->
     try
-      wrench.rmdirSyncRecursive(baseDir)
+      fsextra.removeSync(baseDir)
     catch e
 
   it('tests files created', (done)->

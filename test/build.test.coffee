@@ -1,7 +1,7 @@
 assert = require 'assert'
 rallyAppBuilder = require '../index'
 fs = require 'fs'
-wrench = require 'wrench'
+fsextra = require 'fs-extra'
 path = require 'path'
 sinon = require 'sinon'
 shell = require 'shelljs'
@@ -18,7 +18,7 @@ sdk2WithExternalStylesDirectory = path.join(tempTestDirectory, 'sdk2WithExternal
 describe 'Build an App', ()->
   before (done)->
     try
-      copy = ()-> wrench.copyDirRecursive(fixturesDirectory, tempTestDirectory, done)
+      copy = ()-> fsextra.copy(fixturesDirectory, tempTestDirectory, done)
       fs.mkdir(tempTestDirectory, copy)
     catch e
   after (done)->
@@ -205,7 +205,7 @@ describe 'Build an App', ()->
           assert(appDebugFileContents.indexOf("http://www.regular.com/stuff.css") >= 0)
 
     describe 'with build scripts', ->
-      
+
       beforeEach ->
         @config = require('../lib/config')
 
@@ -246,7 +246,7 @@ describe 'Build an App', ()->
 
     afterEach ->
       @sandbox.restore()
-    
+
     it 'should push and pop the app path directory', (done)->
       rallyAppBuilder.build.runScript {scripts: {prebuild: 'cmd'}}, 'appPath', 'prebuild', (err)->
         assert(shell.pushd.calledWith('appPath'))
@@ -254,10 +254,10 @@ describe 'Build an App', ()->
         assert(shell.popd.called)
         assert(shell.exec.calledBefore(shell.popd))
         done()
-    
+
     it 'should exec the script step', (done)->
       rallyAppBuilder.build.runScript {scripts: {prebuild: 'cmd'}}, 'appPath', 'prebuild', (err)->
-        assert(shell.exec.calledWith('cmd'))       
+        assert(shell.exec.calledWith('cmd'))
         done()
 
     it 'should error if attempting and undefined step', (done)->
@@ -270,4 +270,3 @@ describe 'Build an App', ()->
         assert(not err?)
         assert(not shell.exec.called)
         done()
-

@@ -2,7 +2,7 @@ assert = require 'assert'
 rallyAppBuilder = require '../index'
 fs = require 'fs'
 path = require 'path'
-wrench = require 'wrench'
+fsextra = require 'fs-extra'
 if process.env.TRAVIS
   console.log "Clone tests not ran during Travis build process due to timeouts."
   return
@@ -24,7 +24,7 @@ describe('Clone existing App', ()->
       done(e)
   after ()->
     try
-      wrench.rmdirSyncRecursive(baseDir)
+      fsextra.removeSync(baseDir)
     catch e
 
   it('should delete the RakeFile', ()->
