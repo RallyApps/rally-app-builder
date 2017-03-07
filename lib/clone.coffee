@@ -1,4 +1,4 @@
-fetchGitHubRepo = require("fetch-github-repo")
+fetchGitHubRepo = require("rally-fetch-github-repo")
 _ = require('lodash')
 fs = require 'fs'
 path = require 'path'

@@ -47,10 +47,10 @@ describe 'CSS', ->
   describe '#compileInPlace', ->
     fs = require 'fs'
     path = require 'path'
-    wrench = require 'wrench'
+    fsextra = require 'fs-extra'
     tempTestDirectory = 'test/buildTemp'
     beforeEach ->
-      wrench.rmdirSyncRecursive tempTestDirectory
+      fsextra.removeSync tempTestDirectory
       fs.mkdirSync tempTestDirectory
 
     it 'should leave a css file alone', (done) ->
@@ -70,4 +70,3 @@ describe 'CSS', ->
           assert content == writtenFile
           assert fs.existsSync writtenFile
           done()
-
