@@ -26,7 +26,7 @@
     "grunt-contrib-jasmine": "1.1.0",
     "grunt-contrib-watch": "1.0.0",
     "handlebars": "~1.0.11",
-    "jshint": "~2.9.2",
+    "jshint": "^2.9.4",
     "less": "~1.7.0",
     "lodash": "~3.0.0",
     "mustache": "0.7.x",
@@ -36,7 +36,7 @@
     "rally-fetch-github-repo": "0.2.2",
     "request": "~2.11.4",
     "shelljs": "^0.3.0",
-    "uglify-js": "2.7.3",
+    "uglify-js-harmony": "^2.7.5",
     "yargs": "4.3.1"
   },
   "devDependencies": {
