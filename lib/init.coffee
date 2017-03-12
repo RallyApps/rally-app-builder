@@ -27,6 +27,7 @@ module.exports = (args, callback)->
       server: 'https://rally1.rallydev.com'
       path: '.'
     filePath = args.path
+    args.packageName = args.name.replace /\s/g, ''
     view = args
     templatePath = path.resolve(__dirname, '../templates/')
 
