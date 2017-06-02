@@ -21,10 +21,6 @@ describe('Config', function(){
         "rallyapps/ninjas"
       ]
     };
-
-    let updatedConfig = config._updateConfig(testConfig);
-    return it("should add a server to the config file if one is not present",
-    ()=> assert(updatedConfig.server === "https://rally1.rallydev.com"));
   });
 
   return describe('#getAppSourceRoot', function() {
