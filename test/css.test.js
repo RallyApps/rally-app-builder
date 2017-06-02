@@ -1,72 +1,88 @@
-assert = require 'assert'
-css = require '../lib/build/css'
+let assert = require('assert');
+let css = require('../lib/build/css');
 
-describe 'CSS', ->
+describe('CSS', function() {
 
-  describe '#isLessFile', ->
+  describe('#isLessFile', function() {
 
-    it 'should return true for a less file', ->
-      assert css.isLessFile 'app.less'
+    it('should return true for a less file', () => assert(css.isLessFile('app.less')));
 
-    it 'should return false for a css file', ->
-      assert !css.isLessFile 'app.css'
+    return it('should return false for a css file', () => assert(!css.isLessFile('app.css')));
+  });
 
-  describe '#getGeneratedFileName', ->
+  describe('#getGeneratedFileName', function() {
 
-    it 'should return the same name for a css file', ->
-      assert 'app.css' == css.getGeneratedFileName 'app.css'
+    it('should return the same name for a css file', () => assert('app.css' === css.getGeneratedFileName('app.css')));
 
-    it 'should return the corect name for a less file', ->
-      assert 'app.less.css' == css.getGeneratedFileName 'app.less.css'
+    return it('should return the corect name for a less file', () => assert('app.less.css' === css.getGeneratedFileName('app.less.css')));
+  });
 
-  describe '#compile', ->
+  describe('#compile', function() {
 
-    it 'should replace the global prefix var', (done) ->
-      style = '.@{prefix}foo{padding:5px;}'
-      css.compile style, false, (err, result) ->
-        assert result.indexOf('.x-') == 0
-        done()
+    it('should replace the global prefix var', function(done) {
+      let style = '.@{prefix}foo{padding:5px;}';
+      return css.compile(style, false, function(err, result) {
+        assert(result.indexOf('.x-') === 0);
+        return done();
+      });
+    });
 
-    it 'should call the error callback', (done) ->
-      css.compile 'blerg!', false, (err, result) ->
-        assert err != null
-        done()
+    it('should call the error callback', done =>
+      css.compile('blerg!', false, function(err, result) {
+        assert(err !== null);
+        return done();
+      })
+    );
 
-    it 'should compress', (done) ->
-      style = '.foo{\npadding:5px;\n}'
-      css.compile style, true, (err, result) ->
-        assert '.foo{padding:5px}' == result
-        done()
+    it('should compress', function(done) {
+      let style = '.foo{\npadding:5px;\n}';
+      return css.compile(style, true, function(err, result) {
+        assert('.foo{padding:5px}' === result);
+        return done();
+      });
+    });
 
-    it 'should not compress', (done) ->
-      style = '.foo{\npadding:5px;\n}'
-      css.compile style, false, (err, result) ->
-        assert result.indexOf('\n') != -1
-        done()
+    return it('should not compress', function(done) {
+      let style = '.foo{\npadding:5px;\n}';
+      return css.compile(style, false, function(err, result) {
+        assert(result.indexOf('\n') !== -1);
+        return done();
+      });
+    });
+  });
 
-  describe '#compileInPlace', ->
-    fs = require 'fs'
-    path = require 'path'
-    fsextra = require 'fs-extra'
-    tempTestDirectory = 'test/buildTemp'
-    beforeEach ->
-      fsextra.removeSync tempTestDirectory
-      fs.mkdirSync tempTestDirectory
+  return describe('#compileInPlace', function() {
+    let fs = require('fs');
+    let path = require('path');
+    let fsextra = require('fs-extra');
+    let tempTestDirectory = 'test/buildTemp';
+    beforeEach(function() {
+      fsextra.removeSync(tempTestDirectory);
+      return fs.mkdirSync(tempTestDirectory);
+    });
 
-    it 'should leave a css file alone', (done) ->
-      style = '.foo{\npadding:5px;\n}'
-      file = path.join tempTestDirectory, 'foo.css'
-      fs.writeFile file, style, (err) ->
-        css.compileInPlace file, false, (err, content) ->
-          assert content == file
-          done()
+    it('should leave a css file alone', function(done) {
+      let style = '.foo{\npadding:5px;\n}';
+      let file = path.join(tempTestDirectory, 'foo.css');
+      return fs.writeFile(file, style, err =>
+        css.compileInPlace(file, false, function(err, content) {
+          assert(content === file);
+          return done();
+        })
+      );
+    });
 
-    it 'should compile the less file in place', (done) ->
-      style = '.foo{\npadding:5px;\n}'
-      file = path.join tempTestDirectory, 'foo.less'
-      fs.writeFile file, style, (err) ->
-        css.compileInPlace file, false, (err, content) ->
-          writtenFile = css.getGeneratedFileName file
-          assert content == writtenFile
-          assert fs.existsSync writtenFile
-          done()
+    return it('should compile the less file in place', function(done) {
+      let style = '.foo{\npadding:5px;\n}';
+      let file = path.join(tempTestDirectory, 'foo.less');
+      return fs.writeFile(file, style, err =>
+        css.compileInPlace(file, false, function(err, content) {
+          let writtenFile = css.getGeneratedFileName(file);
+          assert(content === writtenFile);
+          assert(fs.existsSync(writtenFile));
+          return done();
+        })
+      );
+    });
+  });
+});

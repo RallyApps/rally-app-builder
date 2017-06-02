@@ -1,35 +1,42 @@
-assert = require 'assert'
-rallyAppBuilder = require '../index'
-fs = require 'fs'
-fsextra = require 'fs-extra'
-describe('Init new App', ()->
-  baseDir = 'test/initTemp'
+let assert = require('assert');
+let rallyAppBuilder = require('../index');
+let fs = require('fs');
+let fsextra = require('fs-extra');
+describe('Init new App', function(){
+  let baseDir = 'test/initTemp';
 
-  before ()->
-    try
-      fs.mkdirSync(baseDir)
-    catch e
-  after ()->
-    try
-      fsextra.removeSync(baseDir)
-    catch e
+  before(function(){
+    try {
+      return fs.mkdirSync(baseDir);
+    } catch (e) {}
+  });
+  after(function(){
+    try {
+      return fsextra.removeSync(baseDir);
+    } catch (e) {}
+  });
 
-  it('tests files created', (done)->
-    checkFilesFetched = ()->
-      files = fs.readdirSync(baseDir)
-      error = new Error("README.md not found")
-      for file in files
-        if file.indexOf("README.md") > -1
-          error = null
-      if error
-        done(error)
-      else
-        done()
+  return it('tests files created', function(done){
+    let checkFilesFetched = function(){
+      let files = fs.readdirSync(baseDir);
+      let error = new Error("README.md not found");
+      for (let file of Array.from(files)) {
+        if (file.indexOf("README.md") > -1) {
+          error = null;
+        }
+      }
+      if (error) {
+        return done(error);
+      } else {
+        return done();
+      }
+    };
 
-    rallyAppBuilder.init(
-      name: 'App'
+    return rallyAppBuilder.init({
+      name: 'App',
       path: baseDir
+    },
       checkFilesFetched
-    )
-  )
-)
+    );
+  });
+});
