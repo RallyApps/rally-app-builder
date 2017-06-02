@@ -26,9 +26,6 @@ However, if that does't work (permission errors, etc.) it can be installed local
     build [--templates]
     Builds the current App
 
-    clone [--organization] [--repo]
-    Creates a new Rally App project from an existing GitHub project
-
     run [--port]
     Starts a local server and launches the App in the default browser
 
@@ -81,13 +78,6 @@ You can define pre and post build commands to be executed by adding them to your
 }
 ```
 
-### clone
-`rally-app-builder clone --org=RallyApps --repo=StoryBoard`
-
-Many Rally Apps are created by using an existing App as a template.
-By using the rally-app-builder clone command you can get a copy of the existing App without installing the Git CLI.
-This command makes some changes to the config file so that we can tell which App you based your work on. As we determine
-which apps you are most interested in customizing we take that as input on ways to improve the existing catalog App.
 
 ### run
 `rally-app-builder run`

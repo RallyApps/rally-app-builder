@@ -45,7 +45,7 @@
     "sinon": "^1.10.2"
   },
   "scripts": {
-    "test": "mocha -t 20000 --compilers coffee:coffee-script"
+    "test": "mocha --trace-deprecation -t 20000"
   },
   "bin": {
     "rally-app-builder": "./bin/rally-app-builder",

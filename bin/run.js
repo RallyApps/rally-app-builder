@@ -35,29 +35,6 @@ let init = function(args) {
   });
 };
 
-let clone = function(args) {
-  let {org, repo, templates} = args;
-  let organization = args._[1] || org || args.organization;
-  repo = args._[2] || repo;
-  if (!organization) {
-    console.error('Please specify an organization when using the clone command.');
-    return;
-  }
-  if (!repo) {
-    console.error('Please specify a repo when using the clone command.');
-    return;
-  }
-  console.log(`Cloning ${repo} repo from ${organization} account`);
-  return RallyAppBuilder.clone(
-    {organization, repo},
-    function(error) {
-      if (error) {
-        return errorHandler(error);
-      } else {
-        return build({templates});
-      }
-  });
-};
 
 let watch = function(args) {
   let {templates, ci} = args;
@@ -91,15 +68,6 @@ yargs
     'Builds the current App.',
     {templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}}
     , build
-  )
-  .command(
-    'clone',
-    'Creates a new Rally App project locally from an existing GitHub project.', {
-    org: {alias: 'o', describe: 'The GitHub organization'},
-    repo: {alias: 'r', describe: 'The GitHub repo name'},
-    templates: {alias: 't', describe: 'The path containing custom html output templates (advanced)'}
-  }
-    , clone
   )
   .command(
     'watch',
