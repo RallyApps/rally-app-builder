@@ -4,10 +4,6 @@ pathUtils = require('path')
 
 configFileName = "config.json"
 
-_updateConfig = (config)->
-  config.server = config.server || "https://rally1.rallydev.com"
-  config
-
 saveConfig = ({path, config}, callback)->
   configPath = pathUtils.join(path, configFileName)
   fs.writeFile(configPath, JSON.stringify(config, null, '    '), callback)
@@ -15,10 +11,7 @@ saveConfig = ({path, config}, callback)->
 getConfig = (path, callback) ->
   convertToJson = (error, file)->
     if !error
-      config = JSON.parse(file)
-      _updateConfig(config)
-      saveConfig({config, path})
-      callback(null, config)
+      callback(null, JSON.parse(file))
     else
       callback(error)
 
@@ -39,5 +32,5 @@ getAppSourceRoot = (path, callback) ->
       common = pathUtils.resolve common, '..'
     callback null, common
 
-module.exports = {_updateConfig,getConfig,saveConfig,getAppSourceRoot}
+module.exports = {getConfig,saveConfig,getAppSourceRoot}
 _.defaults module.exports, {configFileName}
