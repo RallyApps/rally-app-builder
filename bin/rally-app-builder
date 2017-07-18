@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-path = require("path")
+path = require('path');
 require(path.join(__dirname, 'run'));
