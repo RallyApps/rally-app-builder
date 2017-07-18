@@ -1,4 +1,4 @@
-#Rally App Builder
+# Rally App Builder
 
 [![Build Status](https://travis-ci.org/RallyApps/rally-app-builder.png?branch=master)](https://travis-ci.org/RallyApps/rally-app-builder)
 
@@ -43,7 +43,7 @@ However, if that does't work (permission errors, etc.) it can be installed local
 
 ## Commands
 
-###init
+### init
 `rally-app-builder init --name=myNewApp`
 Creating a new Rally App is as easy as using init. The init command creates you a  After init creates your App it will automatically run the build command on it for you.
 
