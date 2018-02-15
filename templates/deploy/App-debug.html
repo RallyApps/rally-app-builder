@@ -18,7 +18,9 @@
                 ],
         function() {
             Rally.launchApp('{{className}}', {
-                name:"{{name}}"
+                name:"{{name}}",
+                parentRepos:"{{{parents}}}",
+                version:"{{version}}"
             });
         }, true);
     </script>
