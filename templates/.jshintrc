@@ -30,7 +30,7 @@
     "boss"          : false,
     "debug"         : false,
     "eqnull"        : false,
-    "esversion"     : 5,
+    "esversion"     : 6,
     "moz"           : false,
     "evil"          : false,
     "expr"          : false,
