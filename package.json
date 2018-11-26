@@ -18,7 +18,7 @@
     "chokidar": "^1.4.3",
     "coffeescript": "2.2.1",
     "commander": "0.6.x",
-    "express": "4.2.x",
+    "express": "4.16.4",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "1.0.0",
@@ -45,7 +45,7 @@
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
     "fs-extra": "2.0.0",
-    "mocha": "3.2.x",
+    "mocha": "5.2.0",
     "sinon": "^1.10.2"
   },
   "scripts": {
