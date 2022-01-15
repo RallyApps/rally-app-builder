@@ -36,7 +36,7 @@
     "rally-fetch-github-repo": "0.2.2",
     "request": "~2.11.4",
     "serve-static": "^1.12.3",
-    "shelljs": "^0.3.0",
+    "shelljs": "^0.8.5",
     "uglify-es": "^3.3.9",
     "yargs": "4.3.1"
   },
