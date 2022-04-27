@@ -14,7 +14,7 @@
     "node": ">0.10.32"
   },
   "dependencies": {
-    "async": "0.1.x",
+    "async": "2.6.x",
     "chokidar": "^1.4.3",
     "coffeescript": "2.2.1",
     "commander": "0.6.x",
