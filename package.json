@@ -19,7 +19,7 @@
     "coffeescript": "2.2.1",
     "commander": "0.6.x",
     "express": "4.2.x",
-    "grunt": "1.0.1",
+    "grunt": "1.5.2",
     "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-concat": "1.0.1",
