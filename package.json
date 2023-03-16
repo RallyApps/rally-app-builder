@@ -34,7 +34,7 @@
     "open": "~0.0.5",
     "promise-to-validate": "~0.3.0",
     "rally-fetch-github-repo": "0.2.2",
-    "request": "~2.11.4",
+    "request": "~2.88.2",
     "serve-static": "^1.12.3",
     "shelljs": "^0.3.0",
     "uglify-es": "^3.3.9",
